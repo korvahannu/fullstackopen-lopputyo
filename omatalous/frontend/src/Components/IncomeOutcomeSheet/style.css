@@ -1,0 +1,31 @@
+#wrapper {
+    padding:32px;
+}
+
+form {
+    border: 1px solid #000;
+    padding:16px;
+}
+
+form p {
+    width:512px;
+}
+
+form select {
+    margin-left:8px;
+    width:256px;
+}
+
+table {
+    border:1px grey solid;
+    width:100%;
+}
+
+table thead {
+    background-color:rgb(159, 242, 248);
+}
+
+table th {
+    width:100px;
+    border:1px grey solid;
+}
