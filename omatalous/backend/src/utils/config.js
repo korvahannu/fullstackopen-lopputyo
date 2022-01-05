@@ -1,9 +1,17 @@
+// This config file takes variables from environmental values (check .env for example) and sets them for easy-access
+// These environmental values defined by process.env MUST BE set for this application to work.
+
 require('dotenv').config();
 
 const PORT = process.env.PORT | 3001;
-const URI = process.env.URI;
+const WEBTOKEN_SECRET = process.env.WEBTOKEN_SECRET;
+
+const URI = process.env.NODE_ENV === 'test'
+    ? process.env.URI_TEST
+    :  process.env.URI;
 
 module.exports = {
     PORT,
-    URI
-}
+    URI,
+    WEBTOKEN_SECRET
+};

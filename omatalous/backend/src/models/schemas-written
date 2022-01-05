@@ -1,0 +1,31 @@
+User
+- id
+- username
+- name
+- passwordHash
+
+Category
+- id
+- name
+- [user]
+
+Account
+- id 
+- Account name
+- Balance
+- [user]
+
+PaymentMethod
+- name
+- [account]
+- [user]
+
+Transaction
+- id
+- amount
+- date
+- description
+- [user]
+- [account]
+- [paymentMethod]
+- [category]

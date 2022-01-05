@@ -1,0 +1,31 @@
+User
+- id
+- username
+- name
+- password
+
+Category
+- id
+- name
+- [UserID]
+
+Account
+- id 
+- Account name
+- Balance
+- [UserID]
+
+PaymentMethod
+- Method name
+- [AccountID]
+- [UserID]
+
+Transaction
+- id
+- amount
+- date
+- description
+- [UserID]
+- [AccountID]
+- [PaymentMethodID]
+- [CategoryID]
