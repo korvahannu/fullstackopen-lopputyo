@@ -5,13 +5,19 @@ const paymentMethodSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    icon: {
+        type: String,
+        default: 'default'
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        required: true
     },
     account: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Account'
+        ref:'Account',
+        required: true
     }
 });
 

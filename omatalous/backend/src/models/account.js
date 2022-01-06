@@ -3,15 +3,20 @@ const mongoose = require('mongoose');
 const accountSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     balance: {
         type: Number,
         required: true
     },
+    icon: {
+        type: String,
+        default: 'default',
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'User'
+        ref:'User',
+        required: true
     }
 });
 

@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
 
+const validateEmail = (email) => {
+    var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // eslint-disable-line
+    return re.test(email);
+};
+
 const userSchema = new mongoose.Schema({
 
     username: {
@@ -16,7 +21,16 @@ const userSchema = new mongoose.Schema({
     passwordHash: {
         type: String,
         required: true
-    }
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true,
+        unique:true,
+        validate: [validateEmail, 'Invalid email'],
+        match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'] // eslint-disable-line
+    },
 
 });
 

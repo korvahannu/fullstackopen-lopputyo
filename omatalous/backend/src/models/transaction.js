@@ -14,19 +14,23 @@ const transactionSchema = new mongoose.Schema({
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: true
     },
     account: {
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Account'
+        ref:'Account',
+        required: true
     },
     paymentMethod: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'PaymentMethod'
+        ref: 'PaymentMethod',
+        required: true
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Category',
+        required: true
     }
 });
 

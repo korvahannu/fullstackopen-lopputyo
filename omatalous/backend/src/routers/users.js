@@ -3,14 +3,47 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
 
-router.get('/', async (request, response) => {
+/*
+Admin:
+- view full user list
+- add a new user => Possibly a new route for user registration?
+
+User:
+- Can view own account information
+*/
+
+router.get('/', checkTokenAuthorization, validateAdminAccount, async (request, response) => {
 
     const result = await User.find({});
     return response.json(result);
     
 });
 
-router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, response) => {
+router.get('/:id', checkTokenAuthorization, async(request, response, next) => {
+
+    const id = request.params.id;
+
+    if(request.user.id !== id && !request.user.admin) {
+        return response.status(401).json({error: 'unauthorized'});
+    }
+
+    try {
+        const user = await User.findById(id);
+
+        if(user) {
+            return response.json(user);
+        }
+        else {
+            return response.status(400).json({error: 'user with given id does not exist'});
+        }
+    }
+    catch(error) {
+        next(error);
+    }
+    
+});
+
+router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
 
     const body = request.body;
 
@@ -26,17 +59,23 @@ router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, 
         return response.status(400).json({error: 'username and password must be over 5 characters'});
     }
 
-    const passwordHash = await bcrypt.hash(body.password, 10);
+    try {
+        const passwordHash = await bcrypt.hash(body.password, 10);
 
-    const user = new User({
-        username: body.username,
-        name: body.name,
-        passwordHash
-    });
+        const user = new User({
+            username: body.username,
+            name: body.name,
+            passwordHash
+        });
+    
+        const result = await user.save();
+    
+        response.json(result);
+    }
+    catch(error) {
+        next(error);
+    }
 
-    const result = await user.save();
-
-    response.json(result);
 
 });
 
