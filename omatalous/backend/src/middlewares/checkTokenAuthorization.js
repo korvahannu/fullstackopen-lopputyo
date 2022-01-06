@@ -15,15 +15,20 @@ const checkTokenAuthorization = async (request, response, next) => {
     if(token === null || token === undefined)
         return response.status(401).json({error: 'missing token'});
 
-    const decodedToken = webtoken.verify(token, WEBTOKEN_SECRET);
+    try {
+        const decodedToken = webtoken.verify(token, WEBTOKEN_SECRET);
 
-    if(!decodedToken) {
-        return response.status(401).json({error: 'invalid token'});
+        if(!decodedToken) {
+            return response.status(401).json({error: 'invalid token'});
+        }
+
+        request.user = await User.findById(decodedToken.id);
+
+        next();
     }
-
-    request.user = await User.findById(decodedToken.id);
-
-    next();
+    catch (error) {
+        return response.status(400).json({error: 'corrupted or malicious token'});
+    }
 
 };
 

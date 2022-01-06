@@ -10,6 +10,11 @@ Admin:
 
 User:
 - Can view own account information
+
+TODO:
+- Ability delete user
+- Ability to update user
+- If user is removed, remove all of his categories, accounts, paymentmethods etc.
 */
 
 router.get('/', checkTokenAuthorization, validateAdminAccount, async (request, response) => {
@@ -65,6 +70,7 @@ router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, 
         const user = new User({
             username: body.username,
             name: body.name,
+            email: body.email,
             passwordHash
         });
     
