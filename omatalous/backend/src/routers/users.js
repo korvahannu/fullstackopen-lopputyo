@@ -10,11 +10,6 @@ Admin:
 
 User:
 - Can view own account information
-
-TODO:
-- Ability delete user
-- Ability to update user
-- If user is removed, remove all of his categories, accounts, paymentmethods etc.
 */
 
 router.get('/', checkTokenAuthorization, validateAdminAccount, async (request, response) => {
@@ -22,6 +17,21 @@ router.get('/', checkTokenAuthorization, validateAdminAccount, async (request, r
     const result = await User.find({});
     return response.json(result);
     
+});
+
+router.delete('/:id', checkTokenAuthorization, validateAdminAccount, async (request,response, next) => {
+    try {
+        const user = User.findById(request.params.id);
+
+        if(!user)
+            return response.status(400).json({error:'user does not exist'});
+
+        await user.remove();
+        return response.json(200).end();
+    }
+    catch(error) {
+        next(error);
+    }
 });
 
 router.get('/:id', checkTokenAuthorization, async(request, response, next) => {
@@ -81,8 +91,6 @@ router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, 
     catch(error) {
         next(error);
     }
-
-
 });
 
 module.exports = router;

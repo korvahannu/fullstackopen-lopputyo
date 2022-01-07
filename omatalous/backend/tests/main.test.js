@@ -5,11 +5,28 @@ const api = supertest(app);
 const User = require('../src/models/user');
 const Category = require('../src/models/category');
 
+/*
+TODO:
+- tests for accounts.js and paymentMethods.js
+- tests for updating user, categories and accounts
+- tests for user.js
+*/
+
 const { createQuickUser } = require('./utils');
 
-let token = '';
-let helper;
-let helperSecond;
+const tokenlist = {
+    admin: '',
+    normal: '',
+    normalSecond: ''
+};
+
+const userlist = {
+    admin: '',
+    normal: '',
+    normalSecond: ''
+};
+
+let helper = '';
 
 const init = async () => {
 
@@ -19,16 +36,20 @@ const init = async () => {
     const admin = await createQuickUser('admin', true);
     const adminUser = new User(admin);
     await adminUser.save();
+    
+    userlist.admin = adminUser._id.toString();
 
     const normal = await createQuickUser('normal', false);
     const normalUser = new User(normal);
-
     await normalUser.save();
 
+    userlist.normal = normalUser._id.toString();
+    
     const normalSecond = await createQuickUser('normalSecond', false);
     const normalSecondUser = new User(normalSecond);
-
     await normalSecondUser.save();
+
+    userlist.normalSecond = normalSecondUser._id.toString();
 
 };
 
@@ -65,7 +86,7 @@ describe('Login tests', () => {
         expect(result.body.token).not.toBeNull();
         expect(result.body.token).not.toBeUndefined();
 
-        token = `bearer ${result.body.token}`;
+        tokenlist.admin = `bearer ${result.body.token}`;
 
     });
 
@@ -83,24 +104,20 @@ describe('User data access tests', () => {
     test('can admin access full list of users?', async () => {
 
         const result = await api.get('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
         expect(result.body)
         .toHaveLength(3);
-
-        helper = result.body[1].id;
-        helperSecond = result.body[2].id;
-
     });
 
     
     test('can admin access information of an user with a specific id?', async () => {
 
-        const result = await api.get(`/api/users/${helper}`)
-        .set('Authorization', token)
+        const result = await api.get(`/api/users/${userlist.normal}`)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -124,13 +141,13 @@ describe('User data access tests', () => {
         };
 
         await api.post('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send(newUser)
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
         const result2 = await api.get('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -147,7 +164,7 @@ describe('User data access tests', () => {
         };
 
         await api.post('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send(newUser)
         .expect(400);
     });
@@ -168,14 +185,14 @@ describe('User data access tests', () => {
         expect(result.body.token).not.toBeNull();
         expect(result.body.token).not.toBeUndefined();
 
-        token = `bearer ${result.body.token}`;
+        tokenlist.normal = `bearer ${result.body.token}`;
 
     });
 
     test('is a regular user prevented from accessing full list of users?', async () => {
 
         await api.get('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .expect(401)
         .expect('Content-Type', /application\/json/);
 
@@ -183,8 +200,8 @@ describe('User data access tests', () => {
 
     test('is a regular user prevented from accessing another users information?', async () => {
 
-        await api.get(`/api/users/${helperSecond}`)
-        .set('Authorization', token)
+        await api.get(`/api/users/${userlist.normalSecond}`)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(401)
         .expect('Content-Type', /application\/json/);
@@ -193,8 +210,8 @@ describe('User data access tests', () => {
 
     test('Can a user view their own user information?', async () => {
 
-        const result = await api.get(`/api/users/${helper}`)
-        .set('Authorization', token)
+        const result = await api.get(`/api/users/${userlist.normal}`)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -215,7 +232,7 @@ describe('User data access tests', () => {
         };
 
         await api.post('/api/users')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send(newUser)
         .expect(401);
     });
@@ -231,19 +248,19 @@ describe('Category tests', () => {
         };
 
         const result = await api.post('/api/categories/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send(category)
         .expect(200)
         .expect('Content-Type', /application\/json/);
 
-        helper = result.body.id;
+        helper = result.body.id.toString();
 
     });
 
     test('Can user view only one of the categories by id?', async () => {
 
         const result = await api.get(`/api/categories/${helper}`)
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(200);
 
@@ -253,7 +270,7 @@ describe('Category tests', () => {
 
     test('Can user view all their categories?', async () => {
         const result = await api.get('/api/categories/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(200);
 
@@ -274,18 +291,18 @@ describe('Category tests', () => {
         };
 
         const result = await api.post('/api/categories/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send(category)
         .expect(200)
         .expect('Content-Type', /application\/json/);
         
         await api.delete(`/api/categories/${result.body.id}`)
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(200);
 
         const result2 = await api.get('/api/categories/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.normal)
         .send()
         .expect(200);
 
@@ -294,23 +311,9 @@ describe('Category tests', () => {
     });
 
     test('Can admin view all categories by all users?', async () => {
-        const credentials = {
-            username: 'admin',
-            password: 'admin'
-        };
-
-        const result = await api.post('/api/login')
-        .send(credentials)
-        .expect(200)
-        .expect('Content-Type', /application\/json/);
-
-        expect(result.body.token).not.toBeNull();
-        expect(result.body.token).not.toBeUndefined();
-
-        token = `bearer ${result.body.token}`;
 
         const result2 = await api.get('/api/categories/all/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -322,12 +325,12 @@ describe('Category tests', () => {
     test('Can admin delete another users category?', async () => {
 
         await api.delete(`/api/categories/${helper}`)
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200);
         
         const result2 = await api.get('/api/categories/all/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send()
         .expect(200)
         .expect('Content-Type', /application\/json/);
@@ -343,12 +346,75 @@ describe('Category tests', () => {
         };
 
         await api.post('/api/categories/')
-        .set('Authorization', token)
+        .set('Authorization', tokenlist.admin)
         .send(category)
         .expect(400)
         .expect('Content-Type', /application\/json/);
     });
 
+    test('Trying to delete that dont exist returns an error', async () => {
+
+        await api.delete('/api/categories/y509jj0954590j4j9')
+        .set('Authorization', tokenlist.admin)
+        .send()
+        .expect(400);
+
+    });
+
+    test('You can edit a category', async () => {
+        const category = {
+            name: 'TEST-CATEGORY'
+        };
+
+        const newCategory = await api.post('/api/categories/')
+        .set('Authorization', tokenlist.normal)
+        .send(category)
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+        const result = await api.put(`/api/categories/${newCategory.body.id.toString()}`)
+        .set('Authorization', tokenlist.normal)
+        .send({name:'EDITED-CATEGORY', icon:'EDIT'})
+        .expect(200)
+        .expect('Content-Type', /application\/json/);
+
+        expect(result.body.name).toBe('EDITED-CATEGORY');
+        expect(result.body.icon).toBe('EDIT');
+    });
+
+});
+
+describe('Account tests', () => {
+    // User can add account
+    // Can not add account with invalid info
+    // Can not do anything at account router without credentials
+    // User can get their accounts
+    // User can get a specific account with account id
+    // admin can fetch /all/
+    // user can delete account
+    // user can edit account
+    // admin can delete or edit
+});
+
+describe('Payment method tests', () => {
+    // User can add paymentMethod
+    // Can not add paymentMethod with invalid info
+    // Can not do anything at paymentMethod router without credentials
+    // User can get their paymentMethod
+    // User can get a specific paymentMethod with account id
+    // admin can fetch /all/
+    // user can delete paymentMethod
+    // user can edit paymentMethod
+    // admin can delete or edit
+    // paymentMethod can not have invalid accountId
+    // Random user can not add an account to another user
+});
+
+describe('User ', () => {
+    // Can register
+    // Does not allow wrong info, such as invalid email or too short password
+    // user can update accoiunt
+    // user can disable their account
 });
 
 afterAll(()=> {

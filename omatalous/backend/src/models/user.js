@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema({
     },
     admin: {
         type: Boolean,
+        required: true,
+        default: false
     },
     passwordHash: {
         type: String,
@@ -31,6 +33,11 @@ const userSchema = new mongoose.Schema({
         validate: [validateEmail, 'Invalid email'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'] // eslint-disable-line
     },
+    disabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 
 });
 

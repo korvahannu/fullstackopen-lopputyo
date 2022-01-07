@@ -32,4 +32,4 @@ accountSchema.set('toJSON', {
 
 });
 
-module.exports = mongoose.Model('Account', accountSchema);
+module.exports = mongoose.model('Account', accountSchema);

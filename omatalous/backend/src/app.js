@@ -11,6 +11,9 @@ const getTokenFromRequest = require('./middlewares/getTokenFromRequest');
 const usersRouter = require('./routers/users');
 const loginRouter = require('./routers/login');
 const categoriesRouter = require('./routers/categories');
+const accountsRouter = require('./routers/accounts');
+const paymentMethodsRouter = require('./routers/paymentMethods');
+const userRouter = require('./routers/user');
 const errorHandler = require('./middlewares/errorHandler');
 
 // ESTABLISH  CONNECTION TO MONGODB
@@ -31,6 +34,9 @@ app.use(getTokenFromRequest);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/categories', categoriesRouter);
+app.use('/api/accounts', accountsRouter);
+app.use('/api/paymentmethods', paymentMethodsRouter);
+app.use('/api/user', userRouter);
 
 // PING ROUTE
 app.use('/ping', (request, response) => {

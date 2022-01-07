@@ -18,7 +18,7 @@ const paymentMethodSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'Account',
         required: true
-    }
+    },
 });
 
 paymentMethodSchema.set('toJSON', {
