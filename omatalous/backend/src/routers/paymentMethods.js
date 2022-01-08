@@ -28,6 +28,19 @@ router.get('/', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
+router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+    try {
+
+        const result = await PaymentMethod.find({});
+
+        return response.json(result);
+
+    }
+    catch(error) {
+        next(error);
+    }
+});
+
 router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
     try {
         const result = await PaymentMethod.findById(request.params.id);
@@ -40,19 +53,6 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
         }
         else
             response.status(401).json({error: 'unauthorized'});
-    }
-    catch(error) {
-        next(error);
-    }
-});
-
-router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
-    try {
-
-        const result = await PaymentMethod.find({});
-
-        return response.json(result);
-
     }
     catch(error) {
         next(error);
@@ -72,7 +72,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
         
         const account = await Account.findById(body.account);
 
-        if(account.user !== request.user.id) {
+        if(account.user.toString() !== request.user.id) {
             return response.json(400).json({error: 'you cant add a payment method to an account that is not yours'});
         }
 

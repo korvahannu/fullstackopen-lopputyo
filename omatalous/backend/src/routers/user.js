@@ -14,13 +14,13 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const { checkTokenAuthorization } = require('../middlewares/checkTokenAuthorization');
 
-router.get('/', checkTokenAuthorization, async (request, response, next) => {
+router.get('/', checkTokenAuthorization, async (request, response) => {
     return response.json(request.user);
 });
 
 router.get('/deleteAccount/', checkTokenAuthorization, async (request, response, next) => {
     if(request.user.admin) {
-        return response.status(401).json({error: 'admins can not remove accounts, please contact system administrator'});
+        return response.status(401).json({error: 'admins can not their own accounts, please contact system administrator'});
     }
 
     try {
@@ -59,20 +59,29 @@ router.post('/register/', async (request, response, next) => {
 
     const body = request.body;
 
-    const passwordHash = await bcrypt.hash(body.password, 10);
+    if(!body.email ||!body.username||!body.password) {
+        return response.status(400).json({error: 'missing new user info'});
+    }
 
-    const user = new User({
-        username: body.username,
-        name: body.name,
-        email: body.email,
-        passwordHash,
-        admin: false,
-        disabled: false
-    });
+    try {
+        const passwordHash = await bcrypt.hash(body.password, 10);
 
-    await user.save();
+        const user = new User({
+            username: body.username,
+            name: body.name,
+            email: body.email,
+            passwordHash,
+            admin: false,
+            disabled: false
+        });
 
-    return response.json(user);
+        await user.save();
+
+        return response.json(user);
+    }
+    catch(error) {
+        next(error);
+    }
 
 });
 

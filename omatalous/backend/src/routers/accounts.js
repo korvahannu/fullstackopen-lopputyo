@@ -15,6 +15,19 @@ User:
 - update own account
 */
 
+router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+
+    try {
+        const result = await Account.find({});
+
+        return response.json(result);
+    }
+    catch(error) {
+        next(error);
+    }
+
+});
+
 router.get('/', checkTokenAuthorization, async (request, response, next) => {
 
     const userId = request.user.id;
@@ -38,7 +51,7 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
         if(!account)
             return response.status(400).json({error:'account does not exist'});
 
-        if(request.user.admin || request.user.id === account.user.toString()) {
+        if(request.user.admin ||request.user.id === account.user.toString()) {
             return response.json(account);
         }
         else {
@@ -51,23 +64,16 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
 
 });
 
-router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
-
-    try {
-        const result = await Account.find({});
-
-        return response.json(result);
-    }
-    catch(error) {
-        next(error);
-    }
-
-});
-
 router.post('/', checkTokenAuthorization, async (request, response, next) => {
     try {
 
         const body = request.body;
+
+        if(body.balance === null || body.balance === undefined)
+            body.balance = 0;
+        
+        if(body.name === null || body.name === undefined || body.name === '')
+            return response.status(400).json({error: 'account name can not be null'});
 
         let icon = 'default';
 
@@ -91,7 +97,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.delete('/:id', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+router.delete('/:id', checkTokenAuthorization, async (request, response, next) => {
 
     try {
         const account = await Account.findById(request.params.id);
