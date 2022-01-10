@@ -9,3 +9,4 @@
 | 7.1.2021. | 2.5    | Accounts, paymentMethods ja user -routerit asennettu. Testeriä säädetty hieman. Käyttäjän voi nyt disabloida. Testerit pitää vielä tehdä uusille routereille, sitten voin tehdä viimeisenä transactions -router ja täten backendin pitäisi teoriassa toimia odotetusti. |
 | 8.1.2021. | 3    | Testerit kirjoitettu routeille accounts, paymentMethods ja user. Monta bugia löytyi joten testien kirjoittaminen on osoittautunut hedelmälliseksi. |
 | 9.1/10.1.2021. | 3    | Transaction routeri kirjoitettu loppuun. Testerit kirjoitettu. Bugeja korjailtu. Alustava backend valmis? |
+| 10.1.2021. | 1    | Pientä koodin refaktorointia ja turhien kommentien poistoa |

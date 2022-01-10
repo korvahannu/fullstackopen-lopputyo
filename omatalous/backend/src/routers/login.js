@@ -18,6 +18,9 @@ router.post('/', async (request, response) => {
         return response.status(401).json({error: 'invalid username or password'});
     }
 
+    if(user.disabled === true)
+        return response.status(400).json({error: 'user account has been removed, contact sysadmin for re-activation'});
+
     const _token = {
         username: user.username,
         id: user._id

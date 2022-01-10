@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
-const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
 
 /*
 Admin:
@@ -12,14 +12,14 @@ User:
 - Can view own account information
 */
 
-router.get('/', checkTokenAuthorization, validateAdminAccount, async (request, response) => {
+router.get('/', validateAdminAccount, async (request, response) => {
 
     const result = await User.find({});
     return response.json(result);
     
 });
 
-router.delete('/:id', checkTokenAuthorization, validateAdminAccount, async (request,response, next) => {
+router.delete('/:id', validateAdminAccount, async (request,response, next) => {
     try {
         const user = User.findById(request.params.id);
 
@@ -34,7 +34,7 @@ router.delete('/:id', checkTokenAuthorization, validateAdminAccount, async (requ
     }
 });
 
-router.get('/:id', checkTokenAuthorization, async(request, response, next) => {
+router.get('/:id', async(request, response, next) => {
 
     const id = request.params.id;
 
@@ -58,7 +58,7 @@ router.get('/:id', checkTokenAuthorization, async(request, response, next) => {
     
 });
 
-router.post('/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+router.post('/', validateAdminAccount, async (request, response, next) => {
 
     const body = request.body;
 

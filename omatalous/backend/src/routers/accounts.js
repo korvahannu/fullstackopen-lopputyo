@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Account = require('../models/account');
-const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
 
 /*
 Admin:
@@ -15,7 +15,7 @@ User:
 - update own account
 */
 
-router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+router.get('/all/', validateAdminAccount, async (request, response, next) => {
 
     try {
         const result = await Account.find({});
@@ -28,7 +28,7 @@ router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (reques
 
 });
 
-router.get('/', checkTokenAuthorization, async (request, response, next) => {
+router.get('/', async (request, response, next) => {
 
     const userId = request.user.id;
 
@@ -43,7 +43,7 @@ router.get('/', checkTokenAuthorization, async (request, response, next) => {
 
 });
 
-router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.get('/:id', async (request, response, next) => {
 
     try {
         const account = await Account.findById(request.params.id);
@@ -64,7 +64,7 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
 
 });
 
-router.post('/', checkTokenAuthorization, async (request, response, next) => {
+router.post('/', async (request, response, next) => {
     try {
 
         const body = request.body;
@@ -93,7 +93,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.delete('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.delete('/:id', async (request, response, next) => {
 
     try {
         const account = await Account.findById(request.params.id);
@@ -115,7 +115,7 @@ router.delete('/:id', checkTokenAuthorization, async (request, response, next) =
 
 });
 
-router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.put('/:id', async (request, response, next) => {
     const body = request.body;
 
     let updatedAccount = {};

@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Category = require('../models/category');
-const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
 
 /*
 Admin:
@@ -15,7 +15,7 @@ User:
 - edit own categories
 */
 
-router.post('/', checkTokenAuthorization, async (request, response, next) => {
+router.post('/', async (request, response, next) => {
 
     try {
         
@@ -44,7 +44,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
 });
 
 
-router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (request, response, next) => {
+router.get('/all/', validateAdminAccount, async (request, response, next) => {
 
     try {
         const result = await Category.find({});
@@ -58,7 +58,7 @@ router.get('/all/', checkTokenAuthorization, validateAdminAccount, async (reques
 });
 
 
-router.get('/', checkTokenAuthorization, async (request, response, next) => {
+router.get('/', async (request, response, next) => {
     const userId = request.user.id;
 
     try {
@@ -74,7 +74,7 @@ router.get('/', checkTokenAuthorization, async (request, response, next) => {
 });
 
 
-router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.get('/:id', async (request, response, next) => {
     const id = request.params.id;
 
     try {
@@ -95,7 +95,7 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.delete('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.delete('/:id', async (request, response, next) => {
     const id = request.params.id;
 
     try {
@@ -117,7 +117,7 @@ router.delete('/:id', checkTokenAuthorization, async (request, response, next) =
     }
 });
 
-router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.put('/:id', async (request, response, next) => {
 
     const body = request.body;
 

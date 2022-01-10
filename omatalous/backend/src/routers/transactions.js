@@ -21,9 +21,6 @@ Users can not:
 admin:
 - Can do everything under "Users can" and "Users can not"
 - Can send a get request to /all/ to retrieve all transactions
-
-TODO:
-Populate information with the respective names
 */
 
 router.get('/all/', checkTokenAuthorization, validateAdminAccount,async (request, response, next) => {
@@ -60,7 +57,7 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
         if(!transaction)
             return response.status(400).json({error:'transaction not found'});
 
-        if(transaction.user.id.toString() === request.user.id || request.user.admin) {
+        if(transaction.user.id.toString() === request.user.id ||request.user.admin) {
             return response.json(transaction);
         }
         else {

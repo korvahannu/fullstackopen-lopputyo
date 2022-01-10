@@ -434,18 +434,18 @@ describe('User ', () => {
         await get('/api/user', null, 401, true);
     });
 
-    test('can not register account at /api/user/register with wrong info', async () => {
-        await post('/api/user/register', null, {password:'test'}, 400, false);
-        await post('/api/user/register', null, {username:'test', email:'dfgfdg', password:'test'}, 400, true);
-        await post('/api/user/register', null, null, 400, false);
+    test('can not register account at /api/register with wrong info', async () => {
+        await post('/api/register', null, {password:'test'}, 400, false);
+        await post('/api/register', null, {username:'test', email:'dfgfdg', password:'test'}, 400, true);
+        await post('/api/register', null, null, 400, false);
     });
 
-    test('you can register a new account at /api/user/register', async () => {
-        await post('/api/user/register', null, {username:'my new user', email:'newuser@gmail.com', password:'mynewuser'}, 200, true);
+    test('you can register a new account at /api/register', async () => {
+        await post('/api/register', null, {username:'my new user', email:'newuser@gmail.com', password:'mynewuser'}, 200, true);
     });
 
     test('no duplicate registers are allowed', async () => {
-        await post('/api/user/register', null, {username:'test', email:'test@test.com', password:'test'}, 200, false);
+        await post('/api/register', null, {username:'test', email:'test@test.com', password:'test'}, 200, false);
     });
 
     test('user can update account name at /api/user/updateAccount', async () => {
