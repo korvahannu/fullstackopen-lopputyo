@@ -39,6 +39,8 @@ const userSchema = new mongoose.Schema({
         default: false
     }
 
+}, {
+    timestamps:true
 });
 
 userSchema.set('toJSON', {

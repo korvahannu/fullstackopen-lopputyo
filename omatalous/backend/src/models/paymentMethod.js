@@ -19,6 +19,8 @@ const paymentMethodSchema = new mongoose.Schema({
         ref:'Account',
         required: true
     },
+}, {
+    timestamps:true
 });
 
 paymentMethodSchema.set('toJSON', {

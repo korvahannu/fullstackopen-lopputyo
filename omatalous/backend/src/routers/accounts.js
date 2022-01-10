@@ -68,9 +68,6 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
     try {
 
         const body = request.body;
-
-        if(body.balance === null || body.balance === undefined)
-            body.balance = 0;
         
         if(body.name === null || body.name === undefined || body.name === '')
             return response.status(400).json({error: 'account name can not be null'});
@@ -82,7 +79,6 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
         
         const account = new Account({
             name: body.name,
-            balance: body.balance,
             icon,
             user: request.user.id
         });
@@ -107,10 +103,10 @@ router.delete('/:id', checkTokenAuthorization, async (request, response, next) =
 
         if(request.user.admin || request.user.id === account.user.toString()) {
             await account.remove();
-            return response.json(200).end();
+            return response.status(200).end();
         }
         else {
-            response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json({error: 'unauthorized'});
         }
     }
     catch(error) {
@@ -126,9 +122,6 @@ router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
 
     if(body.name !== undefined)
         updatedAccount.name = body.name;
-    
-    if (body.balance !== undefined)
-        updatedAccount.balance = body.balance;
     
     if (body.icon !== undefined)
         updatedAccount.icon = body.icon;

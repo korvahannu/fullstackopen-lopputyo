@@ -14,6 +14,7 @@ const categoriesRouter = require('./routers/categories');
 const accountsRouter = require('./routers/accounts');
 const paymentMethodsRouter = require('./routers/paymentMethods');
 const userRouter = require('./routers/user');
+const transactionsRouter = require ('./routers/transactions');
 const errorHandler = require('./middlewares/errorHandler');
 
 // ESTABLISH  CONNECTION TO MONGODB
@@ -37,6 +38,8 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/accounts', accountsRouter);
 app.use('/api/paymentmethods', paymentMethodsRouter);
 app.use('/api/user', userRouter);
+app.use('/api/transactions', transactionsRouter);
+
 
 // PING ROUTE
 app.use('/ping', (request, response) => {

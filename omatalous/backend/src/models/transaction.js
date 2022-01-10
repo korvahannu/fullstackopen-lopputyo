@@ -5,10 +5,6 @@ const transactionSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    date: {
-        type: Date,
-        required: true
-    },
     description: {
         type: String
     },
@@ -32,6 +28,8 @@ const transactionSchema = new mongoose.Schema({
         ref: 'Category',
         required: true
     }
+}, {
+    timestamps:true
 });
 
 transactionSchema.set('toJSON', {

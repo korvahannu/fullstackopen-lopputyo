@@ -70,10 +70,17 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
         if(body.icon !== null && body.icon !== undefined)
             icon = body.icon;
         
+        if(body.account == null || body.account === undefined)
+            return response.json(400).json({error:'account must be defined'});
+        
         const account = await Account.findById(body.account);
 
         if(account.user.toString() !== request.user.id) {
             return response.json(400).json({error: 'you cant add a payment method to an account that is not yours'});
+        }
+
+        if(!account) {
+            return response.json(400).json({error:'account does not exist'});
         }
 
         const paymentMethod = new PaymentMethod({
@@ -102,10 +109,10 @@ router.delete('/:id', checkTokenAuthorization, async (request, response, next) =
        
        if(request.user.admin || request.user.id === paymentMethod.user.toString()) {
            await paymentMethod.remove();
-           return response.json(200).end();
+           return response.status(200).end();
         }
         else {
-            response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json({error: 'unauthorized'});
         }
     }  
     catch(error) {

@@ -5,10 +5,6 @@ const accountSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    balance: {
-        type: Number,
-        required: true
-    },
     icon: {
         type: String,
         default: 'default',
@@ -18,6 +14,8 @@ const accountSchema = new mongoose.Schema({
         ref:'User',
         required: true
     }
+}, {
+    timestamps:true
 });
 
 accountSchema.set('toJSON', {

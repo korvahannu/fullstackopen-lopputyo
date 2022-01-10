@@ -14,6 +14,8 @@ const categorySchema = new mongoose.Schema({
         ref:'User',
         required: true
     }
+}, {
+    timestamps:true
 });
 
 categorySchema.set('toJSON', {
