@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const PORT = process.env.PORT | 3001;
 const WEBTOKEN_SECRET = process.env.WEBTOKEN_SECRET;
+const TOKEN_DEFAULT_EXPIRATION = 86400000;
 
 const URI = process.env.NODE_ENV === 'test'
     ? process.env.URI_TEST
@@ -13,5 +14,6 @@ const URI = process.env.NODE_ENV === 'test'
 module.exports = {
     PORT,
     URI,
-    WEBTOKEN_SECRET
+    WEBTOKEN_SECRET,
+    TOKEN_DEFAULT_EXPIRATION
 };

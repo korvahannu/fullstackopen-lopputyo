@@ -3,8 +3,9 @@
 // request.token is handled by ./getTokenFromRequest.js
 
 const User = require('../models/user');
+const Session = require('../models/session');
 const webtoken = require('jsonwebtoken');
-const { WEBTOKEN_SECRET } = require('../utils/config');
+const { WEBTOKEN_SECRET, TOKEN_DEFAULT_EXPIRATION } = require('../utils/config');
 
 // Some actions, such as adding a transaction, require a user login (authorization)
 // add this as middleware to router to extract user without copy-pasting code
@@ -26,6 +27,14 @@ const checkTokenAuthorization = async (request, response, next) => {
 
         if(request.user.disabled || request.user === null || request.user === undefined) {
             return response.status(401).json({error: 'account disabled or deleted'});
+        }
+
+        const session = await Session.findOne({user:request.user.id.toString(), token: token});
+        const difference = new Date().getTime() - session.date;
+
+        if(!session||difference > TOKEN_DEFAULT_EXPIRATION) { 
+            await session.remove();
+            return response.status(401).json({error: 'session expired or not found'});
         }
 
         next();

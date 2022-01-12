@@ -19,7 +19,6 @@ router.get('/all/', validateAdminAccount, async (request, response, next) => {
 
     try {
         const result = await Account.find({});
-
         return response.json(result);
     }
     catch(error) {
@@ -34,7 +33,6 @@ router.get('/', async (request, response, next) => {
 
     try {
         const result = await Account.find({user:userId});
-
         return response.json(result);
     }
     catch(error) {
@@ -48,10 +46,11 @@ router.get('/:id', async (request, response, next) => {
     try {
         const account = await Account.findById(request.params.id);
 
-        if(!account)
+        if(!account) 
             return response.status(400).json({error:'account does not exist'});
 
         if(request.user.admin ||request.user.id === account.user.toString()) {
+
             return response.json(account);
         }
         else {

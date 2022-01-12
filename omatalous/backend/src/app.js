@@ -10,12 +10,14 @@ const app = express();
 const getTokenFromRequest = require('./middlewares/getTokenFromRequest');
 const usersRouter = require('./routers/users');
 const loginRouter = require('./routers/login');
+const logoutRouter = require('./routers/logout');
 const registerRouter = require('./routers/register');
 const categoriesRouter = require('./routers/categories');
 const accountsRouter = require('./routers/accounts');
 const paymentMethodsRouter = require('./routers/paymentMethods');
 const userRouter = require('./routers/user');
 const transactionsRouter = require ('./routers/transactions');
+const logsRouter = require('./routers/logs');
 const errorHandler = require('./middlewares/errorHandler');
 const { checkTokenAuthorization, } = require('./middlewares/checkTokenAuthorization');
 
@@ -45,7 +47,8 @@ app.use('/api/categories', categoriesRouter);
 app.use('/api/accounts', accountsRouter);
 app.use('/api/paymentmethods', paymentMethodsRouter);
 app.use('/api/transactions', transactionsRouter);
-
+app.use('/api/logs', logsRouter);
+app.use('/api/logout', logoutRouter);
 
 // PING ROUTE
 app.use('/ping', (request, response) => {

@@ -7,6 +7,8 @@ const Category = require('../src/models/category');
 const Account = require('../src/models/account');
 const PaymentMethod = require('../src/models/paymentMethod');
 const Transaction = require('../src/models/transaction');
+const Log = require('../src/models/log');
+const Session = require('../src/models/session');
 
 const { createQuickUser } = require('./utils');
 
@@ -105,6 +107,8 @@ const init = async () => {
     await Account.deleteMany({});
     await PaymentMethod.deleteMany({});
     await Transaction.deleteMany({});
+    await Log.deleteMany({});
+    await Session.deleteMany({});
 
     const admin = await createQuickUser('admin', true);
     const adminUser = new User(admin);
@@ -467,7 +471,7 @@ describe('User ', () => {
     });
 
     test('admin cant delete their own account', async () => {
-        await get('/api/user/deleteAccount', tokenlist.admin, 401, false);
+        await post('/api/user/deleteAccount', tokenlist.admin, null, 401, false);
     });
 });
 
@@ -624,6 +628,27 @@ describe('Transaction tests', () => {
         {category:'gddgffdg'}, 400, false);
         await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 
         {paymentMethod:'gddgffdg'}, 400, false);
+    });
+});
+
+describe('Session tests', () => {
+    test('logged in user has a session saved', async () => {
+
+        const as = await Session.find({});
+        console.log(as);
+
+        const result = await Session.findOne({user:userlist.normal});
+        expect(result).not.toBeNull();
+    });
+
+    test('user can logout', async () => {
+        await post('/api/logout', tokenlist.normal, null, 200, false);
+    });
+
+    
+    test('after logout session no longer exists', async () => {
+        const result = await Session.findOne({user:userlist.normal});
+        expect(result).toBeNull();
     });
 });
 

@@ -6,7 +6,7 @@ router.get('/', checkTokenAuthorization, async (request, response) => {
     return response.json(request.user);
 });
 
-router.get('/deleteAccount/', checkTokenAuthorization, async (request, response, next) => {
+router.post('/deleteAccount/', checkTokenAuthorization, async (request, response, next) => {
     if(request.user.admin) {
         return response.status(401).json({error: 'admins can not their own accounts, please contact system administrator'});
     }

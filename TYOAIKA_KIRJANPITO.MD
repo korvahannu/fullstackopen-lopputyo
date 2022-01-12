@@ -10,3 +10,4 @@
 | 8.1.2021. | 3    | Testerit kirjoitettu routeille accounts, paymentMethods ja user. Monta bugia löytyi joten testien kirjoittaminen on osoittautunut hedelmälliseksi. |
 | 9.1/10.1.2021. | 3    | Transaction routeri kirjoitettu loppuun. Testerit kirjoitettu. Bugeja korjailtu. Alustava backend valmis? |
 | 10.1.2021. | 1    | Pientä koodin refaktorointia ja turhien kommentien poistoa |
+| 12.1.2021. | 4    | Yritin tehdä kaikenlaisia hienoja lisäominaisuuksia, jotka lopulta poistin. Jäljelle jäi session control ja logout -router. Sessio expiroituu automaagisesti 24h jälkeen. Testerit kirjoitettu. |
