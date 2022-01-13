@@ -5,6 +5,7 @@ const { log } = require('./utils/logger');
 const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
 
 // IMPORT IN-HOUSE COMPONENTS
 const getTokenFromRequest = require('./middlewares/getTokenFromRequest');
@@ -33,7 +34,13 @@ connectToMongo();
 // PRE-ROUTERS MIDDLEWARES
 app.use(express.static('build'));
 app.use(express.json());
+app.use(morgan('dev'));
 app.use(getTokenFromRequest);
+
+// PING ROUTE
+app.use('/ping', (request, response) => {
+    response.send('pong');
+});
 
 // ROUTERS
 app.use('/api/login', loginRouter);
@@ -49,11 +56,6 @@ app.use('/api/paymentmethods', paymentMethodsRouter);
 app.use('/api/transactions', transactionsRouter);
 app.use('/api/logs', logsRouter);
 app.use('/api/logout', logoutRouter);
-
-// PING ROUTE
-app.use('/ping', (request, response) => {
-    response.send('pong');
-});
 
 // POST-ROUTERS MIDDLEWARES
 app.use(errorHandler);

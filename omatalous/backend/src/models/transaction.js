@@ -27,7 +27,13 @@ const transactionSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
         required: true
-    }
+    },
+    type: {
+        required: true,
+        type: String,
+        enum: ['need', 'want'],
+        default: 'need'
+    },
 }, {
     timestamps:true
 });

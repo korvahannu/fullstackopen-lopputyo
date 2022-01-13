@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../models/user');
+const Session = require('../models/session');
 const { checkTokenAuthorization } = require('../middlewares/checkTokenAuthorization');
 
 router.get('/', checkTokenAuthorization, async (request, response) => {
@@ -13,6 +14,8 @@ router.post('/deleteAccount/', checkTokenAuthorization, async (request, response
 
     try {
         // Instead of deleting, we disable an account
+        const session = await Session.findOne({user:request.user.id.toString()});
+        await session.remove();
         const user = await User.findByIdAndUpdate(request.user.id, {disabled: true}, {new: true});
         return response.json(user);
     }

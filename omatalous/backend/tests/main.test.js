@@ -633,10 +633,6 @@ describe('Transaction tests', () => {
 
 describe('Session tests', () => {
     test('logged in user has a session saved', async () => {
-
-        const as = await Session.find({});
-        console.log(as);
-
         const result = await Session.findOne({user:userlist.normal});
         expect(result).not.toBeNull();
     });

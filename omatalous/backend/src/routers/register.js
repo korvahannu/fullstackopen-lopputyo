@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+const addDefaultsToUser = require('../utils/addDefaultsToUser');
 
 router.post('/', async (request, response, next) => {
 
@@ -23,6 +24,8 @@ router.post('/', async (request, response, next) => {
         });
 
         await user.save();
+
+        await addDefaultsToUser(user.id.toString());
 
         return response.json(user);
     }

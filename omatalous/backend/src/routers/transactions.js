@@ -77,6 +77,10 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
         const account = await Account.findById(body.account);
         const paymentMethod = await PaymentMethod.findById(body.paymentMethod);
         const category = await Category.findById(body.category);
+        let type = 'need';
+
+        if(body.type && body.type !== null && body.type !== undefined)
+            type = body.type;
 
         if(!account ||!paymentMethod ||!category)
             return response.status(400).json({error: 'One or more fields are invalid'});
@@ -93,7 +97,8 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
             user:request.user.id,
             account:body.account,
             paymentMethod:body.paymentMethod,
-            category: body.category
+            category: body.category,
+            type
         });
 
         await transaction.save();
