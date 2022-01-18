@@ -1,6 +1,6 @@
-import react from "react";
+import React from 'react';
 
-const FormAddNew = ({AddNewTransaction}) => {
+const FormAddNew = (AddNewTransaction) => {
 
     const handleEvent = (event) => {
         event.preventDefault();
@@ -22,7 +22,7 @@ const FormAddNew = ({AddNewTransaction}) => {
                 category,
                 date
             }
-        )
+        );
     };
 
     const clearForm = (event) => {
@@ -61,7 +61,7 @@ const FormAddNew = ({AddNewTransaction}) => {
             <button type="submit">Add</button>
             <button onClick={clearForm}>Clear</button>
         </form>
-    )
+    );
 };
 
 export default FormAddNew;

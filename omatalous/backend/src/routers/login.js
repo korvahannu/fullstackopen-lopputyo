@@ -4,6 +4,7 @@ const webtoken = require('jsonwebtoken');
 const User = require('../models/user');
 const { WEBTOKEN_SECRET } = require('../utils/config');
 const Session = require('../models/session');
+const responses = require('./responses');
 
 router.post('/', async (request, response) => {
 
@@ -16,11 +17,11 @@ router.post('/', async (request, response) => {
     : await bcrypt.compare(body.password, user.passwordHash);
 
     if(!user || !passwordCorrect) {
-        return response.status(401).json({error: 'invalid username or password'});
+        return response.status(401).json(responses.invalidCredentials());
     }
 
     if(user.disabled === true)
-        return response.status(400).json({error: 'user account has been removed, contact sysadmin for re-activation'});
+        return response.status(400).json(responses.accountDisabled());
 
     const _token = {
         username: user.username,

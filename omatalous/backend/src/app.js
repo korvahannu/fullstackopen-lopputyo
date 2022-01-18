@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const cors = require('cors');
 
 // IMPORT IN-HOUSE COMPONENTS
 const getTokenFromRequest = require('./middlewares/getTokenFromRequest');
@@ -32,6 +33,7 @@ const connectToMongo = async () => {
 connectToMongo();
 
 // PRE-ROUTERS MIDDLEWARES
+app.use(cors());
 app.use(express.static('build'));
 app.use(express.json());
 app.use(morgan('dev'));

@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Account = require('../models/account');
 const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const responses = require('./responses');
 
 /*
 Admin:
@@ -47,14 +48,14 @@ router.get('/:id', async (request, response, next) => {
         const account = await Account.findById(request.params.id);
 
         if(!account) 
-            return response.status(400).json({error:'account does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('account'));
 
         if(request.user.admin ||request.user.id === account.user.toString()) {
 
             return response.json(account);
         }
         else {
-            return response.status(401).json({error:'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -69,7 +70,7 @@ router.post('/', async (request, response, next) => {
         const body = request.body;
         
         if(body.name === null || body.name === undefined || body.name === '')
-            return response.status(400).json({error: 'account name can not be null'});
+            return response.status(400).json(responses.fieldMustBeDefined('Account name'));
 
         let icon = 'default';
 
@@ -98,14 +99,14 @@ router.delete('/:id', async (request, response, next) => {
         const account = await Account.findById(request.params.id);
 
         if(!account)
-            return response.status(400).json({error:'account does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('account'));
 
         if(request.user.admin || request.user.id === account.user.toString()) {
             await account.remove();
             return response.status(200).end();
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -129,14 +130,14 @@ router.put('/:id', async (request, response, next) => {
         const account = await Account.findById(request.params.id);
 
         if(!account)
-            return response.status(400).json({error:'account does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('account'));
 
         if(account.user.toString() === request.user.id || request.user.admin) {
             const result = await Account.findByIdAndUpdate(request.params.id, updatedAccount, {new: true});
             return response.json(result);
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {

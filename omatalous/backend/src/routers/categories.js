@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const Category = require('../models/category');
 const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const responses = require('./responses');
 
 /*
 Admin:
@@ -81,13 +82,13 @@ router.get('/:id', async (request, response, next) => {
         const category = await Category.findById(id);
 
         if(category === null || category === undefined)
-            return response.status(400).json({error:'category does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('category'));
 
         if(request.user.admin || category.user.toString() === request.user.id) {
             return response.json(category);
         }
         else {
-            return response.status(401).json({error:'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -102,14 +103,14 @@ router.delete('/:id', async (request, response, next) => {
         const category = await Category.findById(id);
 
         if(category === null || category === undefined)
-            return response.status(400).json({error:'category does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('category'));
 
         if(request.user.admin || category.user.toString() === request.user.id) {
             await category.remove();
             return response.status(200).end();
         }
         else {
-            return response.status(401).json({error:'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -133,14 +134,14 @@ router.put('/:id', async (request, response, next) => {
         const category = await Category.findById(request.params.id);
 
         if(category === null || category === undefined)
-            return response.status(400).json({error:'category does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('category'));
 
         if(category.user.toString() === request.user.id || request.user.admin) {
             const result = await Category.findByIdAndUpdate(request.params.id, updatedCategory, {new: true});
             return response.json(result);
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {

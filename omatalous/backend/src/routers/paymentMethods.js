@@ -2,6 +2,7 @@ const router = require('express').Router();
 const PaymentMethod = require('../models/paymentMethod');
 const Account = require('../models/account');
 const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const responses = require('./responses');
 
 /*
 Admin:
@@ -46,13 +47,13 @@ router.get('/:id', async (request, response, next) => {
         const result = await PaymentMethod.findById(request.params.id);
 
         if(!result)
-            return response.status(400).json({error:'paymentmethod does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('payment method'));
 
         if(request.user.admin || request.user.id === result.user.toString()) {
             return response.json(result);
         }
         else
-            response.status(401).json({error: 'unauthorized'});
+            response.status(401).json(responses.notAuthorized());
     }
     catch(error) {
         next(error);
@@ -71,16 +72,16 @@ router.post('/', async (request, response, next) => {
             icon = body.icon;
         
         if(body.account == null || body.account === undefined)
-            return response.json(400).json({error:'account must be defined'});
+            return response.json(400).json(responses.fieldMustBeDefined('account'));
         
         const account = await Account.findById(body.account);
 
         if(account.user.toString() !== request.user.id) {
-            return response.json(400).json({error: 'you cant add a payment method to an account that is not yours'});
+            return response.json(400).json(responses.doesNotBelongToUser('account'));
         }
 
         if(!account) {
-            return response.json(400).json({error:'account does not exist'});
+            return response.json(400).json(responses.dataDoesNotExist('account'));
         }
 
         const paymentMethod = new PaymentMethod({
@@ -105,14 +106,14 @@ router.delete('/:id', async (request, response, next) => {
        const paymentMethod = await PaymentMethod.findById(request.params.id);
 
        if(!paymentMethod)
-            return response.status(400).json({error:'paymentmethod does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('payment method'));
        
        if(request.user.admin || request.user.id === paymentMethod.user.toString()) {
            await paymentMethod.remove();
            return response.status(200).end();
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }  
     catch(error) {
@@ -136,14 +137,14 @@ router.put('/:id', async (request, response, next) => {
         const paymentMethod = await PaymentMethod.findById(request.params.id);
 
         if(!paymentMethod)
-            return response.status(400).json({error:'paymentmethod does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('payment method'));
 
         if(paymentMethod.user.toString() === request.user.id || request.user.admin) {
             const result = await PaymentMethod.findByIdAndUpdate(request.params.id, updatedPaymentMethod, {new: true});
             return response.json(result);
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {

@@ -1,5 +1,6 @@
-import react from "react";
+import React from 'react';
 import './style.css';
+import PropTypes from 'prop-types';
 
 const TransactionList = ({transactionList}) => {
 
@@ -47,7 +48,7 @@ const TransactionList = ({transactionList}) => {
 
 
                                 </tr>
-                            )
+                            );
                         })
                     }
 
@@ -55,6 +56,10 @@ const TransactionList = ({transactionList}) => {
             </table>
         </div>
     );
+};
+
+TransactionList.propTypes = {
+    transactionList: PropTypes.array
 };
 
 export default TransactionList;

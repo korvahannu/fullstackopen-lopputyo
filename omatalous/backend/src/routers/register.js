@@ -2,13 +2,14 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const addDefaultsToUser = require('../utils/addDefaultsToUser');
+const responses = require('./responses');
 
 router.post('/', async (request, response, next) => {
 
     const body = request.body;
 
     if(!body.email ||!body.username||!body.password) {
-        return response.status(400).json({error: 'missing new user info'});
+        return response.status(400).json(responses.fieldMustBeDefined('User info'));
     }
 
     try {

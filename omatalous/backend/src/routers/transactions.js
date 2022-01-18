@@ -4,6 +4,7 @@ const Account = require('../models/account');
 const Category = require('../models/category');
 const PaymentMethod = require('../models/paymentMethod');
 const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
+const responses = require('./responses');
 
 /*
 Users can: 
@@ -55,13 +56,13 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
         .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
 
         if(!transaction)
-            return response.status(400).json({error:'transaction not found'});
+            return response.status(400).json(responses.dataDoesNotExist('transaction'));
 
         if(transaction.user.id.toString() === request.user.id ||request.user.admin) {
             return response.json(transaction);
         }
         else {
-            return response.status(401).json({error:'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -83,12 +84,12 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
             type = body.type;
 
         if(!account ||!paymentMethod ||!category)
-            return response.status(400).json({error: 'One or more fields are invalid'});
+            return response.status(400).json(responses.fieldsDoNotExist('account, payment method and category'));
 
         if(account.user.toString() !== request.user.id
         ||paymentMethod.user.toString() !== request.user.id
         ||category.user.toString() !== request.user.id) {
-            return response.status(400).json({error: 'One or more fields do not belong to user'});
+            return response.status(400).json(responses.dataDoesNotExist('new user info'));
         }
 
         const transaction = new Transaction({
@@ -167,7 +168,7 @@ router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
         const transaction = await Transaction.findById(request.params.id);
 
         if(!transaction) {
-            return response.status(400).json({error:'transaction does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('transaction'));
         }
         
         if(transaction.user.toString() === request.user.id || request.user.admin) {
@@ -176,7 +177,7 @@ router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
             return response.json(result);
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {
@@ -189,14 +190,14 @@ router.delete('/:id', checkTokenAuthorization, async (request, response, next) =
         const transaction = await Transaction.findById(request.params.id);
 
         if(!transaction)
-            return response.status(400).json({error:'transaction does not exist'});
+            return response.status(400).json(responses.dataDoesNotExist('transaction'));
         
         if(request.user.admin || request.user.id === transaction.user.toString()) {
             await transaction.remove();
             return response.status(200).end();
         }
         else {
-            return response.status(401).json({error: 'unauthorized'});
+            return response.status(401).json(responses.notAuthorized());
         }
     }
     catch(error) {

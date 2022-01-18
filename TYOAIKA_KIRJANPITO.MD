@@ -12,3 +12,4 @@
 | 10.1.2021. | 1    | Pientä koodin refaktorointia ja turhien kommentien poistoa |
 | 12.1.2021. | 4    | Yritin tehdä kaikenlaisia hienoja lisäominaisuuksia, jotka lopulta poistin. Jäljelle jäi session control ja logout -router. Sessio expiroituu automaagisesti 24h jälkeen. Testerit kirjoitettu. |
 | 13.1.2021. | 1.5    | Morgan otettu käyttöön pyyntöjen loggausta varten. Lisätty ominaisuus, jossa käyttäjän rekisteröinti luo hänelle oletusarvoiset kategoriat, tilit ja maksutavat. Nyt jos käyttäjä disabloidaan, hänen sessiot poistetaan. |
+| 18.1.2021. | 2   | Redux ym. avustavat kirjastot otettu käyttöön frontendissä, log in prototyyppi tehty ja toimii (pystyt kirjautumaan sisään). Jotain backendin pikkukorjauksia tehty. |
