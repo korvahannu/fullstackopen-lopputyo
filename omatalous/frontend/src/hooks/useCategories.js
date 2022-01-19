@@ -13,7 +13,7 @@ const useCategories = () => {
         const result = await getUserCategories();
 
         setCategories(
-            result.map(r => r.name )
+            result
         );
     };
 

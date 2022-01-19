@@ -3,7 +3,7 @@ import './style.css';
 import PropTypes from 'prop-types';
 
 const TransactionList = ({transactionList}) => {
-
+    console.log(transactionList);
     return (
         <div>
             <h2>Most recent</h2>
@@ -28,13 +28,13 @@ const TransactionList = ({transactionList}) => {
                             return(
                                 <tr key={`${transaction.amount}${transaction.description}`}>
                                     <th>
-                                        {transaction.account}
+                                        {transaction.account.name}
                                     </th>
                                     <th>
-                                        {transaction.paymentMethod}
+                                        {transaction.paymentMethod.name}
                                     </th>
                                     <th>
-                                        {transaction.category}
+                                        {transaction.category.name}
                                     </th>
                                     <th>
                                         {transaction.amount}

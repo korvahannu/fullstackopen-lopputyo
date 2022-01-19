@@ -24,7 +24,7 @@ admin:
 - Can send a get request to /all/ to retrieve all transactions
 */
 
-router.get('/all/', checkTokenAuthorization, validateAdminAccount,async (request, response, next) => {
+router.get('/all/', validateAdminAccount,async (request, response, next) => {
     try {
 
         const result = await Transaction.find({})
@@ -37,7 +37,7 @@ router.get('/all/', checkTokenAuthorization, validateAdminAccount,async (request
     }
 });
 
-router.get('/', checkTokenAuthorization, async (request, response, next) => {
+router.get('/', async (request, response, next) => {
 
     try {
         const result = await Transaction.find({user:request.user.id})
@@ -50,7 +50,7 @@ router.get('/', checkTokenAuthorization, async (request, response, next) => {
 
 });
 
-router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.get('/:id', async (request, response, next) => {
     try {
         const transaction = await Transaction.findById(request.params.id)
         .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
@@ -70,7 +70,7 @@ router.get('/:id', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.post('/', checkTokenAuthorization, async (request, response, next) => {
+router.post('/', async (request, response, next) => {
     try {
 
         // amount, date, description, user(id), account(id), paymentMethod(id), category(id)
@@ -83,8 +83,8 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
         if(body.type && body.type !== null && body.type !== undefined)
             type = body.type;
 
-        if(!account ||!paymentMethod ||!category)
-            return response.status(400).json(responses.fieldsDoNotExist('account, payment method and category'));
+        if(!account ||!paymentMethod ||!category ||!body.date)
+            return response.status(400).json(responses.fieldsDoNotExist('date, account, payment method and category'));
 
         if(account.user.toString() !== request.user.id
         ||paymentMethod.user.toString() !== request.user.id
@@ -99,6 +99,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
             account:body.account,
             paymentMethod:body.paymentMethod,
             category: body.category,
+            date:body.date,
             type
         });
 
@@ -115,7 +116,7 @@ router.post('/', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.put('/:id', async (request, response, next) => {
 
     const body = request.body;
 
@@ -125,6 +126,8 @@ router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
         update.amount = body.amount;
     if(body.description !== undefined)
         update.description = body.description;
+    if(body.date !== undefined)
+        update.date = body.date;
 
     if(body.account !== undefined) {
         try {
@@ -185,7 +188,7 @@ router.put('/:id', checkTokenAuthorization, async (request, response, next) => {
     }
 });
 
-router.delete('/:id', checkTokenAuthorization, async (request, response, next) => {
+router.delete('/:id', async (request, response, next) => {
     try {
         const transaction = await Transaction.findById(request.params.id);
 

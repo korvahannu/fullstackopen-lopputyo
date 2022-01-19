@@ -4,9 +4,11 @@ import thunk from 'redux-thunk';
 
 // Import reducers here
 import userReducer from './reducers/userReducer';
+import transactionsReducer from './reducers/transactionsReducer';
 
 const reducer = combineReducers({
-    user: userReducer
+    user: userReducer,
+    transactions: transactionsReducer
 });
 
 const Store = createStore(reducer, composeWithDevTools(applyMiddleware(thunk)));

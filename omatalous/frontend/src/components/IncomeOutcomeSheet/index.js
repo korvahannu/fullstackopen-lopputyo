@@ -1,68 +1,32 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './style.css';
 import FormAddNew from './FormAddNew';
 import TransactionList from './TransactionList';
 import { logout } from '../../reducers/userReducer';
+import { empty } from '../../reducers/transactionsReducer';
 import { useDispatch } from 'react-redux';
-import CategoryDropdown from '../CategoryDropdown';
+import { useSelector } from 'react-redux';
 
-const initTransactionList = [
-    {
-        account: 'Primary',
-        paymentMethod: 'Credit card 1',
-        amount: -50.56,
-        description: 'Did some grocery shopping',
-        category: 'Groceries',
-        date: '2022-01-22'
-    },
-    {
-        account: 'Primary',
-        paymentMethod: 'Credit card 1',
-        amount: 25,
-        description: 'Gas',
-        category: 'Gas',
-        date: '2022-01-22'
-    },
-    {
-        account: 'Primary',
-        paymentMethod: 'Credit card 1',
-        amount: 5000,
-        description: 'Payday',
-        category: 'Other',
-        date: '2022-01-22'
-    },
-];
 
 const IncomeOutcomeSheet = () => {
 
     const dispatch = useDispatch();
+    const transactionList = useSelector(state => state.transactions);
 
-    const [transactionList, setTransactionList] = useState(initTransactionList);
-
-    const AddNewTransaction = (transaction) => {
-        setTransactionList([
-            ...transactionList,
-            transaction
-        ]);
+    const AddNewTransaction = () => {
+        console.log('This feature is to do');
     };
     
-    const reducer = (total, current) => {
-        return total + current.amount;
-    };
-
-    const count = transactionList.reduce(reducer, 0);
 
     const simpleLogout = () => {
+        dispatch(empty());
         dispatch(logout());
     };
-
 
     return(
         <div id="wrapper">
             <button onClick={simpleLogout}>Log out</button>
-            <CategoryDropdown onChangeValue={(event) => console.log(event.target.value)} />
             <FormAddNew AddNewTransaction={AddNewTransaction} />
-            <p>Balance: {count}</p>
             <TransactionList transactionList={transactionList} />
         </div>
     );

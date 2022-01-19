@@ -8,8 +8,9 @@ const CategoryDropdown = ({onChangeValue}) => {
 
     return (
         <select name="category" onChange={onChangeValue}>
+            <option value=''>---</option>
             {
-                categories.categories.map(r => <option value={r} key={r}>{r}</option>)
+                categories.categories.map(r => <option value={r.id} key={r.id}>{r.name}</option>)
             }
         </select>
     );

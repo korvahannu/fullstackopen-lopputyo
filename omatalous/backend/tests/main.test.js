@@ -489,7 +489,7 @@ describe('Transaction tests', () => {
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
-            
+            date:'2020-02-02'
         }, 200, true);
 
         expect(helper4.body.account.name).toBe('account1');
@@ -521,6 +521,7 @@ describe('Transaction tests', () => {
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
+            date:'2020-02-02'
         }, 200, true);
 
         await delet(`/api/transactions/${dummy.body.id.toString()}`, tokenlist.normal, 200);
@@ -555,6 +556,7 @@ describe('Transaction tests', () => {
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
+            date:'2020-02-02'
         }, 200, true);
 
         await delet(`/api/transactions/${dummy.body.id.toString()}`, tokenlist.admin, 200);

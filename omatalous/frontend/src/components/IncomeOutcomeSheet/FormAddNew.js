@@ -1,67 +1,70 @@
-import React from 'react';
+import React, { useState } from 'react';
+import AccountDropdown from '../AccountDropdown';
+import CategoryDropdown from '../CategoryDropdown';
+import PaymentMethodDropdown from '../PaymentMethodDropdown';
+import useField from '../../hooks/useField';
+import { useDispatch } from 'react-redux';
+import { add as addNewTransaction } from '../../reducers/transactionsReducer';
 
-const FormAddNew = (AddNewTransaction) => {
+const FormAddNew = () => {
 
-    const handleEvent = (event) => {
-        event.preventDefault();
+    const dispatch = useDispatch();
 
-        const account = event.target.account.value;
-        const paymentMethod = event.target.paymentMethod.value;
-        const amount = event.target.amount.value;
-        const description = event.target.description.value;
-        const category = event.target.category.value;
-        const date = event.target.date.value;
+    const [account, setAccount] = useState('');
+    const [category, setCategory] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('');
+    const amount = useField('text', 'amount');
+    const description = useField('text', 'description');
+    const date = useField('date', 'date');
 
+    const onChange = (event) => {
+        switch(event.target.name.toString()) {
+            case 'account':
+                setAccount(event.target.value);
+            break;
 
-        AddNewTransaction(
-            {
-                account,
-                paymentMethod,
-                amount,
-                description,
-                category,
-                date
-            }
-        );
+            case 'paymentMethod':
+                setPaymentMethod(event.target.value);
+            break;
+
+            case 'category':
+                setCategory(event.target.value);
+            break;
+        }
     };
 
-    const clearForm = (event) => {
-        event.preventDefault();
-        document.getElementById('form-add-new-transaction').reset();
-    };
+    const addTransaction = () => {
+        const transaction = {
+            account,
+            category,
+            paymentMethod,
+            description:description.value,
+            date: date.value,
+            amount: amount.value
+        };
 
+        setAccount('');
+        setCategory('');
+        setPaymentMethod('');
+        description.reset();
+        amount.reset();
+        date.reset();
+
+        dispatch(addNewTransaction(transaction));
+    };
+    
     return (
-        <form onSubmit={handleEvent} id="form-add-new-transaction">
-            <p>Account
-                <select name="account">
-                    <option value="Primary account">Primary account</option>
-                    <option value="Savings account">Savings account</option>
-                </select>
-            </p>
-            <p>Payment method
-                <select name="paymentMethod">
-                    <option value="Debit card">Debit card</option>
-                    <option value="Credit card">Credit card</option>
-                    <option value="Credit card 2">Credit card</option>
-                    <option value="Bank transfer">Bank transfer</option>
-                    <option value="Cash">Cash</option>
-                </select>
-            </p>
-            <p>Category
-                <select name="category">
-                    <option value="Groceries">Groceries</option>
-                    <option value="Gas">Gas</option>
-                    <option value="Hobbies">Hobbies</option>
-                    <option value="Other">Other</option>
-                </select>
-            </p>
-            <p>Amount (€) <input type="number" name="amount"></input></p>
-            <p>Description <input type="text" name="description"></input></p>
-            <p>Date <input type="date" name="date"></input></p>
-            <button type="submit">Add</button>
-            <button onClick={clearForm}>Clear</button>
-        </form>
+        <div>
+            <AccountDropdown onChangeValue={onChange} />
+            <PaymentMethodDropdown onChangeValue={onChange}/>
+            <CategoryDropdown onChangeValue={onChange} />
+            <input { ...amount.getInputParameters } placeholder='amount'/>
+            <input { ...description.getInputParameters } placeholder='description' />
+            <input { ...date.getInputParameters } />
+            <button onClick={addTransaction}>Submit</button>
+        </div>
     );
+    
 };
 
 export default FormAddNew;

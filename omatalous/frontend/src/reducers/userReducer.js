@@ -25,7 +25,7 @@ export const logout = () => {
 export const load = () => {
 
 
-    return dispatch => {
+    return async dispatch => {
         const user = JSON.parse(window.localStorage.getItem(LOCALSTORAGE_USER));
         if(user) {
             setToken(user.token);

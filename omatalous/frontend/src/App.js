@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import IncomeOutcomeSheet from './components/IncomeOutcomeSheet';
 import LoginPrompt from './components/LoginPrompt';
 
-import { load } from './reducers/userReducer';
+import { load as tryToLoadUserFromStorage } from './reducers/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
+import { load as loadTransactions } from './reducers/transactionsReducer';
 
 const App = () => {
 
@@ -11,12 +12,15 @@ const App = () => {
   const user = useSelector(state => state.user);
 
   useEffect(() => {
-    dispatch(load());
+    dispatch(tryToLoadUserFromStorage());
   }, []);
 
-  return user
-    ? <IncomeOutcomeSheet />
-    : <LoginPrompt />;
+  if(!user)
+    return <LoginPrompt />;
+  
+  dispatch(loadTransactions());
+
+  return <IncomeOutcomeSheet />;
 };
 
 export default App;
