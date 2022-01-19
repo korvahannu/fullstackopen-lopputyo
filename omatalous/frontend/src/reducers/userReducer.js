@@ -1,5 +1,7 @@
 import loginService from '../services/login';
 import { LOCALSTORAGE_USER } from '../utils/config';
+import { setToken } from '../utils/tokenholder';
+import logoutService from '../services/logout';
 
 const reducer = (state = null, action) => {
     switch(action.type) {
@@ -14,6 +16,7 @@ const reducer = (state = null, action) => {
 
 export const logout = () => {
     return async dispatch => {
+        await logoutService();
         window.localStorage.removeItem(LOCALSTORAGE_USER);
         dispatch({type:'LOGOUT'});
     };
@@ -23,8 +26,9 @@ export const load = () => {
 
 
     return dispatch => {
-        const user = window.localStorage.getItem(LOCALSTORAGE_USER);
+        const user = JSON.parse(window.localStorage.getItem(LOCALSTORAGE_USER));
         if(user) {
+            setToken(user.token);
             dispatch({type:'LOGIN', user});
         }
         else
@@ -44,6 +48,7 @@ export const login = (username, password) => {
         const user = await loginService(credentials);
         
         window.localStorage.setItem(LOCALSTORAGE_USER, JSON.stringify(user));
+        setToken(user.token);
         dispatch({type:'LOGIN', user});
     };
 };

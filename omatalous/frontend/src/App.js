@@ -14,17 +14,9 @@ const App = () => {
     dispatch(load());
   }, []);
 
-  return (
-    <div className="App">
-      Header
-
-      {
-        user
-          ? <IncomeOutcomeSheet />
-          : <LoginPrompt />
-      }
-    </div>
-  );
+  return user
+    ? <IncomeOutcomeSheet />
+    : <LoginPrompt />;
 };
 
 export default App;

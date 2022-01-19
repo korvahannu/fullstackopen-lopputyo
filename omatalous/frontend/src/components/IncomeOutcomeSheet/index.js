@@ -4,6 +4,7 @@ import FormAddNew from './FormAddNew';
 import TransactionList from './TransactionList';
 import { logout } from '../../reducers/userReducer';
 import { useDispatch } from 'react-redux';
+import CategoryDropdown from '../CategoryDropdown';
 
 const initTransactionList = [
     {
@@ -55,11 +56,11 @@ const IncomeOutcomeSheet = () => {
         dispatch(logout());
     };
 
+
     return(
         <div id="wrapper">
-
             <button onClick={simpleLogout}>Log out</button>
-
+            <CategoryDropdown onChangeValue={(event) => console.log(event.target.value)} />
             <FormAddNew AddNewTransaction={AddNewTransaction} />
             <p>Balance: {count}</p>
             <TransactionList transactionList={transactionList} />
