@@ -9,6 +9,7 @@ import { ThemeProvider } from '@mui/material';
 import useTheme from './hooks/useTheme';
 
 import If from './utils/If';
+import TopBar from './components/TopBar';
 
 const App = () => {
   const themeSelector = useTheme(false);
@@ -25,6 +26,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={themeSelector.theme}>
+      <TopBar user={user} />
       <If condition={user}
       onConditionTrue={<IncomeOutcomeSheet />}
       onConditionFalse={<LoginPrompt />} />

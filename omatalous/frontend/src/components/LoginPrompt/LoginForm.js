@@ -1,14 +1,10 @@
 import React from 'react';
 import { Container, Box, Paper, Button, TextField, Typography, Grid, Link } from '@mui/material';
 import LockIcon from '@mui/icons-material/Lock';
-import PaidIcon from '@mui/icons-material/Paid';
 import PropTypes from 'prop-types';
 
 const LoginForm = ({username, password, handleSubmit, error}) => (
     <Container maxWidth='xs'>
-
-        <Typography variant='h3' align='center' sx={{ mt: 3 }}><PaidIcon sx={{width:40, height:40}} />My Economy</Typography>
-
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Typography align='center' variant='h5' sx={{ mb: 2 }}><LockIcon /> Sign in</Typography>
 
