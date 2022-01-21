@@ -5,8 +5,13 @@ import LoginPrompt from './components/LoginPrompt';
 import { load as tryToLoadUserFromStorage } from './reducers/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { load as loadTransactions } from './reducers/transactionsReducer';
+import { ThemeProvider } from '@mui/material';
+import useTheme from './hooks/useTheme';
+
+import If from './utils/If';
 
 const App = () => {
+  const themeSelector = useTheme(false);
 
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
@@ -15,12 +20,16 @@ const App = () => {
     dispatch(tryToLoadUserFromStorage());
   }, []);
 
-  if(!user)
-    return <LoginPrompt />;
-  
-  dispatch(loadTransactions());
+  if(user)
+    dispatch(loadTransactions());
 
-  return <IncomeOutcomeSheet />;
+  return (
+    <ThemeProvider theme={themeSelector.theme}>
+      <If condition={user}
+      onConditionTrue={<IncomeOutcomeSheet />}
+      onConditionFalse={<LoginPrompt />} />
+    </ThemeProvider>
+  );
 };
 
 export default App;

@@ -1,27 +1,28 @@
 import React from 'react';
 import { login } from '../../reducers/userReducer';
-import { useDispatch } from 'react-redux';
+import { setNotification } from '../../reducers/notificationReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import LoginForm from './LoginForm';
+import useField from '../../hooks/useField';
 
 const LoginPrompt = () => {
-
     const dispatch = useDispatch();
+    const username = useField('text', 'username');
+    const password = useField('password', 'password');
+    const error = useSelector(state => state.notification);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const username = event.target.username.value;
-        const password = event.target.username.value;
-        dispatch(login(username, password));
+        try {
+            await dispatch(login(username.value, password.value));
+        }
+        catch(error) {
+            await dispatch(setNotification('login-error', 'Invalid login credentials', 5));
+        }
     };
 
     return (
-        <div>
-            <h1>Login prompt</h1>
-            <form onSubmit={handleSubmit}>
-                <p>Username: <input type="text" name="username" /></p>
-                <p>Password: <input type="password" name="password" /></p>
-                <p><button type="submit">Login</button></p>
-            </form>
-        </div>
+        <LoginForm username={username} password={password} handleSubmit={handleSubmit} error={error} />
     );
 };
 

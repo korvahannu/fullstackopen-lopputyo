@@ -3,7 +3,6 @@ import './style.css';
 import PropTypes from 'prop-types';
 
 const TransactionList = ({transactionList}) => {
-    console.log(transactionList);
     return (
         <div>
             <h2>Most recent</h2>
