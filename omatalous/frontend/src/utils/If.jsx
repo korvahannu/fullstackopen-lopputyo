@@ -1,10 +1,9 @@
-const If = ({condition, onConditionTrue, onConditionFalse}) => {
+const If = (props) => {
 
-    if(condition)
-        return onConditionTrue;
-    else
-        return onConditionFalse;
+    if(!props.condition)
+        return null;
 
+    return props.children;
 };
 
 export default If;

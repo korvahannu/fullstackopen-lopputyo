@@ -57,7 +57,7 @@ const TransactionsDataGrid = ({transactions, onSelectionChange}) => {
         <CustomDataGrid disableColumnMenu={true} onSelectionModelChange={onSelectionChange} 
         sortModel={sortModel}
         onSortModelChange={() => null}
-        density='compact' columns={columns} rows={rows} pageSize={10} checkboxSelection 
+        density='compact' columns={columns} rows={rows} rowsPerPageOptions={[10]} pageSize={10} checkboxSelection 
         
         getCellClassName={(params) => {
             if (params.field === 'amount') {
