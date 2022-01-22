@@ -18,3 +18,4 @@
 | 21.1.2021. | 3.5   | Noin tunti meni kun luin Material-UI dokumentaatiota. Loput ajat meni sen implementoidessa => Login screen on nyt material UI:lla tehty. Tein myös notificationreducerin, jota eri komponentit voivat käyttää viestien lähettämiseen. Toistaiseksi vain login-screen käyttää sitä. Alustin myös vähän transactions-listan muuttamista MUI Datagridiksi. Omasta mielestä dokumentaatio datagridiin ollun melko hankalaa luettavaa, mutta nyt sain esitettävään muotoon sen. |
 | 21.1.2021. | 1   | Olin niin tyytyväinen frontendin tekemiseen, että tein tunnin lisätyötä! mui appbar lisätty yläosaan, jota kautta tapahtuu esim. log out |
 | 22.1.2021. | 1   | Sidebar lisätty, ei vielä sisällä toiminnallisuuksia |
+| 22.1.2021. | 2.5 | Transaktioiden lisäys siirretty kokonaan material-ui-komponentteihin ja se toimii. Projektin juuressa on nyt featurelist -tiedosto, jossa lukee mitä haluan vielä tehdä. |

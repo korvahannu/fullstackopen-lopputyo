@@ -1,0 +1,10 @@
+0.1.0
+New Transaction -näkymään input validation
+Delete selected -toimimaan, vaatii backendiin jonkun routen
+Mahdollisuus lisätä tilejä ja paymentMethodeja
+-> Lisätoiminnallisuus: PaymentMethod dropdown näyttää vain valitun accountin paymentMethodit
+Edit profile
+profile avatar ym ym.
+Rekisteröitymismahdollisuus, onko kuinka vaikeaa ja vielä ajankohtaista?
+
+Jonkinlainen CI/CD systeemi olisi hyvä, jossa projektin pushmaamista varten testien pitäisi toteutua yms yms

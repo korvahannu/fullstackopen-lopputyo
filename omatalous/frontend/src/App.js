@@ -29,15 +29,16 @@ const App = () => {
     <ThemeProvider theme={themeSelector.theme}>
       <TopBar user={user} />
       <If condition={user}>
-        <Box sx={{display:'flex'}}>
-          <Box sx={{flexGrow:0.5}}>
+        <Box sx={{display:'flex', paddingTop:3}}>
+          <Box sx={{flexGrow:0.1}}>
             <SideBar />
           </Box>
-          <Box sx={{flexGrow:1}}>
+          <Box sx={{flexGrow:1, pr:'5%'}}>
               <Main />
           </Box>
         </Box>
       </If>
+      
       <If condition={!user}>
         <LoginPrompt />
       </If>

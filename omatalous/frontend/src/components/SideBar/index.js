@@ -14,7 +14,7 @@ const options = [
     },
     {
         label: 'Transactions',
-        value: 'home',
+        value: 'transactions',
         icon: <ReceiptLongIcon />
     },
     {
