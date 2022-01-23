@@ -68,7 +68,7 @@ router.post('/', async (request, response, next) => {
         
 
         if(category.type !== 'income')
-            response.status(400).json(responses.invalidType('category'));
+            return response.status(400).json(responses.invalidType('category'));
 
         if(account.user.toString() !== request.user.id
         ||category.user.toString() !== request.user.id) {
@@ -129,6 +129,9 @@ router.put('/:id', async (request, response, next) => {
     if(body.category !== undefined) {
         try {
             const category = await Category.findById(body.category);
+
+            if(category.type !== 'income')
+                return response.status(400).json(responses.invalidType('category'));
 
             if(category && category.user.toString() === request.user.id) {
                 update.category = body.category;

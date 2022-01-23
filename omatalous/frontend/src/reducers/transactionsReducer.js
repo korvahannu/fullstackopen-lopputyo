@@ -3,8 +3,12 @@ import { addOutcome } from '../services/outcomes';
 
 const reducer = (state = [], action) => {
     switch(action.type) {
+        case 'SETLOADING':
+            return {
+                isLoading: true
+            };
         case 'ADD':
-            return [...state, action.data];
+            return [action.data, ...state];
 
         case 'EMPTY':
             return [];
@@ -37,9 +41,10 @@ export const addNewOutcome = (outcome) => {
     };
 };
 
-export const load = () => {
+export const loadTransactions = () => {
 
     return async dispatch => {
+        dispatch({type:'SETLOADING'});
         const transactions = await getUserTransactions();
         dispatch({type:'LOAD', transactions});
     };

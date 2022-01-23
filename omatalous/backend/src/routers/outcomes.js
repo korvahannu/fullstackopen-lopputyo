@@ -90,7 +90,7 @@ router.post('/', async (request, response, next) => {
             return response.status(400).json(responses.fieldsDoNotExist('date, account, payment method and category'));
         
         if(category.type !== 'outcome')
-            response.status(400).json(responses.invalidType('category'));
+            return response.status(400).json(responses.invalidType('category'));
 
         if(account.user.toString() !== request.user.id
         ||paymentMethod.user.toString() !== request.user.id
@@ -166,6 +166,10 @@ router.put('/:id', async (request, response, next) => {
     if(body.category !== undefined) {
         try {
             const category = await Category.findById(body.category);
+
+            if(category.type !== 'income')
+                return response.status(400).json(responses.invalidType('category'));
+
 
             if(category && category.user.toString() === request.user.id) {
                 update.category = body.category;

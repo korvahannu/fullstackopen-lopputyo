@@ -3,7 +3,6 @@ import LoginPrompt from './components/LoginPrompt';
 
 import { load as tryToLoadUserFromStorage } from './reducers/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { load as loadTransactions } from './reducers/transactionsReducer';
 import { ThemeProvider, Box } from '@mui/material';
 import useTheme from './hooks/useTheme';
 
@@ -24,8 +23,6 @@ const App = () => {
     dispatch(tryToLoadUserFromStorage());
   }, []);
 
-  if(user)
-    dispatch(loadTransactions());
 
   return (
     <ThemeProvider theme={themeSelector.theme}>

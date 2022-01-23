@@ -22,12 +22,6 @@ const columns = [
 
 const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
 
-  const sortModel = [
-    {
-      field: 'date',
-      sort: 'desc'
-    }
-  ];
   
   const rows = transactions.map(transaction => {
 
@@ -70,7 +64,6 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
       }}
     >
       <CustomDataGrid disableColumnMenu={true} onSelectionModelChange={onSelectionChange}
-        sortModel={sortModel}
         onSortModelChange={() => null}
         density='compact' columns={columns} rows={rows} rowsPerPageOptions={[10]} pageSize={10} checkboxSelection
 
@@ -89,7 +82,7 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
 };
 
 TransactionsDataGrid.propTypes = {
-  transactions: PropTypes.array,
+  transactions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
   onSelectionChange: PropTypes.func
 };
 
