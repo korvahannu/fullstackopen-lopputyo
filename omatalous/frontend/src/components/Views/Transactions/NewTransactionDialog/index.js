@@ -8,7 +8,7 @@ import PaymentMethodDropdown from './PaymentMethodDropdown';
 import useStyles from '../../../styles';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { useDispatch } from 'react-redux';
-import { add as addNewTransaction } from '../../../../reducers/transactionsReducer';
+import { addNewOutcome } from '../../../../reducers/transactionsReducer';
 import format from 'date-fns/format';
 
 
@@ -47,7 +47,7 @@ const NewTransactionDialog = ({ open, setOpen }) => {
 
     const addTransaction = () => {
         setOpen(false);
-        const transaction = {
+        const outcome = {
             account,
             category,
             paymentMethod,
@@ -63,7 +63,7 @@ const NewTransactionDialog = ({ open, setOpen }) => {
         setAmount('');
         setDate(new Date());
 
-        dispatch(addNewTransaction(transaction));
+        dispatch(addNewOutcome(outcome, 'outcome'));
     };
 
     return (

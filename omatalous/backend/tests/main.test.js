@@ -6,7 +6,8 @@ const User = require('../src/models/user');
 const Category = require('../src/models/category');
 const Account = require('../src/models/account');
 const PaymentMethod = require('../src/models/paymentMethod');
-const Transaction = require('../src/models/transaction');
+const Outcome = require('../src/models/outcome');
+const Income = require('../src/models/income')
 const Log = require('../src/models/log');
 const Session = require('../src/models/session');
 
@@ -106,9 +107,10 @@ const init = async () => {
     await Category.deleteMany({});
     await Account.deleteMany({});
     await PaymentMethod.deleteMany({});
-    await Transaction.deleteMany({});
+    await Outcome.deleteMany({});
     await Log.deleteMany({});
     await Session.deleteMany({});
+    await Income.deleteMany({});
 
     const admin = await createQuickUser('admin', true);
     const adminUser = new User(admin);
@@ -475,14 +477,14 @@ describe('User ', () => {
     });
 });
 
-describe('Transaction tests', () => {
+describe('Outcome tests', () => {
 
-    test('User can add a transaction', async () => {
+    test('User can add a outcome', async () => {
         helper = await post('/api/accounts', tokenlist.normal, {name:'account1'}, 200, true);
         helper2 = await post('/api/categories', tokenlist.normal, {name:'category1'}, 200, true);
         helper3 = await post('/api/paymentMethods', tokenlist.normal, {name:'paymentMethod1', account:helper.body.id.toString()}, 200, true);
 
-        helper4 = await post('/api/transactions', tokenlist.normal, {
+        helper4 = await post('/api/outcomes', tokenlist.normal, {
             amount: 500,
             description: 'test',
             user:userlist.normal,
@@ -497,13 +499,13 @@ describe('Transaction tests', () => {
         expect(helper4.body.category.name).toBe('category1');
     });
 
-    test('user can edit transaction', async () => {
+    test('user can edit outcomes', async () => {
 
         helper = await post('/api/accounts', tokenlist.normal, {name:'account2'}, 200, true);
         helper2 = await post('/api/categories', tokenlist.normal, {name:'category2'}, 200, true);
         helper3 = await post('/api/paymentMethods', tokenlist.normal, {name:'paymentMethod2', account:helper.body.id.toString()}, 200, true);
 
-        const result = await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 
+        const result = await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 
         {amount:200, description:'hello world', account:helper.body.id.toString(), category:helper2.body.id.toString(), paymentMethod:helper3.body.id.toString()}, 200, true);
 
         expect(result.body.amount).toBe(200);
@@ -513,8 +515,8 @@ describe('Transaction tests', () => {
         expect(result.body.category.name).toBe('category2');
     });
 
-    test('user can delete a transaction', async () => {
-        const dummy = await post('/api/transactions', tokenlist.normal, {
+    test('user can delete a outcome', async () => {
+        const dummy = await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             description: 'dummy',
             user:userlist.normal,
@@ -524,32 +526,32 @@ describe('Transaction tests', () => {
             date:'2020-02-02'
         }, 200, true);
 
-        await delet(`/api/transactions/${dummy.body.id.toString()}`, tokenlist.normal, 200);
+        await delet(`/api/outcomes/${dummy.body.id.toString()}`, tokenlist.normal, 200);
     });
 
-    test('user can view a specific transaction with id of it', async () => {
-        const result = await get(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 200, true);
+    test('user can view a specific outcome with id of it', async () => {
+        const result = await get(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 200, true);
         expect(result.body.description).toBe('hello world');
     });
 
-    test('user can view all their transactions', async () => {
-        const result = await get('/api/transactions/', tokenlist.normal, 200, true);
+    test('user can view all their outcomes', async () => {
+        const result = await get('/api/outcomes/', tokenlist.normal, 200, true);
         expect(result.body).toHaveLength(1);
     });
 
     test('Admin can view /all/', async () => {
-        const result = await get('/api/transactions/all/', tokenlist.admin, 200, true);
+        const result = await get('/api/outcomes/all/', tokenlist.admin, 200, true);
         expect(result.body).toHaveLength(1);
     });
 
-    test('Admin can edit anyones transaction', async () => {
-        const result = await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.admin, 
+    test('Admin can edit anyones outcome', async () => {
+        const result = await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.admin, 
         {description:'i am an admin'}, 200, true);
         expect(result.body.description).toBe('i am an admin');
     });
 
-    test('Admin can delete anyones transaction', async() => {
-        const dummy = await post('/api/transactions', tokenlist.normal, {
+    test('Admin can delete anyones outcome', async() => {
+        const dummy = await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             description: 'dummy',
             user:userlist.normal,
@@ -559,63 +561,63 @@ describe('Transaction tests', () => {
             date:'2020-02-02'
         }, 200, true);
 
-        await delet(`/api/transactions/${dummy.body.id.toString()}`, tokenlist.admin, 200);
+        await delet(`/api/outcomes/${dummy.body.id.toString()}`, tokenlist.admin, 200);
     });
 
-    test('User can not view another users transaction', async () => {
-        await get(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401, false);
+    test('User can not view another users outcome', async () => {
+        await get(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401, false);
     });
 
-    test('User can not delete another users transaction', async () => {
-        await delet(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401);
+    test('User can not delete another users outcome', async () => {
+        await delet(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401);
     });
 
-    test('User can not edit another users transaction', async () => {
-        await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normalSecond, 
+    test('User can not edit another users outcome', async () => {
+        await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 
         {description:'this should fail'}, 401, false);
     });
 
-    test('User can not post a transaction with invalid info (e.g. missing category or account)', async () => {
-        await post('/api/transactions', tokenlist.normal, {
+    test('User can not post a outcome with invalid info (e.g. missing category or account)', async () => {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             description: 'dummy',
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             account:helper.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 'fail me',
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             account:'fail me',
             category:helper2.body.id.toString(),
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             account:helper.body.id.toString(),
             category:'fail me',
             paymentMethod: helper3.body.id.toString(),
         }, 400, false);
-        await post('/api/transactions', tokenlist.normal, {
+        await post('/api/outcomes', tokenlist.normal, {
             amount: 555,
             account:helper.body.id.toString(),
             category:helper2.body.id.toString(),
@@ -623,14 +625,249 @@ describe('Transaction tests', () => {
         }, 400, false);
     });
 
-    test('User can not edit a transaction to have invalid info (e.g. changing account to another users account)', async () => {
-        await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 
+    test('User can not edit a outcome to have invalid info (e.g. changing account to another users account)', async () => {
+        await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 
         {account:'gddgffdg'}, 400, false);
-        await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 
+        await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 
         {category:'gddgffdg'}, 400, false);
-        await put(`/api/transactions/${helper4.body.id.toString()}`, tokenlist.normal, 
+        await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 
         {paymentMethod:'gddgffdg'}, 400, false);
     });
+
+    test('User cant add an outcome with invalid category type', async () => {
+        const account = await post('/api/accounts', tokenlist.normal, {name:'account1'}, 200, true);
+        const category = await post('/api/categories', tokenlist.normal, {name:'category1', type:'income'}, 200, true);
+        const paymentMethod = await post('/api/paymentMethods', tokenlist.normal, {name:'paymentMethod1', account:helper.body.id.toString()}, 200, true);
+
+        helper4 = await post('/api/outcomes', tokenlist.normal, {
+            amount: 500,
+            description: 'test',
+            user:userlist.normal,
+            account:account.body.id.toString(),
+            category:category.body.id.toString(),
+            paymentMethod: paymentMethod.body.id.toString(),
+            date:'2020-02-02'
+        }, 400, true);
+    });
+});
+
+describe('Income tests', () => {
+
+    test('User can add a income', async () => {
+        helper = await post('/api/accounts', tokenlist.normal, {name:'account1'}, 200, true);
+        helper2 = await post('/api/categories', tokenlist.normal, {name:'category1', type:'income'}, 200, true);
+        helper4 = await post('/api/incomes', tokenlist.normal, {
+            amount: 500,
+            description: 'test',
+            user:userlist.normal,
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+            date:'2020-02-02'
+        }, 200, true);
+
+        expect(helper4.body.account.name).toBe('account1');
+        expect(helper4.body.category.name).toBe('category1');
+    });
+
+    test('user can edit incomes', async () => {
+
+        helper = await post('/api/accounts', tokenlist.normal, {name:'account2'}, 200, true);
+        helper2 = await post('/api/categories', tokenlist.normal, {name:'category2', type:'income'}, 200, true);
+
+        const result = await put(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normal, 
+        {amount:200, description:'hello world', account:helper.body.id.toString(), category:helper2.body.id.toString()}, 200, true);
+
+        expect(result.body.amount).toBe(200);
+        expect(result.body.description).toBe('hello world');
+        expect(result.body.account.name).toBe('account2');
+        expect(result.body.category.name).toBe('category2');
+    });
+
+    test('user can delete a income', async () => {
+        const dummy = await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            description: 'dummy',
+            user:userlist.normal,
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+            date:'2020-02-02'
+        }, 200, true);
+
+        await delet(`/api/incomes/${dummy.body.id.toString()}`, tokenlist.normal, 200);
+    });
+
+    test('user can view a specific income with id of it', async () => {
+        const result = await get(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normal, 200, true);
+        expect(result.body.description).toBe('hello world');
+    });
+
+    test('user can view all their incomes', async () => {
+        const result = await get('/api/incomes/', tokenlist.normal, 200, true);
+        expect(result.body).toHaveLength(1);
+    });
+
+    test('Admin can view /all/', async () => {
+        const result = await get('/api/incomes/all/', tokenlist.admin, 200, true);
+        expect(result.body).toHaveLength(1);
+    });
+
+    test('Admin can edit anyones income', async () => {
+        const result = await put(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.admin, 
+        {description:'i am an admin'}, 200, true);
+        expect(result.body.description).toBe('i am an admin');
+    });
+
+    test('Admin can delete anyones income', async() => {
+        const dummy = await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            description: 'dummy',
+            user:userlist.normal,
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+            date:'2020-02-02'
+        }, 200, true);
+
+        await delet(`/api/incomes/${dummy.body.id.toString()}`, tokenlist.admin, 200);
+    });
+
+    test('User can not view another users income', async () => {
+        await get(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401, false);
+    });
+
+    test('User can not delete another users income', async () => {
+        await delet(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 401);
+    });
+
+    test('User can not edit another users income', async () => {
+        await put(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normalSecond, 
+        {description:'this should fail'}, 401, false);
+    });
+
+    test('User can not post a income with invalid info (e.g. missing category or account)', async () => {
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            description: 'dummy',
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            account:helper.body.id.toString(),
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            category:helper2.body.id.toString(),
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString()
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 'fail me',
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString()
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            account:'fail me',
+            category:helper2.body.id.toString()
+        }, 400, false);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 555,
+            account:helper.body.id.toString(),
+            category:'fail me',
+        }, 400, false);
+    });
+
+    test('User can not add an income with invalid category type', async () => {
+        const account = await post('/api/accounts', tokenlist.normal, {name:'account1'}, 200, true);
+        const category = await post('/api/categories', tokenlist.normal, {name:'category1', type:'outcome'}, 200, true);
+        await post('/api/incomes', tokenlist.normal, {
+            amount: 500,
+            description: 'test',
+            user:userlist.normal,
+            account:account.body.id.toString(),
+            category:category.body.id.toString(),
+            date:'2020-02-02'
+        }, 400, true);
+    });
+
+    test('User can not edit a income to have invalid info (e.g. changing account to another users account)', async () => {
+        await put(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normal, 
+        {account:'gddgffdg'}, 400, false);
+        await put(`/api/incomes/${helper4.body.id.toString()}`, tokenlist.normal, 
+        {category:'gddgffdg'}, 400, false);
+    });
+});
+
+describe('/api/transactions tests', () => {
+
+    test('Adding an income to an account increases balance', async () => {
+        helper = await post('/api/accounts', tokenlist.normal, {name:'myaccount'}, 200, true);
+        helper2 = await post('/api/categories', tokenlist.normal, {name:'mycategory', type:'income'}, 200, true);
+        
+        helper4.income = await post('/api/incomes', tokenlist.normal, {
+            amount: 500,
+            description: 'test',
+            user:userlist.normal,
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+            date:'2020-02-02'
+        }, 200, true);
+
+
+        const result = await get(`/api/accounts/${helper.body.id.toString()}`, tokenlist.normal, 200, true);
+
+        expect(result.body.balance).toBe(500);
+
+    });
+
+
+    test('Adding an outcome to an account decreases is balance', async () => {
+
+        helper2 = await post('/api/categories', tokenlist.normal, {name:'category_outcome'}, 200, true);
+        helper3 = await post('/api/paymentMethods', tokenlist.normal, {name:'paymentMethod1', account:helper.body.id.toString()}, 200, true);
+
+        helper4.outcome = await post('/api/outcomes', tokenlist.normal, {
+            amount: 250,
+            description: 'test',
+            user:userlist.normal,
+            account:helper.body.id.toString(),
+            category:helper2.body.id.toString(),
+            paymentMethod: helper3.body.id.toString(),
+            date:'2020-02-02'
+        }, 200, true);
+
+        const result = await get(`/api/accounts/${helper.body.id.toString()}`, tokenlist.normal, 200, true);
+        expect(result.body.balance).toBe(250);
+    });
+
+    test('Deleting an income from an account decreases balance', async () => {
+
+        const idArray = [helper4.income.body.id.toString()];
+
+        await api.delete('/api/transactions')
+        .set('Authorization', tokenlist.normal)
+        .send({idArray:idArray})
+        .expect(200);
+
+        const result = await get(`/api/accounts/${helper.body.id.toString()}`, tokenlist.normal, 200, true);
+        expect(result.body.balance).toBe(-250);
+    });
+
+    test('Deleting an outcome from an account increases balance', async () => {
+
+        const idArray = [helper4.outcome.body.id.toString()];
+
+        await api.delete('/api/transactions')
+        .set('Authorization', tokenlist.normal)
+        .send({idArray:idArray})
+        .expect(200);
+
+        const result = await get(`/api/accounts/${helper.body.id.toString()}`, tokenlist.normal, 200, true);
+        expect(result.body.balance).toBe(0);
+    });
+
 });
 
 describe('Session tests', () => {

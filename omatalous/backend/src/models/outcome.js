@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
-const transactionSchema = new mongoose.Schema({
+const outcomeSchema = new mongoose.Schema({
     amount: {
         type: Number,
-        required: true
+        required: true,
+        min: 0
     },
     date: {
         type: Date,
@@ -42,7 +43,7 @@ const transactionSchema = new mongoose.Schema({
     timestamps:true
 });
 
-transactionSchema.set('toJSON', {
+outcomeSchema.set('toJSON', {
 
     transform: (document, returnedObject) => {
 
@@ -54,4 +55,4 @@ transactionSchema.set('toJSON', {
 
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+module.exports = mongoose.model('Outcome', outcomeSchema);

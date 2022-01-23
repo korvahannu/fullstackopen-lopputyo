@@ -21,7 +21,8 @@ router.post('/', async (request, response, next) => {
             email: body.email,
             passwordHash,
             admin: false,
-            disabled: false
+            disabled: false,
+            avatar: body.avatar
         });
 
         await user.save();

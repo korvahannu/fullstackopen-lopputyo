@@ -13,6 +13,12 @@ const categorySchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'User',
         required: true
+    },
+    type: {
+        required: true,
+        type: String,
+        enum: ['income', 'outcome'],
+        default: 'outcome'
     }
 }, {
     timestamps:true

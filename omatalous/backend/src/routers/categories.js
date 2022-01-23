@@ -30,6 +30,7 @@ router.post('/', async (request, response, next) => {
         const category = new Category({
             name: body.name,
             icon,
+            type: body.type,
             user: request.user.id
         });
 

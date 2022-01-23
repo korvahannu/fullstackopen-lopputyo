@@ -1,9 +1,9 @@
 const If = (props) => {
 
-    if(!props.condition)
-        return null;
+    if(props.condition)
+        return props.children;
 
-    return props.children;
+    return null;
 };
 
 export default If;

@@ -68,7 +68,7 @@ router.post('/', async (request, response, next) => {
     try {
 
         const body = request.body;
-        
+
         if(body.name === null || body.name === undefined || body.name === '')
             return response.status(400).json(responses.fieldMustBeDefined('Account name'));
 
@@ -80,6 +80,7 @@ router.post('/', async (request, response, next) => {
         const account = new Account({
             name: body.name,
             icon,
+            balance: body.balance,
             user: request.user.id
         });
 

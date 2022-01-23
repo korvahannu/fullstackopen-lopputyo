@@ -1,211 +1,105 @@
 const router = require('express').Router();
-const Transaction = require('../models/transaction');
+const Income = require('../models/income');
+const Outcome = require('../models/outcome');
 const Account = require('../models/account');
-const Category = require('../models/category');
-const PaymentMethod = require('../models/paymentMethod');
-const { checkTokenAuthorization, validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
-const responses = require('./responses');
 
-/*
-Users can: 
-- add a transaction by posting to /
-- edit a transaction by put to /:id
-- delete a transaction by delete to /:id
-- view all of their transaction by get to /
-- view a specific transaction by get to /:id
-
-Users can not:
-- edit another users transaction by put to :/id
-- delete another users transaction by delete to :/id
-- view someone elses specific transaction by get to :/id
-
-admin:
-- Can do everything under "Users can" and "Users can not"
-- Can send a get request to /all/ to retrieve all transactions
-*/
-
-router.get('/all/', validateAdminAccount,async (request, response, next) => {
+// Return all incomes and outcomes of user sorted by date
+router.get('/', async(request, response, next) => {
     try {
+        const incomes = await Income.find({user:request.user.id})
+        .populate('user', 'name').populate('account', 'name icon').populate('category', 'name icon type');
 
-        const result = await Transaction.find({})
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
-        return response.json(result);
+        const outcomes = await Outcome.find({user:request.user.id})
+        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon type');
 
-    }
-    catch(error) {
-        next(error);
-    }
-});
+        const result = [...incomes, ...outcomes];
 
-router.get('/', async (request, response, next) => {
+        result.sort((a,b) => {
+            let dateA = new Date(a.date);
+            let dateB = new Date(b.date);
 
-    try {
-        const result = await Transaction.find({user:request.user.id})
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
-        return response.json(result);
-    }
-    catch(error) {
-        next(error);
-    }
+            if(dateA.toString() === dateB.toString()) {
+                dateA = new Date(a.createdAt);
+                dateB = new Date(b.createdAt);
+            }
 
-});
-
-router.get('/:id', async (request, response, next) => {
-    try {
-        const transaction = await Transaction.findById(request.params.id)
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
-
-        if(!transaction)
-            return response.status(400).json(responses.dataDoesNotExist('transaction'));
-
-        if(transaction.user.id.toString() === request.user.id ||request.user.admin) {
-            return response.json(transaction);
-        }
-        else {
-            return response.status(401).json(responses.notAuthorized());
-        }
-    }
-    catch(error) {
-        next(error);
-    }
-});
-
-router.post('/', async (request, response, next) => {
-    try {
-
-        // amount, date, description, user(id), account(id), paymentMethod(id), category(id)
-        const body = request.body;
-        const account = await Account.findById(body.account);
-        const paymentMethod = await PaymentMethod.findById(body.paymentMethod);
-        const category = await Category.findById(body.category);
-        let type = 'need';
-
-        if(body.type && body.type !== null && body.type !== undefined)
-            type = body.type;
-
-        if(!account ||!paymentMethod ||!category ||!body.date)
-            return response.status(400).json(responses.fieldsDoNotExist('date, account, payment method and category'));
-
-        if(account.user.toString() !== request.user.id
-        ||paymentMethod.user.toString() !== request.user.id
-        ||category.user.toString() !== request.user.id) {
-            return response.status(400).json(responses.dataDoesNotExist('new user info'));
-        }
-
-        const transaction = new Transaction({
-            amount:body.amount,
-            description: body.description,
-            user:request.user.id,
-            account:body.account,
-            paymentMethod:body.paymentMethod,
-            category: body.category,
-            date:body.date,
-            type
+            return (dateB - dateA);
         });
 
-        await transaction.save();
-
-        const result = await Transaction.findById(transaction.id.toString())
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
-
         return response.json(result);
-
-    }
+    } 
     catch(error) {
         next(error);
     }
 });
 
-router.put('/:id', async (request, response, next) => {
+// Get a list of id's to remove from incomes and outcomes
 
-    const body = request.body;
-
-    let update = {};
-
-    if(body.amount !== undefined)
-        update.amount = body.amount;
-    if(body.description !== undefined)
-        update.description = body.description;
-    if(body.date !== undefined)
-        update.date = body.date;
-
-    if(body.account !== undefined) {
-        try {
-            const account = await Account.findById(body.account);
-            if(account && account.user.toString() === request.user.id) {
-                update.account = body.account;
-            }
-        }
-        catch(error) {
-            return response.status(400).json({error:error.message});
-        }
-    }
-
-    if(body.paymentMethod !== undefined) {
-        try {
-            const paymentMethod = await PaymentMethod.findById(body.paymentMethod);
-
-            if(paymentMethod && paymentMethod.user.toString() === request.user.id) {
-                update.paymentMethod = body.paymentMethod;
-            }
-        }
-        catch(error) {
-            return response.status(400).json({error:error.message});
-        }
-    }
-
-    if(body.category !== undefined) {
-        try {
-            const category = await Category.findById(body.category);
-
-            if(category && category.user.toString() === request.user.id) {
-                update.category = body.category;
-            }
-        }
-        catch(error) {
-            return response.status(400).json({error:error.message});
-        }
-    }
-    
+router.delete('/', async(request, response, next) => {
+    // TODO: Removing any number of transactions causes all user accounts to be synced via syncAccounts
+    // maybe pass an array of accounts instead of updating everything?
     try {
-        const transaction = await Transaction.findById(request.params.id);
 
-        if(!transaction) {
-            return response.status(400).json(responses.dataDoesNotExist('transaction'));
+        const idArray = request.body.idArray;
+
+        if(idArray === undefined ||idArray===null) {
+            return response.status(400).end();
         }
-        
-        if(transaction.user.toString() === request.user.id || request.user.admin) {
-            const result = await Transaction.findByIdAndUpdate(request.params.id, update, {new: true})
-            .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
-            return response.json(result);
+
+        for (const id of idArray) {
+            const outcome = await Outcome.findById(id);
+            if(outcome !== null && outcome !== undefined && outcome.user.toString() === request.user.id) {
+                await outcome.remove();
+            }
+
+            const income = await Income.findById(id);
+            if(income !== null && income !== undefined && income.user.toString() === request.user.id) {
+                await income.remove();
+            }
         }
-        else {
-            return response.status(401).json(responses.notAuthorized());
-        }
-    }
+
+        await syncAccounts(request.user.id);
+
+        return response.status(200).end();
+
+    } 
     catch(error) {
         next(error);
     }
 });
 
-router.delete('/:id', async (request, response, next) => {
+router.post('/syncBalances/', async(request, response, next) => {
     try {
-        const transaction = await Transaction.findById(request.params.id);
-
-        if(!transaction)
-            return response.status(400).json(responses.dataDoesNotExist('transaction'));
-        
-        if(request.user.admin || request.user.id === transaction.user.toString()) {
-            await transaction.remove();
-            return response.status(200).end();
-        }
-        else {
-            return response.status(401).json(responses.notAuthorized());
-        }
-    }
+        await syncAccounts(request.user.id);
+        return response.status(200).end();
+    } 
     catch(error) {
         next(error);
     }
 });
+
+const syncAccounts = async (user) => {
+
+    const accounts = await Account.find({user:user});
+
+    for (const account of accounts) {
+        account.balance = 0;
+
+        const incomes = await Income.find({account:account.id.toString()});
+
+        for(const income of incomes) {
+            account.balance += income.amount;
+        }
+
+        const outcomes = await Outcome.find({account:account.id.toString()});
+
+        for(const outcome of outcomes) {
+            account.balance -= outcome.amount;
+        }
+
+        await account.save();
+    }
+};
+
 
 module.exports = router;

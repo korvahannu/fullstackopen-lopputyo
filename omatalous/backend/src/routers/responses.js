@@ -58,6 +58,12 @@ const responses = {
         return {
             error: `Fields "${field}" are too short.`
         };
+    },
+
+    invalidType: (field) => {
+        return {
+            error: `Fields "${field}" has invalid type.`
+        };
     }
 };
 

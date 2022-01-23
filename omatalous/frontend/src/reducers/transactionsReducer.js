@@ -1,4 +1,5 @@
-import { getUserTransactions, addUserTransactions } from '../services/transactions';
+import { getUserTransactions, deleteMany } from '../services/transactions';
+import { addOutcome } from '../services/outcomes';
 
 const reducer = (state = [], action) => {
     switch(action.type) {
@@ -10,6 +11,12 @@ const reducer = (state = [], action) => {
 
         case 'LOAD':
             return action.transactions;
+
+        case 'DELETEMANY':
+
+            return state.filter(
+                obj => !action.transactions.includes(obj.id)
+            );
 
         default:
             return state;
@@ -23,11 +30,10 @@ export const empty = () => {
     };
 };
 
-export const add = (transaction) => {
-
+export const addNewOutcome = (outcome) => {
     return async dispatch => {
-        const data = await addUserTransactions(transaction);
-        dispatch({type:'ADD', data});
+        const newOutcome = await addOutcome(outcome);
+        dispatch({type:'ADD', data:newOutcome});
     };
 };
 
@@ -37,6 +43,20 @@ export const load = () => {
         const transactions = await getUserTransactions();
         dispatch({type:'LOAD', transactions});
     };
+};
+
+export const deleteManyTransactions = (idArray) => {
+
+    return async dispatch => {
+        try {
+            await deleteMany(idArray);
+            dispatch({type:'DELETEMANY', transactions:idArray});
+        }
+        catch(error) {
+            console.log(error);
+        }
+    };
+
 };
 
 export default reducer;

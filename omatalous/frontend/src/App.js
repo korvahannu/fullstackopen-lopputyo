@@ -12,7 +12,9 @@ import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import Main from './components/Main';
 
+
 const App = () => {
+
   const themeSelector = useTheme(false);
 
   const dispatch = useDispatch();
@@ -28,7 +30,7 @@ const App = () => {
   return (
     <ThemeProvider theme={themeSelector.theme}>
       <TopBar user={user} />
-      <If condition={user}>
+      <If condition={user !== null && user!==undefined}>
         <Box sx={{display:'flex', paddingTop:3}}>
           <Box sx={{flexGrow:0.1}}>
             <SideBar />
@@ -39,7 +41,7 @@ const App = () => {
         </Box>
       </If>
       
-      <If condition={!user}>
+      <If condition={user === null || user===undefined}>
         <LoginPrompt />
       </If>
     </ThemeProvider>

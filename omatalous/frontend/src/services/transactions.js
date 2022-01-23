@@ -2,6 +2,7 @@ import axios from 'axios';
 import { baseUrl } from '../utils/config';
 import { getToken } from '../utils/tokenholder';
 
+
 export const getUserTransactions = async () => {
     const config = {
         headers: {
@@ -13,13 +14,15 @@ export const getUserTransactions = async () => {
     return response.data;
 };
 
-export const addUserTransactions = async (transaction) => {
-    const config = {
+export const deleteMany = async (idArray) => {
+
+    await axios.delete(`${baseUrl}/api/transactions`,
+    {
+        data: {
+            idArray: idArray
+        },
         headers: {
             Authorization: getToken()
         }
-    };
-
-    const response = await axios.post(`${baseUrl}/api/transactions`, transaction, config);
-    return response.data;
+    });
 };

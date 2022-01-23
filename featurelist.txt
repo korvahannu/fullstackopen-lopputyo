@@ -1,4 +1,26 @@
 0.1.0
+
+
+done:
+- Transaction model on nyt Outcome
+- Uusi model: Income
+- Category model: Type (string, enum), default 'income'
+- mahdollisuus laittaa balance accountiin, default 0
+- Transaktion income/outcome aina positiivinen luku! => hoidettu math.abs ja required min 0
+=> negatiiviset luvut muutetaan aina pos
+- Account saa attribuutin balance => muista päivittää uuden transaktion myötä
+- Categoryyn tulee type income/outcome => muista laittaa income vaihtoehto
+- accountissa on nyt avatar vaihtoehto (string), toteutus tulee myöhemmin
+Routerit:
+GET /api/transactions
+- palauttaa listan, joka koostuu käyttäjän kaikista income/outcomeista, sorttaus daten ja creation daten mukaan
+DELETE /api/transactions/many
+- ottaa vastaan listan ID:tä ja poistaa sekä outcomesta ja incomesta löytyvät matchit
+Läjä testeireitä
+
+
+!! Priority 1: Income pitää eriyttää outcomista. Teenkö backendissä vai frondissa?
+-> Ei ole esimerkiksi järkevää, että Income => category groceries
 New Transaction -näkymään input validation
 Delete selected -toimimaan, vaatii backendiin jonkun routen
 Mahdollisuus lisätä tilejä ja paymentMethodeja

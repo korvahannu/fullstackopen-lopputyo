@@ -38,6 +38,11 @@ const addDefaultsToUser = async (userId) => {
     await addCategory('Dining out');
     await addCategory('Music');
     await addCategory('Other');
+    
+    await addCategoryIncome('Work');
+    await addCategoryIncome('Hobbies');
+    await addCategoryIncome('Givins');
+    await addCategoryIncome('Other');
 };
 
 const addPaymentMethod = async (name, account) => {
@@ -55,6 +60,17 @@ const addCategory = async (name) => {
     const category = new Category({
         name,
         icon: 'default',
+        user
+    });
+
+    await category.save();
+};
+
+const addCategoryIncome = async (name) => {
+    const category = new Category({
+        name,
+        icon: 'default',
+        type: 'income',
         user
     });
 
