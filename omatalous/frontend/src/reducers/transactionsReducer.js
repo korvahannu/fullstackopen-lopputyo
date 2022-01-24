@@ -1,5 +1,6 @@
 import { getUserTransactions, deleteMany } from '../services/transactions';
 import { addOutcome } from '../services/outcomes';
+import { addIncome } from '../services/incomes';
 
 const reducer = (state = [], action) => {
     switch(action.type) {
@@ -38,6 +39,13 @@ export const addNewOutcome = (outcome) => {
     return async dispatch => {
         const newOutcome = await addOutcome(outcome);
         dispatch({type:'ADD', data:newOutcome});
+    };
+};
+
+export const addNewIncome = (income) => {
+    return async dispatch => {
+        const newIncome = await addIncome(income);
+        dispatch({type:'ADD', data: newIncome});
     };
 };
 

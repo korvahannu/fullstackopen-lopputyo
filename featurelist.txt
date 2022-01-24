@@ -1,11 +1,9 @@
 0.1.0
-Tee siten, että outcome-ikkuna ei näytä income-kategorioita
-Kyky lisätä outcomeja
 New Transaction -näkymään input validation
+Mahdollisuus nähdä omat tilit ja paymentMethodit accounts -osiosta
 Mahdollisuus lisätä tilejä ja paymentMethodeja
--> Lisätoiminnallisuus: PaymentMethod dropdown näyttää vain valitun accountin paymentMethodit
-Edit profile
-profile avatar ym ym.
-Rekisteröitymismahdollisuus, onko kuinka vaikeaa ja vielä ajankohtaista?
-
-Jonkinlainen CI/CD systeemi olisi hyvä, jossa projektin pushmaamista varten testien pitäisi toteutua yms yms
+Kun nämä on tehty, niin lisäominaisuus newOutcome -näkymään: Näytetään vain valitun accountin sisältämät maksutavat
+Edit profile, profile avatar ym ym.
+Teeman keskittäminen useStyles() komponenttiin
+Yleinen refaktorointi ja mahdollisesti useMemo ja useCallback hyödyntäminen
+Mahdollisesti english/finnish lokalisaatio

@@ -189,7 +189,7 @@ router.put('/:id', async (request, response, next) => {
         
         if(outcome.user.toString() === request.user.id || request.user.admin) {
             const result = await Outcome.findByIdAndUpdate(request.params.id, update, {new: true})
-            .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon');
+            .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'type name icon');
             return response.json(result);
         }
         else {

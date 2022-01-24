@@ -91,7 +91,7 @@ router.post('/', async (request, response, next) => {
         await account.save();
 
         const result = await Income.findById(income.id.toString())
-        .populate('user', 'name').populate('account', 'name icon').populate('category', 'name icon');
+        .populate('user', 'name').populate('account', 'name icon').populate('category', 'type name icon');
 
         return response.json(result);
 
