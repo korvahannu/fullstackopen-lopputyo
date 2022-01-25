@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import LoginPrompt from './components/LoginPrompt';
 
-import { load as tryToLoadUserFromStorage } from './reducers/userReducer';
+import { loadAccounts } from './reducers/accountsReducer';
+import { loadCategories } from './reducers/categoriesReducer';
+import { loadPaymentMethods } from './reducers/paymentMethodsReducer';
+import { loadTransactions } from './reducers/transactionsReducer';
+import { tryToLoadUserFromStorage } from './reducers/userReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider, Box } from '@mui/material';
 import useTheme from './hooks/useTheme';
@@ -38,8 +42,16 @@ const App = () => {
   }, []);
 
   useEffect(async () => {
-    if (user)
+    if (user) {
+
+      // Put all user reducer loads here
+      dispatch(loadTransactions());
+      dispatch(loadCategories());
+      dispatch(loadAccounts());
+      dispatch(loadPaymentMethods());
+
       navigate(`/${view}`);
+    }
     else if (!user)
       navigate('/login');
   }, [user]);

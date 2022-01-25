@@ -24,7 +24,7 @@ export const logout = () => {
     };
 };
 
-export const load = () => {
+export const tryToLoadUserFromStorage = () => {
 
 
     return async dispatch => {

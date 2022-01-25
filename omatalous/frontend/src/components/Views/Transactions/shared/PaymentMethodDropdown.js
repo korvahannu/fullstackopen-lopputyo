@@ -1,18 +1,18 @@
 import React from 'react';
-import usePaymentMethods from '../../../../hooks/usePaymentMethods';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
 const PaymentMethodDropdown = ({account, onChangeValue, value}) => {
 
-    const paymentMethods = usePaymentMethods();
+    const paymentMethods = useSelector(state => state.paymentMethods);
 
     return (
         <FormControl fullWidth>
             <InputLabel id='new-transaction-paymentmethod-label'>Payment Method</InputLabel>
             <Select name="paymentMethod"  value={value}  defaultValue={''} onChange={onChangeValue} fullWidth label='Payment Method' labelId='new-transaction-paymentmethod-label'>
                 {
-                    paymentMethods.paymentMethods.map(r => {
+                    paymentMethods.map(r => {
                         if(!account)
                             return null;
 

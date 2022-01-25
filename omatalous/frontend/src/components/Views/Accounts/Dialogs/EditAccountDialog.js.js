@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Button, ButtonBase, Dialog, DialogTitle, TextField, DialogContent, DialogActions, Slide, FormControl, Typography, Divider } from '@mui/material';
 import { forwardRef } from 'react';
 import useStyles from '../../../styles';
-import { removeUserAccount } from '../../../../services/accounts';
 import useField from '../../../../hooks/useField';
+import { useSelector, useDispatch } from 'react-redux';
+import {removeAccount} from '../../../../reducers/accountsReducer';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -12,24 +13,29 @@ const Transition = forwardRef(
     }
 );
 
-const EditAccount = ({ paymentMethods, account, open, setOpen, updateAccounts }) => {
+const EditAccount = ({ account, open, setOpen }) => {
 
     const classes = useStyles();
     const [newPaymentMethods, setNewPaymentMethods] = useState([]);
     const newPaymentMethod = useField('text', 'paymentMethod');
-
     const [newAccountName, setNewAccountName] = useState('');
+    const dispatch = useDispatch();
 
-    if(!account||!paymentMethods)
+    const paymentMethods = useSelector(state => state.paymentMethods.filter(method => {
+        if(!account)
+            return false;
+        if(method.account === null || method.account.id !== account.id)
+            return false;
+        return true;
+    }));
+
+    if(!account)
         return null;
-
 
     const deleteAccount = async () => {
         if(window,confirm(`Are you sure you want to delete account "${account.name}"? Transactions and payment methods linked to this will remain as ghosts.`)) {
-
-            await removeUserAccount(account);
+            await dispatch(removeAccount(account));
             setOpen(false);
-            updateAccounts();
         }
     };
 

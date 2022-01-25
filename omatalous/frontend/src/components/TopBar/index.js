@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { logout } from '../../reducers/userReducer';
-import { empty } from '../../reducers/transactionsReducer';
 import { useDispatch } from 'react-redux';
 import Bar from './Bar';
 
@@ -37,7 +36,7 @@ const TopBar = ({ user }) => {
     };
 
     const handleLogout = () => {
-        dispatch(empty());
+        // TODO: Do I need to empty all states when logging out?
         dispatch(logout());
     };
 

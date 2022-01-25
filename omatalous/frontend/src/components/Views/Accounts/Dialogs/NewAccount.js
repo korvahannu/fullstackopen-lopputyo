@@ -4,7 +4,9 @@ import { Box, Divider, Typography, TextField, Button, Dialog, DialogTitle, Dialo
 import { forwardRef } from 'react';
 import useStyles from '../../../styles';
 import useField from '../../../../hooks/useField';
-import { addNewUserAccount } from '../../../../services/accounts';
+import { addAccount } from '../../../../reducers/accountsReducer';
+import { useDispatch } from 'react-redux';
+import { loadPaymentMethods } from '../../../../reducers/paymentMethodsReducer';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -12,13 +14,14 @@ const Transition = forwardRef(
     }
 );
 
-const NewAccount = ({ updateAccounts, open, setOpen }) => {
+const NewAccount = ({ open, setOpen }) => {
 
     const classes = useStyles();
     const name = useField('text', 'name');
     const balance = useField('number', 'balance');
     const paymentMethod = useField('text', 'paymentMethod');
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const dispatch = useDispatch();
 
     const addPaymentMethod = () => {
         setPaymentMethods([
@@ -39,9 +42,10 @@ const NewAccount = ({ updateAccounts, open, setOpen }) => {
         };
 
         setOpen(false);
-        await addNewUserAccount(acc);
+
+        await dispatch(addAccount(acc));
+        await dispatch(loadPaymentMethods());
         emptyInput();
-        await updateAccounts();
     };
 
     const emptyInput = () => {

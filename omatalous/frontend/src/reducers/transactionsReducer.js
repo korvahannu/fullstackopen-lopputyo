@@ -4,20 +4,13 @@ import { addIncome } from '../services/incomes';
 
 const reducer = (state = [], action) => {
     switch(action.type) {
-        case 'SETLOADING':
-            return {
-                isLoading: true
-            };
-        case 'ADD':
+        case 'ADD_TRANSACTION':
             return [action.data, ...state];
-
-        case 'EMPTY':
-            return [];
-
-        case 'LOAD':
+            
+        case 'LOAD_TRANSACTIONS':
             return action.transactions;
 
-        case 'DELETEMANY':
+        case 'DELETE_TRANSACTIONS':
 
             return state.filter(
                 obj => !action.transactions.includes(obj.id)
@@ -28,33 +21,24 @@ const reducer = (state = [], action) => {
     }
 };
 
-export const empty = () => {
-
-    return dispatch => {
-        dispatch({type:'EMPTY'});
-    };
-};
-
 export const addNewOutcome = (outcome) => {
     return async dispatch => {
         const newOutcome = await addOutcome(outcome);
-        dispatch({type:'ADD', data:newOutcome});
+        dispatch({type:'ADD_TRANSACTION', data:newOutcome});
     };
 };
 
 export const addNewIncome = (income) => {
     return async dispatch => {
         const newIncome = await addIncome(income);
-        dispatch({type:'ADD', data: newIncome});
+        dispatch({type:'ADD_TRANSACTION', data: newIncome});
     };
 };
 
 export const loadTransactions = () => {
-    console.log('dispatching load transactions');
     return async dispatch => {
-        dispatch({type:'SETLOADING'});
         const transactions = await getUserTransactions();
-        dispatch({type:'LOAD', transactions});
+        dispatch({type:'LOAD_TRANSACTIONS', transactions});
     };
 };
 
@@ -63,7 +47,7 @@ export const deleteManyTransactions = (idArray) => {
     return async dispatch => {
         try {
             await deleteMany(idArray);
-            dispatch({type:'DELETEMANY', transactions:idArray});
+            dispatch({type:'DELETE_TRANSACTIONS', transactions:idArray});
         }
         catch(error) {
             console.log(error);

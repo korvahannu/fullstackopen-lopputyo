@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import TransactionsDataGrid from './TransactionsDataGrid';
 import { Button, Box } from '@mui/material';
@@ -7,7 +7,6 @@ import NewIncomeDialog from './Dialogs/NewIncome';
 import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
 import If from '../../../utils/If';
-import { loadTransactions } from '../../../reducers/transactionsReducer';
 
 
 const Transactions = () => {
@@ -16,12 +15,6 @@ const Transactions = () => {
     const [showNewIncomeDialog, setShowNewIncomeDialog] = useState(false);
     const [selected, setSelected] = useState([]);
     const transactions = useSelector(state => state.transactions);
-    const user = useSelector(state => state.user);
-
-    useEffect(() => {
-        if(user)
-            dispatch(loadTransactions());
-    }, []);
 
     const openNewIncomeDialog = () => setShowNewIncomeDialog(true);
 
@@ -42,7 +35,7 @@ const Transactions = () => {
             <NewOutcomeDialog open={showNewOutcomeDialog} setOpen={setShowNewOutcomeDialog} />
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
 
-            <If condition={!transactions.isLoading}>
+            <If condition={transactions}>
                 <Box sx={{ mb: 3 }}>
                     <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
                     <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
@@ -59,7 +52,7 @@ const Transactions = () => {
                 <TransactionsDataGrid transactions={transactions} onSelectionChange={onSelectionModelChange} />
             </If>
 
-            <If condition={transactions.isLoading}>
+            <If condition={!transactions}>
                 <Loading />
             </If>
 
