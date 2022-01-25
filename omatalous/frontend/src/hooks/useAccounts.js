@@ -3,9 +3,11 @@ import { getUserAccounts } from '../services/accounts';
 
 const useAccounts = () => {
     const [accounts, setAccounts] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    useEffect( ()=> {
-        getAccounts();
+    useEffect( async ()=> {
+        await getAccounts();
+        setLoading(false);
     }
     , []);
 
@@ -17,7 +19,7 @@ const useAccounts = () => {
         );
     };
 
-    return { accounts };
+    return { accounts, loading };
 };
 
 export default useAccounts;

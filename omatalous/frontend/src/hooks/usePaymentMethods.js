@@ -3,9 +3,11 @@ import { getUserPaymentMethods } from '../services/paymentMethods';
 
 const usePaymentMethods = () => {
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    useEffect( ()=> {
-        getPaymentMethods();
+    useEffect( async ()=> {
+        await getPaymentMethods();
+        setLoading(false);
     }
     , []);
 
@@ -17,7 +19,7 @@ const usePaymentMethods = () => {
         );
     };
 
-    return { paymentMethods };
+    return { paymentMethods, loading };
 };
 
 export default usePaymentMethods;

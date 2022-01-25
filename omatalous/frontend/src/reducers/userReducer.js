@@ -18,6 +18,7 @@ const reducer = (state = null, action) => {
 export const logout = () => {
     return async dispatch => {
         window.localStorage.removeItem(LOCALSTORAGE_USER);
+        window.localStorage.removeItem('view');
         await logoutService();
         dispatch({type:'LOGOUT'});
     };
@@ -38,6 +39,7 @@ export const load = () => {
             catch (error) {
                 console.log('invalid loaded login' + error);
                 window.localStorage.removeItem(LOCALSTORAGE_USER);
+                window.localStorage.removeItem('view');
                 setToken('');
                 dispatch({type:'LOGOUT'});
             }

@@ -50,7 +50,7 @@ export const addNewIncome = (income) => {
 };
 
 export const loadTransactions = () => {
-
+    console.log('dispatching load transactions');
     return async dispatch => {
         dispatch({type:'SETLOADING'});
         const transactions = await getUserTransactions();

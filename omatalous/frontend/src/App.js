@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LoginPrompt from './components/LoginPrompt';
 
 import { load as tryToLoadUserFromStorage } from './reducers/userReducer';
@@ -6,43 +6,70 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider, Box } from '@mui/material';
 import useTheme from './hooks/useTheme';
 
-import If from './utils/If';
 import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
-import Main from './components/Main';
+import Accounts from './components/Views/Accounts';
 
+import Transactions from './components/Views/Transactions';
+import If from './utils/If';
+
+import {
+  Routes,
+  Route,
+  useNavigate
+} from 'react-router-dom';
 
 const App = () => {
 
   const themeSelector = useTheme(false);
-
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  const [view, setView] = useState('home');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(tryToLoadUserFromStorage());
+    const previousView = window.localStorage.getItem('view');
+    if(previousView && previousView !=='' && previousView!== null&&previousView!==undefined) {
+      setView(previousView);
+    }
+
+    if(!user)
+      dispatch(tryToLoadUserFromStorage());
   }, []);
 
+  useEffect(async () => {
+    if (user)
+      navigate(`/${view}`);
+    else if (!user)
+      navigate('/login');
+  }, [user]);
+
+  useEffect(() => {
+    window.localStorage.setItem('view', view);
+  },[view]);
 
   return (
     <ThemeProvider theme={themeSelector.theme}>
       <TopBar user={user} />
-      <If condition={user !== null && user!==undefined}>
-        <Box sx={{display:'flex', paddingTop:3}}>
-          <Box sx={{flexGrow:0.1}}>
-            <SideBar />
+
+      <Box sx={{ display: 'flex', paddingTop: 3 }}>
+
+        <If condition={user}>
+          <Box sx={{ flexGrow: 0.1 }}>
+            <SideBar view={view} setView={setView} />
           </Box>
-          <Box sx={{flexGrow:1, pr:'5%'}}>
-              <Main />
-          </Box>
-        </Box>
-      </If>
-      
-      <If condition={user === null || user===undefined}>
-        <LoginPrompt />
-      </If>
+        </If>
+
+        <Routes>
+          <Route path='/login' element={<LoginPrompt />} />
+            <Route path='/transactions' element={<Transactions />} />
+            <Route path='/home' element={<h1>This is your home screen</h1>} />
+            <Route path='/accounts' element={<Accounts />} />
+        </Routes>
+      </Box>
     </ThemeProvider>
   );
 };
+
 
 export default App;

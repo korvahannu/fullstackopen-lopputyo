@@ -21,7 +21,8 @@ router.get('/', async (request, response, next) => {
     const userId = request.user.id;
 
     try {
-        const result = await PaymentMethod.find({user: userId});
+        const result = await PaymentMethod.find({user: userId})
+        .populate('account', 'name id');
         return response.json(result);
     }
     catch(error) {
