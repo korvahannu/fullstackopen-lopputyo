@@ -505,6 +505,7 @@ describe('Outcome tests', () => {
         helper2 = await post('/api/categories', tokenlist.normal, {name:'category2'}, 200, true);
         helper3 = await post('/api/paymentMethods', tokenlist.normal, {name:'paymentMethod2', account:helper.body.id.toString()}, 200, true);
 
+        // FIXME:
         const result = await put(`/api/outcomes/${helper4.body.id.toString()}`, tokenlist.normal, 
         {amount:200, description:'hello world', account:helper.body.id.toString(), category:helper2.body.id.toString(), paymentMethod:helper3.body.id.toString()}, 200, true);
 

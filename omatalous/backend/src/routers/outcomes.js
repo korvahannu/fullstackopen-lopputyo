@@ -167,7 +167,7 @@ router.put('/:id', async (request, response, next) => {
         try {
             const category = await Category.findById(body.category);
 
-            if(category.type !== 'income')
+            if(category.type !== 'outcome')
                 return response.status(400).json(responses.invalidType('category'));
 
 

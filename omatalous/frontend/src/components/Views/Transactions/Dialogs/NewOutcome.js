@@ -57,11 +57,11 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
                 <Box sx={{ height: 32 }} />
                 <TextField label='Description' variant='outlined' fullWidth value={description.value || ''} onChange={description.onChange} />
                 <Box sx={{ height: 32 }} />
-                <AccountDropdown value={account.value} onChangeValue={account.onChange} />
-                <Box sx={{ height: 32 }} />
                 <CategoryDropdown value={category.value} onChangeValue={category.onChange} type='outcome' />
                 <Box sx={{ height: 32 }} />
-                <PaymentMethodDropdown value={paymentMethod.value} onChangeValue={paymentMethod.onChange} />
+                <AccountDropdown value={account.value} onChangeValue={account.onChange} />
+                <Box sx={{ height: 32 }} />
+                <PaymentMethodDropdown value={paymentMethod.value} account={account} onChangeValue={paymentMethod.onChange} />
                 <Box sx={{ height: 32 }} />
                 <DesktopDatePicker
                     fullWidth

@@ -19,7 +19,7 @@ const useAccounts = () => {
         );
     };
 
-    return { accounts, loading };
+    return { accounts, loading, getAccounts};
 };
 
 export default useAccounts;

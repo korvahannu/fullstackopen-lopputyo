@@ -46,7 +46,15 @@ const Transactions = () => {
                 <Box sx={{ mb: 3 }}>
                     <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
                     <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
-                    <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
+                    
+                    {
+                        selected.length < 1
+                        ? null
+                        : selected.length === 1
+                        ? <Button variant='outlined'>Edit selected</Button>
+                        : <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
+                    }
+                    
                 </Box>
                 <TransactionsDataGrid transactions={transactions} onSelectionChange={onSelectionModelChange} />
             </If>

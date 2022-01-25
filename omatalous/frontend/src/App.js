@@ -63,7 +63,7 @@ const App = () => {
         <Routes>
           <Route path='/login' element={<LoginPrompt />} />
             <Route path='/transactions' element={<Transactions />} />
-            <Route path='/home' element={<h1>This is your home screen</h1>} />
+            <Route path='/home' element={<img src='https://www.anychart.com/blog/wp-content/uploads/2017/09/data-visualization-best-practices-in-anychart-js-charts-dataviz-weekly.png' />} />
             <Route path='/accounts' element={<Accounts />} />
         </Routes>
       </Box>

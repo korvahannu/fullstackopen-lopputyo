@@ -25,6 +25,10 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
   
   const rows = transactions.map(transaction => {
 
+    const accName = transaction.account === null
+    ? 'Deleted account.'
+    : transaction.account.name;
+
     if (transaction.category.type === 'outcome') {
       return {
         id: transaction.id,
@@ -32,7 +36,7 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
         description: transaction.description,
         category: transaction.category.name,
         paymentMethod: transaction.paymentMethod.name,
-        account: transaction.account.name,
+        account: accName,
         date: transaction.date.substring(0, 10)
       };
     }
@@ -43,7 +47,7 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
         description: transaction.description,
         category: transaction.category.name,
         paymentMethod: '',
-        account: transaction.account.name,
+        account: accName,
         date: transaction.date.substring(0, 10)
       };
     }

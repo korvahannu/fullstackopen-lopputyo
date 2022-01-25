@@ -41,7 +41,6 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
         description.reset();
         amount.reset();
         setDate(new Date());
-
         dispatch(addNewIncome(outcome));
     };
 

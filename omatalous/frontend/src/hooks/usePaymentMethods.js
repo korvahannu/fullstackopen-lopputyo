@@ -19,7 +19,7 @@ const usePaymentMethods = () => {
         );
     };
 
-    return { paymentMethods, loading };
+    return { paymentMethods, loading, getPaymentMethods };
 };
 
 export default usePaymentMethods;

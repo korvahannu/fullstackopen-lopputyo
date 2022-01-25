@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Account = require('../models/account');
+const PaymentMethod = require('../models/paymentMethod');
 const { validateAdminAccount } = require('../middlewares/checkTokenAuthorization');
 const responses = require('./responses');
 
@@ -84,7 +85,32 @@ router.post('/', async (request, response, next) => {
             user: request.user.id
         });
 
-        await account.save();
+        await account.save();   // Save account
+
+        if(body.paymentMethods !== null && body.paymentMethods !== undefined) {
+            const paymentMethods = body.paymentMethods;
+            console.log(paymentMethods);
+
+            for(const pm of paymentMethods) {
+
+                if(pm.name === null || pm.name === undefined ||pm.name ==='')
+                    continue;
+
+                icon = 'default';
+                if(pm.icon !== null && pm.icon !== undefined)
+                    icon = pm.icon;
+
+                const paymentMethod = new PaymentMethod ({
+                    name: pm.name,
+                    icon,
+                    user: request.user.id,
+                    account: account.id.toString()
+                });
+
+                await paymentMethod.save();
+
+            }
+        }
 
         return response.json(account);
 

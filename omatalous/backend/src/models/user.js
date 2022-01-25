@@ -37,6 +37,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    avatar: {
+        type: String,
+        required: false
     }
 }, {
     timestamps:true

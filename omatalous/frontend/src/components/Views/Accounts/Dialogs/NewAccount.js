@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Divider, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, FormControl } from '@mui/material';
+import { Box, Divider, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, FormControl, ButtonBase } from '@mui/material';
 import { forwardRef } from 'react';
 import useStyles from '../../../styles';
 import useField from '../../../../hooks/useField';
+import { addNewUserAccount } from '../../../../services/accounts';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -11,15 +12,58 @@ const Transition = forwardRef(
     }
 );
 
-const NewAccount = ({ open, setOpen }) => {
+const NewAccount = ({ updateAccounts, open, setOpen }) => {
 
     const classes = useStyles();
     const name = useField('text', 'name');
-    const description = useField('text', 'description');
+    const balance = useField('number', 'balance');
+    const paymentMethod = useField('text', 'paymentMethod');
+    const [paymentMethods, setPaymentMethods] = useState([]);
 
+    const addPaymentMethod = () => {
+        setPaymentMethods([
+            {
+                name:paymentMethod.value,
+                icon:'default'
+            },
+            ...paymentMethods
+        ]);
+        paymentMethod.reset();
+    };
+
+    const addNewAccount = async () => {
+        const acc = {
+            name:name.value,
+            balance:balance.value,
+            paymentMethods: paymentMethods
+        };
+
+        setOpen(false);
+        await addNewUserAccount(acc);
+        emptyInput();
+        await updateAccounts();
+    };
+
+    const emptyInput = () => {
+        name.reset();
+        balance.reset();
+        paymentMethod.reset();
+        setPaymentMethods([]);
+    };
+
+    const closeWindow = () => {
+        emptyInput();
+        setOpen(false);
+    };
+
+    const removeMethod = (method) => {
+        setPaymentMethods(
+            paymentMethods.filter(p => p.name !== method)
+        );
+    };
 
     return (
-        <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => setOpen(false)}>
+        <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => closeWindow()}>
 
             <DialogTitle>Add a new account</DialogTitle>
 
@@ -28,14 +72,25 @@ const NewAccount = ({ open, setOpen }) => {
                 <DialogContent>
                     <TextField label='Account name' type='text' variant='outlined' fullWidth value={name.value || ''} onChange={name.onChange} />
                     <Box sx={{ height: 32 }} />
-                    <TextField label='Description' variant='outlined' fullWidth value={description.value || ''} onChange={description.onChange} />
+                    <TextField label='Initial balance' type='number' variant='outlined' fullWidth value={balance.value || ''} onChange={balance.onChange} />
                     <Box sx={{ height: 32 }} />
-                    <Divider />
+                    {
+                        paymentMethods.length > 0
+                        ? <Typography variant=''>Payment methods: </Typography>
+                        : null
+                    }
+                    {
+                        paymentMethods.map(m => <ButtonBase onClick={()=>removeMethod(m.name)} color='error' sx={{mr:2}} key={m.name}><Typography variant='overline'>{m.name} </Typography></ButtonBase>)
+                    }
+                    <Divider /> <br />
+                    <Typography>Add payment methods:</Typography>
+                    <TextField size='small' value={paymentMethod.value} onChange={paymentMethod.onChange} label='Paymentmethod name' type='text' variant='outlined' />
+                    <Button onClick={addPaymentMethod}>+</Button>
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={() => console.log('unimplemented')}>Add</Button>
-                    <Button onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button onClick={() => addNewAccount()}>Add</Button>
+                    <Button onClick={() => closeWindow()}>Cancel</Button>
                 </DialogActions>
 
             </FormControl>
@@ -47,6 +102,7 @@ const NewAccount = ({ open, setOpen }) => {
 NewAccount.propTypes = {
     children: PropTypes.node,
     setOpen: PropTypes.func,
+    updateAccounts: PropTypes.func,
     open: PropTypes.bool
 };
 

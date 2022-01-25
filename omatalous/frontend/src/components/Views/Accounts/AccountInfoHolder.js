@@ -3,10 +3,10 @@ import { Paper, Typography, Divider, ButtonBase } from '@mui/material';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PropTypes from 'prop-types';
 
-const AccountInfoHolder = ({account, paymentMethods}) => {
+const AccountInfoHolder = ({account, paymentMethods, openEditAccountWindow}) => {
     return (
-        <ButtonBase>
-            <Paper elevation={6} sx={{padding: '32px', minWidth: '256px' }}>
+        <ButtonBase onClick={()=>openEditAccountWindow(account)}>
+            <Paper elevation={6} sx={{padding: '32px', minWidth: '256px', minHeight:'256px', margin:3 }}>
                 <Typography variant='h6'><AssignmentIndIcon /> {account.name}</Typography>
                 <Typography variant='subtitle2' style={{color:account.balance < 0 ? 'red' : 'green'}}>{account.balance}$</Typography>
                 <Divider />
@@ -14,6 +14,10 @@ const AccountInfoHolder = ({account, paymentMethods}) => {
                 <Typography variant='overline'>
                 {
                     paymentMethods.map(method => {
+                        
+                        if(method.account === null) // If user has removed an account, "ghost paymentmethods" may exist
+                            return null;
+
                         if(method.account.id !== account.id)
                             return null;
                         else
@@ -28,7 +32,8 @@ const AccountInfoHolder = ({account, paymentMethods}) => {
 
 AccountInfoHolder.propTypes = {
     account: PropTypes.object,
-    paymentMethods: PropTypes.array
+    paymentMethods: PropTypes.array,
+    openEditAccountWindow: PropTypes.func
 };
 
 export default AccountInfoHolder;

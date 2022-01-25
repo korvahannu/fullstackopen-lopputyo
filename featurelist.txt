@@ -1,9 +1,8 @@
 0.1.0
-Mahdollisuus lisätä tilejä (aloitettu) ja paymentMethodeja
-Jos poistat tilin/paymentmethodin, on myös niihin liittyvät tapahtumat poistettava
-Kun nämä on tehty, niin lisäominaisuus newOutcome -näkymään: Näytetään vain valitun accountin sisältämät maksutavat
-
+Laita edit account toimimaan
+Tee edit näkymä yksittäiselle transaktiolle
 New Transaction -näkymään input validation
+Edit profile ja new profile -näkymään input validation
 Edit profile, profile avatar ym ym.
 Teeman keskittäminen useStyles() komponenttiin
 Yleinen refaktorointi ja mahdollisesti useMemo ja useCallback hyödyntäminen
