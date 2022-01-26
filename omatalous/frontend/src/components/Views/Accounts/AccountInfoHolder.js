@@ -3,8 +3,11 @@ import { Paper, Typography, Divider, ButtonBase } from '@mui/material';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
+import useStyle from '../../styles';
 
 const AccountInfoHolder = ({account, openEditAccountWindow}) => {
+
+    const classes = useStyle();
 
     const paymentMethods = useSelector(state => state.paymentMethods.filter(method => {
         if(method.account === null)
@@ -17,7 +20,7 @@ const AccountInfoHolder = ({account, openEditAccountWindow}) => {
 
     return (
         <ButtonBase onClick={()=>openEditAccountWindow(account)}>
-            <Paper elevation={6} sx={{padding: '32px', minWidth: '256px', minHeight:'256px', margin:3 }}>
+            <Paper elevation={6} className={classes.accountInfoContainer}>
                 <Typography variant='h6'><AssignmentIndIcon /> {account.name}</Typography>
                 <Typography variant='subtitle2' style={{color:account.balance < 0 ? 'red' : 'green'}}>{account.balance}$</Typography>
                 <Divider />

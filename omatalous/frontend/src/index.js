@@ -19,7 +19,6 @@ ReactDOM.render(
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Provider store={Store}>
         <CssBaseline />
-
         <Router>
           <App />
         </Router>

@@ -1,15 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import LoginPrompt from './components/LoginPrompt';
 
-import { loadAccounts } from './reducers/accountsReducer';
-import { loadCategories } from './reducers/categoriesReducer';
-import { loadPaymentMethods } from './reducers/paymentMethodsReducer';
-import { loadTransactions } from './reducers/transactionsReducer';
-import { tryToLoadUserFromStorage } from './reducers/userReducer';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ThemeProvider, Box } from '@mui/material';
-import useTheme from './hooks/useTheme';
 
+import useTheme from './hooks/useTheme';
 import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import Accounts from './components/Views/Accounts';
@@ -17,71 +12,52 @@ import Home from './components/Views/Home';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
+import initializeReduxStorage from './utils/initializeReduxStorage';
 
 import {
   Routes,
-  Route,
-  useNavigate
+  Route
 } from 'react-router-dom';
+import useView from './hooks/useView';
+
+/*
+@App.js has only a few functions
+  1. uses useView() to handle navigation in cooperation of react-routers
+  2. Dispatches all reducer loads for a valid user using helper initializeReduxStorage.js
+  3. uses selector to check wether user is valid or not
+
+All unnecessary components should be eliminated, keep this and index.js clean
+*/
 
 const App = () => {
 
   const themeSelector = useTheme();
-  const dispatch = useDispatch();
   const user = useSelector(state => state.user);
-  const [view, setView] = useState('home');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const previousView = window.localStorage.getItem('view');
-    if(previousView && previousView !=='' && previousView!== null&&previousView!==undefined) {
-      setView(previousView);
-    }
-  }, []);
+  const view = useView();
+  const initializer = initializeReduxStorage();
 
   useEffect(async () => {
-    window.localStorage.setItem('view', view);
-  }, [ view]);
-
-  useEffect(async () => {
-
     if(user) {
-      console.log('Dispatching all reducer-loads');
-      // Put all user reducer loads here
-      dispatch(loadTransactions());
-      dispatch(loadCategories());
-      dispatch(loadAccounts());
-      dispatch(loadPaymentMethods());
-
-      navigate(`/${view}`);
+      initializer.init();
+      view.navigate(view.value);
     }
     else {
-      if(!user) {
-        dispatch(tryToLoadUserFromStorage());
-        navigate('/login');
-      }
+      initializer.loadUserFromStorage();
+      view.navigate('login', 'prevent-save');
     }
-
   }, [user]);
-
-  useEffect(() => {
-    
-  },[view]);
 
   return (
     <ThemeProvider theme={themeSelector.theme}>
       <TopBar user={user} />
 
-      <Box sx={{ display: 'flex', paddingTop: 3 }}>
-
+      <Box sx={{ display: 'flex'}}>
         <If condition={user}>
-          <Box sx={{ flexGrow: 0.1 }}>
-            <SideBar view={view} setView={setView} />
-          </Box>
+          <SideBar view={view} />
         </If>
 
         <Routes>
-          <Route path='/login' element={<LoginPrompt />} />
+          <Route path='/login' element={<LoginPrompt view={view} />} />
             <Route path='/transactions' element={<Transactions />} />
             <Route path='/home' element={<Home />} />
             <Route path='/accounts' element={<Accounts />} />

@@ -8,9 +8,11 @@ import EditTransaction from './EditTransaction';
 import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
 import If from '../../../utils/If';
+import useStyle from '../../styles';
 
 
 const Transactions = () => {
+    const classes = useStyle();
     const dispatch = useDispatch();
     const [showNewOutcomeDialog, setShowNewOutcomeDialog] = useState(false);
     const [showNewIncomeDialog, setShowNewIncomeDialog] = useState(false);
@@ -32,14 +34,14 @@ const Transactions = () => {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, pr: '5%' }}>
+        <Box className={classes.viewContainer}>
 
             <NewOutcomeDialog open={showNewOutcomeDialog} setOpen={setShowNewOutcomeDialog} />
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
             <EditTransaction target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
 
             <If condition={transactions}>
-                <Box sx={{ mb: 3 }}>
+                <Box sx={{ mb: '16px' }}>
                     <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
                     <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
                     

@@ -4,20 +4,19 @@ import { setNotification } from '../../reducers/notificationReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import LoginForm from './LoginForm';
 import useField from '../../hooks/useField';
-import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-const LoginPrompt = () => {
+const LoginPrompt = ({view}) => {
     const dispatch = useDispatch();
     const username = useField('text', 'username');
     const password = useField('password', 'password');
     const error = useSelector(state => state.notification);
-    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             await dispatch(login(username.value, password.value));
-            navigate('/home');
+            view.navigate('home');
         }
         catch(error) {
             await dispatch(setNotification('login-error', 'Invalid login credentials', 5));
@@ -27,6 +26,10 @@ const LoginPrompt = () => {
     return (
         <LoginForm username={username} password={password} handleSubmit={handleSubmit} error={error} />
     );
+};
+
+LoginPrompt.propTypes = {
+    view: PropTypes.object
 };
 
 export default LoginPrompt;

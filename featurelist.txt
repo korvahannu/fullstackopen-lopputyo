@@ -1,5 +1,4 @@
 0.1.0=>
-refaktorointi siten, että transaktion lisääminen/muokkaus dispatchaa sen sijaan, että pakottaa lataamaan kaiken uudestaan backendistä
 backendin testien kirjoittaminen puuttuviin routereihin
 backendin ylimääräisten routereiden poistaminen
 mahdollisuus muokata omaa profiilia ja avataria

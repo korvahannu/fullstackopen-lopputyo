@@ -6,7 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import WorkIcon from '@mui/icons-material/Work';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import useStyle from '../styles';
 
 const options = [
     {
@@ -26,34 +26,32 @@ const options = [
     }
 ];
 
-const SideBar = ({view, setView}) => {
+const SideBar = ({view}) => {
 
-    const navigate = useNavigate();
+    const classes = useStyle();
 
     const handleClick = (value) => {
-        setView(value);
-        navigate(`/${value}`);
+        view.navigate(value);
     };
 
     return (
-        <Box>
+        <Box className={classes.sidebarContainer}>
             <List>
                 {options.map(option => (
-                    <ListItem 
-                    
-                    sx={{color: view === option.value
-                        ? '#3f51b5'
-                        : '',
-                        textDecoration: view === option.value
-                        ? 'underline'
-                        : ''
-                    }}
+                    <ListItem
+
+                    className={
+                        view.value === option.value
+                        ? classes.sidebarSelected
+                        : null
+                    }
                     
                     button key={option.value} value={option.value} onClick={()=>handleClick(option.value)}>
                         <ListItemIcon>
                             {option.icon}
                         </ListItemIcon>
-                        <ListItemText primary={option.label} />
+                        <ListItemText
+                        classes={view.value === option.value ? {primary: classes.sidebarSelectedText} : null} primary={option.label} />
                     </ListItem>
                 ))}
             </List>
@@ -62,8 +60,7 @@ const SideBar = ({view, setView}) => {
 };
 
 SideBar.propTypes = {
-    view: PropTypes.string,
-    setView: PropTypes.func
+    view: PropTypes.object
 };
 
 export default SideBar;
