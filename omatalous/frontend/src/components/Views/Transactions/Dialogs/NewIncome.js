@@ -9,6 +9,7 @@ import { addNewIncome } from '../../../../reducers/transactionsReducer';
 import format from 'date-fns/format';
 import useField from '../../../../hooks/useField';
 import DialogBody from './DialogBody';
+import { loadAccounts } from '../../../../reducers/accountsReducer';
 
 /*
     Because a dialog box can not open itself, we take open and setOpen
@@ -25,7 +26,7 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
     const description = useField('text', 'description');
     const [date, setDate] = useState(new Date());
 
-    const addTransaction = () => {
+    const addTransaction = async () => {
         setOpen(false);
 
         const outcome = {
@@ -41,7 +42,8 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
         description.reset();
         amount.reset();
         setDate(new Date());
-        dispatch(addNewIncome(outcome));
+        await dispatch(addNewIncome(outcome));
+        await dispatch(loadAccounts());
     };
 
     return (

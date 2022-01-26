@@ -1,4 +1,4 @@
-import { getUserTransactions, deleteMany } from '../services/transactions';
+import { getUserTransactions, deleteMany, updateUserTransaction } from '../services/transactions';
 import { addOutcome } from '../services/outcomes';
 import { addIncome } from '../services/incomes';
 
@@ -15,6 +15,16 @@ const reducer = (state = [], action) => {
             return state.filter(
                 obj => !action.transactions.includes(obj.id)
             );
+
+        case 'UPDATE_TRANSACTION':
+
+        return state.map(obj => {
+            if(obj.id !== action.update.id)
+                return obj;
+            else {
+                return action.update;
+            }
+        });
 
         default:
             return state;
@@ -54,6 +64,13 @@ export const deleteManyTransactions = (idArray) => {
         }
     };
 
+};
+
+export const updateTransaction = (update) => {
+    return async dispatch => {
+        const result = await updateUserTransaction(update);
+        return dispatch({type:'UPDATE_TRANSACTION', update: result});
+    };
 };
 
 export default reducer;

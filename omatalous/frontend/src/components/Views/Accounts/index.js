@@ -27,7 +27,7 @@ const Accounts = () => {
         return <Loading />;
 
     return (
-        <Box sx={{ flexGrow: 0.15, pl:'5%', pr: '5%'}}>
+        <Box sx={{ flexGrow: 0.15, pr: '5%'}}>
             <NewAccountDialog open={showNewAccountDialog} setOpen={setShowNewAccountDialog} />
             <EditAccountDialog  account={targetAccount} open={showEditAccountDialog} setOpen={setShowEditAccountDialog} />
 

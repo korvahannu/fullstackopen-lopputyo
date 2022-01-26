@@ -10,6 +10,7 @@ import { addNewOutcome } from '../../../../reducers/transactionsReducer';
 import format from 'date-fns/format';
 import useField from '../../../../hooks/useField';
 import DialogBody from './DialogBody';
+import { loadAccounts } from '../../../../reducers/accountsReducer';
 
 
 /*
@@ -27,7 +28,7 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
     const description = useField('text', 'description');
     const [date, setDate] = useState(new Date());
 
-    const addTransaction = () => {
+    const addTransaction = async  () => {
         setOpen(false);
 
         const outcome = {
@@ -46,7 +47,8 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
         amount.reset();
         setDate(new Date());
 
-        dispatch(addNewOutcome(outcome));
+        await dispatch(addNewOutcome(outcome));
+        await dispatch(loadAccounts());
     };
 
     return (

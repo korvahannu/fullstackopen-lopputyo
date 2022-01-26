@@ -1,9 +1,13 @@
-0.1.0
-Laita edit account toimimaan
-Tee edit näkymä yksittäiselle transaktiolle
-New Transaction -näkymään input validation
-Edit profile ja new profile -näkymään input validation
-Edit profile, profile avatar ym ym.
-Teeman keskittäminen useStyles() komponenttiin
-Yleinen refaktorointi ja mahdollisesti useMemo ja useCallback hyödyntäminen
+0.1.0=>
+refaktorointi siten, että transaktion lisääminen/muokkaus dispatchaa sen sijaan, että pakottaa lataamaan kaiken uudestaan backendistä
+backendin testien kirjoittaminen puuttuviin routereihin
+backendin ylimääräisten routereiden poistaminen
+mahdollisuus muokata omaa profiilia ja avataria
+input validation kaikkiin lomakkeisiin
+Teeman keskittäminen useStyles() komponenttiin ja ulkoasun hiominen
+useMemo ja useCallback hyödyntäminen, yleinen optimointi
+rekisteröinti mahdollisuus, sähköpostivarmistus?
+dashboardiin hienoja tilastoja yms yms.
+Kuukausikatsaus
 Mahdollisesti english/finnish lokalisaatio
+dark/lightmode

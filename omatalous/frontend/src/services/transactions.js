@@ -26,3 +26,17 @@ export const deleteMany = async (idArray) => {
         }
     });
 };
+
+export const updateUserTransaction = async (update) => {
+
+    const config = {
+        headers: {
+            Authorization: getToken()
+            
+        }
+    };
+
+    const response = await axios.put(`${baseUrl}/api/transactions/${update.id}`, update, config);
+    return response.data;
+
+};

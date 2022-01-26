@@ -5,7 +5,9 @@ import { forwardRef } from 'react';
 import useStyles from '../../../styles';
 import useField from '../../../../hooks/useField';
 import { useSelector, useDispatch } from 'react-redux';
-import {removeAccount} from '../../../../reducers/accountsReducer';
+import {removeAccount, editAccount} from '../../../../reducers/accountsReducer';
+import { loadPaymentMethods } from '../../../../reducers/paymentMethodsReducer';
+import { loadTransactions } from '../../../../reducers/transactionsReducer';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -16,6 +18,7 @@ const Transition = forwardRef(
 const EditAccount = ({ account, open, setOpen }) => {
 
     const classes = useStyles();
+    const [paymentMethodsToBeDeleted, setPaymentMethodsToBeDeleted] = useState([]);
     const [newPaymentMethods, setNewPaymentMethods] = useState([]);
     const newPaymentMethod = useField('text', 'paymentMethod');
     const [newAccountName, setNewAccountName] = useState('');
@@ -47,6 +50,7 @@ const EditAccount = ({ account, open, setOpen }) => {
             },
             ...newPaymentMethods
         ]);
+        console.log(newPaymentMethods);
         newPaymentMethod.reset();
     };
 
@@ -55,6 +59,42 @@ const EditAccount = ({ account, open, setOpen }) => {
             newPaymentMethods.filter(p => p.name !== method)
         );
     };
+
+    const closeWindow = () => {
+        setPaymentMethodsToBeDeleted([]);
+        setNewAccountName('');
+        setNewPaymentMethods([]);
+        newPaymentMethod.reset();
+        setOpen(false);
+    };
+
+    const saveChanges = async () => {
+
+        if(!window.confirm('Are you sure? These changes can not be undone.'))
+            return closeWindow();
+
+        const update = {
+            id: account.id,
+            name:newAccountName !== '' && newAccountName !== ' '
+            ? newAccountName
+            : account.name,
+            paymentMethods: {
+                add: newPaymentMethods.length > 0
+                ? newPaymentMethods
+                : null,
+                delete: paymentMethodsToBeDeleted.length > 0
+                ? paymentMethodsToBeDeleted
+                : null
+            }
+        };
+
+        // Editing accounts is a bit heavy work
+        await dispatch(editAccount(update));
+        await dispatch(loadTransactions());
+        await dispatch(loadPaymentMethods());
+        closeWindow();
+    };
+
 
     return (
         <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => setOpen(false)}>
@@ -69,7 +109,9 @@ const EditAccount = ({ account, open, setOpen }) => {
                     <Typography variant='subtitle1'>Payment methods: 
 
                     {
-                        paymentMethods.map(p => <ButtonBase sx={{ml:1, mr:1, textTransform:'uppercase'}} key={p.id}>{p.name}</ButtonBase>)
+                        paymentMethods.filter(p => !paymentMethodsToBeDeleted.includes(p.id)).map(p => <ButtonBase
+                            onClick={()=> setPaymentMethodsToBeDeleted([...paymentMethodsToBeDeleted, p.id])}
+                            sx={{ml:1, mr:1, textTransform:'uppercase'}} key={p.id}>{p.name}</ButtonBase>)
                     }
 
                     {
@@ -85,9 +127,9 @@ const EditAccount = ({ account, open, setOpen }) => {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={() => console.log('asd')}>Confirm edit</Button>
+                    <Button onClick={() => saveChanges()}>Confirm edit</Button>
                     <Button color='error' onClick={() => deleteAccount()}>Delete account</Button>
-                    <Button onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button onClick={closeWindow}>Cancel</Button>
                 </DialogActions>
 
             </FormControl>

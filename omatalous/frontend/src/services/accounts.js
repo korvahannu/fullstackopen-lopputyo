@@ -36,3 +36,25 @@ export const removeUserAccount = async (account) => {
     });
 
 };
+
+/*
+{
+    id: target accounts id,
+    name: new update name,
+    paymentMethods: {
+        add: [],
+        delete: []
+    }
+}
+*/
+export const editUserAccount = async (update) => {
+    const config = {
+        headers: {
+            Authorization: getToken()
+            
+        }
+    };
+
+    const response = await axios.put(`${baseUrl}/api/accounts/${update.id}`, update, config);
+    return response.data;
+};

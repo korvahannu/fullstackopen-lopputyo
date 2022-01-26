@@ -1,4 +1,4 @@
-import { getUserAccounts, addNewUserAccount, removeUserAccount } from '../services/accounts';
+import { getUserAccounts, addNewUserAccount, removeUserAccount, editUserAccount } from '../services/accounts';
 
 const reducer = (state = [], action) => {
     switch(action.type) {
@@ -13,9 +13,26 @@ const reducer = (state = [], action) => {
             return state.filter(
               obj => obj.id !== action.account  
             );
+        case 'CHANGE_ACCOUNT_NAME':
+            return state.map( obj => {
+                if(obj.id !== action.update.id)
+                    return obj;
+                else {
+                    obj.name = action.update.name;
+                    return obj;
+                }
+            });
         default:
             return state;
     }
+};
+
+// TODO: This currently only supports name change
+export const editAccount = (update) => {
+    return async dispatch => {
+        await editUserAccount(update);
+        dispatch({type:'CHANGE_ACCOUNT_NAME', update});
+    };
 };
 
 export const removeAccount = (account) => {

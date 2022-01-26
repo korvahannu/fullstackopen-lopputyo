@@ -13,6 +13,7 @@ import useTheme from './hooks/useTheme';
 import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import Accounts from './components/Views/Accounts';
+import Home from './components/Views/Home';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -25,7 +26,7 @@ import {
 
 const App = () => {
 
-  const themeSelector = useTheme(false);
+  const themeSelector = useTheme();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
   const [view, setView] = useState('home');
@@ -36,14 +37,16 @@ const App = () => {
     if(previousView && previousView !=='' && previousView!== null&&previousView!==undefined) {
       setView(previousView);
     }
-
-    if(!user)
-      dispatch(tryToLoadUserFromStorage());
   }, []);
 
   useEffect(async () => {
-    if (user) {
+    window.localStorage.setItem('view', view);
+  }, [ view]);
 
+  useEffect(async () => {
+
+    if(user) {
+      console.log('Dispatching all reducer-loads');
       // Put all user reducer loads here
       dispatch(loadTransactions());
       dispatch(loadCategories());
@@ -52,12 +55,17 @@ const App = () => {
 
       navigate(`/${view}`);
     }
-    else if (!user)
-      navigate('/login');
+    else {
+      if(!user) {
+        dispatch(tryToLoadUserFromStorage());
+        navigate('/login');
+      }
+    }
+
   }, [user]);
 
   useEffect(() => {
-    window.localStorage.setItem('view', view);
+    
   },[view]);
 
   return (
@@ -75,7 +83,7 @@ const App = () => {
         <Routes>
           <Route path='/login' element={<LoginPrompt />} />
             <Route path='/transactions' element={<Transactions />} />
-            <Route path='/home' element={<img src='https://www.anychart.com/blog/wp-content/uploads/2017/09/data-visualization-best-practices-in-anychart-js-charts-dataviz-weekly.png' />} />
+            <Route path='/home' element={<Home />} />
             <Route path='/accounts' element={<Accounts />} />
         </Routes>
       </Box>

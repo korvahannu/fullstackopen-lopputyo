@@ -4,6 +4,7 @@ import TransactionsDataGrid from './TransactionsDataGrid';
 import { Button, Box } from '@mui/material';
 import NewOutcomeDialog from './Dialogs/NewOutcome';
 import NewIncomeDialog from './Dialogs/NewIncome';
+import EditTransaction from './EditTransaction';
 import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
 import If from '../../../utils/If';
@@ -13,6 +14,7 @@ const Transactions = () => {
     const dispatch = useDispatch();
     const [showNewOutcomeDialog, setShowNewOutcomeDialog] = useState(false);
     const [showNewIncomeDialog, setShowNewIncomeDialog] = useState(false);
+    const [showEditTransactionDialog, setShowEditTransactionDialog] = useState(false);
     const [selected, setSelected] = useState([]);
     const transactions = useSelector(state => state.transactions);
 
@@ -34,6 +36,7 @@ const Transactions = () => {
 
             <NewOutcomeDialog open={showNewOutcomeDialog} setOpen={setShowNewOutcomeDialog} />
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
+            <EditTransaction target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
 
             <If condition={transactions}>
                 <Box sx={{ mb: 3 }}>
@@ -44,7 +47,7 @@ const Transactions = () => {
                         selected.length < 1
                         ? null
                         : selected.length === 1
-                        ? <Button variant='outlined'>Edit selected</Button>
+                        ? <Button variant='outlined' onClick={() => setShowEditTransactionDialog(true)}>Edit selected</Button>
                         : <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
                     }
                     

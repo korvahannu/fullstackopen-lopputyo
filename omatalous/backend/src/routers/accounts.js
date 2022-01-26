@@ -23,7 +23,7 @@ router.get('/all/', validateAdminAccount, async (request, response, next) => {
         const result = await Account.find({});
         return response.json(result);
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 
@@ -34,10 +34,10 @@ router.get('/', async (request, response, next) => {
     const userId = request.user.id;
 
     try {
-        const result = await Account.find({user:userId});
+        const result = await Account.find({ user: userId });
         return response.json(result);
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 
@@ -48,10 +48,10 @@ router.get('/:id', async (request, response, next) => {
     try {
         const account = await Account.findById(request.params.id);
 
-        if(!account) 
+        if (!account)
             return response.status(400).json(responses.dataDoesNotExist('account'));
 
-        if(request.user.admin ||request.user.id === account.user.toString()) {
+        if (request.user.admin || request.user.id === account.user.toString()) {
 
             return response.json(account);
         }
@@ -59,7 +59,7 @@ router.get('/:id', async (request, response, next) => {
             return response.status(401).json(responses.notAuthorized());
         }
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 
@@ -70,14 +70,14 @@ router.post('/', async (request, response, next) => {
 
         const body = request.body;
 
-        if(body.name === null || body.name === undefined || body.name === '')
+        if (body.name === null || body.name === undefined || body.name === '')
             return response.status(400).json(responses.fieldMustBeDefined('Account name'));
 
         let icon = 'default';
 
-        if(body.icon !== null && body.icon !== undefined)
+        if (body.icon !== null && body.icon !== undefined)
             icon = body.icon;
-        
+
         const account = new Account({
             name: body.name,
             icon,
@@ -87,20 +87,20 @@ router.post('/', async (request, response, next) => {
 
         await account.save();   // Save account
 
-        if(body.paymentMethods !== null && body.paymentMethods !== undefined) {
+        if (body.paymentMethods !== null && body.paymentMethods !== undefined) {
             const paymentMethods = body.paymentMethods;
             console.log(paymentMethods);
 
-            for(const pm of paymentMethods) {
+            for (const pm of paymentMethods) {
 
-                if(pm.name === null || pm.name === undefined ||pm.name ==='')
+                if (pm.name === null || pm.name === undefined || pm.name === '')
                     continue;
 
                 icon = 'default';
-                if(pm.icon !== null && pm.icon !== undefined)
+                if (pm.icon !== null && pm.icon !== undefined)
                     icon = pm.icon;
 
-                const paymentMethod = new PaymentMethod ({
+                const paymentMethod = new PaymentMethod({
                     name: pm.name,
                     icon,
                     user: request.user.id,
@@ -115,7 +115,7 @@ router.post('/', async (request, response, next) => {
         return response.json(account);
 
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 });
@@ -125,10 +125,10 @@ router.delete('/:id', async (request, response, next) => {
     try {
         const account = await Account.findById(request.params.id);
 
-        if(!account)
+        if (!account)
             return response.status(400).json(responses.dataDoesNotExist('account'));
 
-        if(request.user.admin || request.user.id === account.user.toString()) {
+        if (request.user.admin || request.user.id === account.user.toString()) {
             await account.remove();
             return response.status(200).end();
         }
@@ -136,7 +136,7 @@ router.delete('/:id', async (request, response, next) => {
             return response.status(401).json(responses.notAuthorized());
         }
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 
@@ -147,27 +147,53 @@ router.put('/:id', async (request, response, next) => {
 
     let updatedAccount = {};
 
-    if(body.name !== undefined)
+    if (body.name !== undefined)
         updatedAccount.name = body.name;
-    
+
     if (body.icon !== undefined)
         updatedAccount.icon = body.icon;
 
     try {
         const account = await Account.findById(request.params.id);
 
-        if(!account)
+        console.log(body);
+
+        if (!account)
             return response.status(400).json(responses.dataDoesNotExist('account'));
 
-        if(account.user.toString() === request.user.id || request.user.admin) {
-            const result = await Account.findByIdAndUpdate(request.params.id, updatedAccount, {new: true});
+        if (account.user.toString() === request.user.id || request.user.admin) {
+            const result = await Account.findByIdAndUpdate(request.params.id, updatedAccount, { new: true });
+            if (body.paymentMethods !== null && body.paymentMethods !== undefined) {
+                if (body.paymentMethods.add !== null && body.paymentMethods.add.length > 0) {
+                    for (const pm of body.paymentMethods.add) {
+                        const paymentMethod = new PaymentMethod({
+                            name: pm.name,
+                            icon: pm.icon,
+                            user: request.user.id,
+                            account: request.params.id
+                        });
+                        await paymentMethod.save();
+                    }
+                }
+
+                if (body.paymentMethods.delete !== null && body.paymentMethods.delete.length > 0) {
+                    for (const pm of body.paymentMethods.delete) {
+
+                        const paymentMethod = await PaymentMethod.findById(pm);
+                        if (paymentMethod && request.user.id === paymentMethod.user.toString()) {
+                            await paymentMethod.remove();
+                        }
+
+                    }
+                }
+            }
             return response.json(result);
         }
         else {
             return response.status(401).json(responses.notAuthorized());
         }
     }
-    catch(error) {
+    catch (error) {
         next(error);
     }
 });
