@@ -27,3 +27,4 @@
 | 25.1.2021. | 2 | Vielä illasta lisää viilausta :-) Päädyin vaihtamaan kaikk useAccounts ym. hookit redux-reducereiksi, koska backend-sai jatkuvasti pyyntöjä frontendiltä. Tämän lisäksi koodia on nyt mielestäni helpompi lukea. Poistin myös käyttämättömiä komponentteja.  |
 | 26.1.2021. | 3 | Nyt on mahdollista muokata yksittäisiä transaktioita. Backendiin piti tehdä routereita tätä varten. Päivitin featurelistaan ominaisuuksia, jotka haluan vielä ennen kuin siirryn versiosta 0.0.x versioon 0.1.xq |
 | 27.1.2021 | 1.5 | Refaktoroin hieman routerointia ja näkymien hallintaa sekä App -komponenttia. Siirsin osan koodista jo käyttämään useStyles() -hookkia. Pitää vielä viimeistellä useStylesiin siirtyminen. Version: 0.0.23 |
+| 1.2.2021 | 1.5 | Input validation laitettu. Dialogin classesia hiottu. Nyt voi poistaa yksittäisen transaktion. Version: 0.0.24 |

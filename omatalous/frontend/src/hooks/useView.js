@@ -32,9 +32,17 @@ const useView = () => {
         navigateTo(`/${newView}`);
     };
 
+    const navigateToSaved = () => {
+        if(value === '' ||value===null)
+            navigateTo('home');
+        else
+            navigateTo(value);
+    };
+
     return {
         value,
-        navigate
+        navigate,
+        navigateToSaved
     };
 };
 

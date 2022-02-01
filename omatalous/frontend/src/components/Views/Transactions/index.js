@@ -9,6 +9,7 @@ import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
 import If from '../../../utils/If';
 import useStyle from '../../styles';
+import Alert from '../../Alert';
 
 
 const Transactions = () => {
@@ -19,6 +20,7 @@ const Transactions = () => {
     const [showEditTransactionDialog, setShowEditTransactionDialog] = useState(false);
     const [selected, setSelected] = useState([]);
     const transactions = useSelector(state => state.transactions);
+    const [deleteWindow, setDeleteWindow] = useState(false);
 
     const openNewIncomeDialog = () => setShowNewIncomeDialog(true);
 
@@ -27,15 +29,17 @@ const Transactions = () => {
     const onSelectionModelChange = (selections) => setSelected(selections);
 
     const deleteSelected = () => {
-        if (window.confirm('Are you sure you want to delete selected?')) {
-            dispatch(deleteManyTransactions(selected));
-            setSelected([]);
-        }
+        setDeleteWindow(true);
+    };
+
+    const acceptDeleteSelected = () => {
+        dispatch(deleteManyTransactions(selected));
+        setSelected([]);
     };
 
     return (
         <Box className={classes.viewContainer}>
-
+            
             <NewOutcomeDialog open={showNewOutcomeDialog} setOpen={setShowNewOutcomeDialog} />
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
             <EditTransaction target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
@@ -61,6 +65,9 @@ const Transactions = () => {
                 <Loading />
             </If>
 
+            <Alert open={deleteWindow} setOpen={setDeleteWindow} titleText='Warning, please read!'
+            bodyText='Deleting these transactions is permanent and it can not be undone!'
+            onAccept={acceptDeleteSelected} />
         </Box>
     );
 };

@@ -2,9 +2,7 @@ import { makeStyles } from '@mui/styles';
 const useStyle = makeStyles((theme) => ({
     dialog: {
         position: 'absolute',
-        top: '40%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
+        top:'-64px',
     },
     temp: {
         backgroundColor: theme.palette.background.paper,
@@ -35,6 +33,13 @@ const useStyle = makeStyles((theme) => ({
         marginTop:'16px',
         marginRight:'16px',
         marginBottom:'16px'
+    },
+    topBarHeader: {
+        margin: 2,
+        display : {
+            xs: 'none',
+            md: 'flex'
+        }
     }
 }));
 

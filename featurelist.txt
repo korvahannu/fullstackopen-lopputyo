@@ -1,8 +1,8 @@
 0.1.0=>
+
 backendin testien kirjoittaminen puuttuviin routereihin
 backendin ylimääräisten routereiden poistaminen
 mahdollisuus muokata omaa profiilia ja avataria
-input validation kaikkiin lomakkeisiin
 Teeman keskittäminen useStyles() komponenttiin ja ulkoasun hiominen
 useMemo ja useCallback hyödyntäminen, yleinen optimointi
 rekisteröinti mahdollisuus, sähköpostivarmistus?

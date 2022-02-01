@@ -16,7 +16,7 @@ const LoginPrompt = ({view}) => {
         event.preventDefault();
         try {
             await dispatch(login(username.value, password.value));
-            view.navigate('home');
+            view.navigateToSaved();
         }
         catch(error) {
             await dispatch(setNotification('login-error', 'Invalid login credentials', 5));

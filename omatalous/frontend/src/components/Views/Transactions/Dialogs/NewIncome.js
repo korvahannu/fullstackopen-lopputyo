@@ -26,7 +26,34 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
     const description = useField('text', 'description');
     const [date, setDate] = useState(new Date());
 
+    const [amountError, setAmountError] = useState(false);
+    const [accountError, setAccountError] = useState(false);
+    const [categoryError, setCategoryError] = useState(false);
+
+
     const addTransaction = async () => {
+
+        let error = false;
+
+        if(!simpleValidate(amount.value)) {
+            setAmountError(true);
+            error = true;
+        }
+        if(!simpleValidate(account.value)) {
+            setAccountError(true);
+            error = true;
+        }
+        if(!simpleValidate(category.value)) {
+            setCategoryError(true);
+            error = true;
+        }
+        if(!simpleValidate(date)) {
+            error = true;
+        }
+
+        if(error)
+            return null;
+
         setOpen(false);
 
         const outcome = {
@@ -50,13 +77,13 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
         <DialogBody open={open} setOpen={setOpen} addTransaction={addTransaction}  title='Add new income' titleColor='green'>
 
                 <DialogContent>
-                    <TextField label='Amount' type='number' variant='outlined' fullWidth value={amount.value || ''} onChange={amount.onChange} />
+                    <TextField error={amountError} onFocus={()=>setAmountError(false)} label='Amount' type='number' variant='outlined' fullWidth value={amount.value || ''} onChange={amount.onChange} />
                     <Box sx={{height:32}} />
-                    <TextField label='Description' variant='outlined' fullWidth value={description.value || ''} onChange={description.onChange} />
+                    <TextField label='Description (optional)' variant='outlined' fullWidth value={description.value || ''} onChange={description.onChange} />
                     <Box sx={{height:32}} />
-                    <AccountDropdown value={account.value} onChangeValue={account.onChange} />
+                    <AccountDropdown error={accountError} setError={setAccountError} value={account.value} onChangeValue={account.onChange} />
                     <Box sx={{height:32}} />
-                    <CategoryDropdown value={category.value} onChangeValue={category.onChange} type='income' />
+                    <CategoryDropdown error={categoryError} setError={setCategoryError} value={category.value} onChangeValue={category.onChange} type='income' />
                     <Box sx={{height:32}} />
                     <Box sx={{height:32}} />
                     <DesktopDatePicker
@@ -72,6 +99,15 @@ const NewOutcomeDialog = ({ open, setOpen }) => {
 
         </DialogBody>
     );
+};
+
+const simpleValidate = (input) => {
+    if(input !== ''
+    && input !== null
+    && input !== undefined
+    && input !== ' ')
+        return true;
+    return false;
 };
 
 NewOutcomeDialog.propTypes = {

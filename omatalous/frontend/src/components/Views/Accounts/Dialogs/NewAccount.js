@@ -23,6 +23,10 @@ const NewAccount = ({ open, setOpen }) => {
     const [paymentMethods, setPaymentMethods] = useState([]);
     const dispatch = useDispatch();
 
+    const [balanceError, setBalanceError] = useState(false);
+    const [nameError, setNameError] = useState(false);
+    const [paymentMethodError, setPaymentMethodError] = useState(false);
+
     const addPaymentMethod = () => {
         setPaymentMethods([
             {
@@ -35,6 +39,32 @@ const NewAccount = ({ open, setOpen }) => {
     };
 
     const addNewAccount = async () => {
+
+        let error = false;
+
+        if(!simpleValidate(name.value)) {
+            setNameError(true);
+            error = true;
+        }
+        if(!simpleValidate(balance.value)) {
+            setBalanceError(true);
+            error = true;
+        }
+        if(paymentMethods.length > 0) {
+            if(!simpleValidate(paymentMethods[0])) {
+                setPaymentMethodError(true);
+                error = true;
+            }
+        }
+        else {
+            setPaymentMethodError(true);
+            error = true;
+        }
+
+
+        if(error)
+            return null;
+
         const acc = {
             name:name.value,
             balance:balance.value,
@@ -53,6 +83,9 @@ const NewAccount = ({ open, setOpen }) => {
         balance.reset();
         paymentMethod.reset();
         setPaymentMethods([]);
+        setPaymentMethodError(false);
+        setBalanceError(false);
+        setNameError(false);
     };
 
     const closeWindow = () => {
@@ -74,9 +107,9 @@ const NewAccount = ({ open, setOpen }) => {
             <FormControl fullWidth>
 
                 <DialogContent>
-                    <TextField label='Account name' type='text' variant='outlined' fullWidth value={name.value || ''} onChange={name.onChange} />
+                    <TextField error={nameError} onFocus={()=>setNameError(false)} label='Account name' type='text' variant='outlined' fullWidth value={name.value || ''} onChange={name.onChange} />
                     <Box sx={{ height: 32 }} />
-                    <TextField label='Initial balance' type='number' variant='outlined' fullWidth value={balance.value || ''} onChange={balance.onChange} />
+                    <TextField error={balanceError} onFocus={()=>setBalanceError(false)} label='Initial balance' type='number' variant='outlined' fullWidth value={balance.value || ''} onChange={balance.onChange} />
                     <Box sx={{ height: 32 }} />
                     {
                         paymentMethods.length > 0
@@ -88,8 +121,12 @@ const NewAccount = ({ open, setOpen }) => {
                     }
                     <Divider /> <br />
                     <Typography>Add payment methods:</Typography>
-                    <TextField size='small' value={paymentMethod.value} onChange={paymentMethod.onChange} label='Paymentmethod name' type='text' variant='outlined' />
+                    <TextField error={paymentMethodError} onFocus={()=>setPaymentMethodError(false)} size='small' value={paymentMethod.value} onChange={paymentMethod.onChange} label='Payment method name' type='text' variant='outlined' />
                     <Button onClick={addPaymentMethod}>+</Button>
+                    {
+                        paymentMethodError && <Typography variant='subtitle2' color='error'>You need to add at least 1 payment method to your new account.</Typography>
+                    }
+                    
                 </DialogContent>
 
                 <DialogActions>
@@ -101,6 +138,16 @@ const NewAccount = ({ open, setOpen }) => {
 
         </Dialog>
     );
+};
+
+
+const simpleValidate = (input) => {
+    if(input !== ''
+    && input !== null
+    && input !== undefined
+    && input !== ' ')
+        return true;
+    return false;
 };
 
 NewAccount.propTypes = {
