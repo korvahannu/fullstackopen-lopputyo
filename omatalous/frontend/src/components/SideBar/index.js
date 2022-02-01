@@ -5,6 +5,9 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import WorkIcon from '@mui/icons-material/Work';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import SchoolIcon from '@mui/icons-material/School';
+import InfoIcon from '@mui/icons-material/Info';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
 
@@ -15,6 +18,16 @@ const options = [
         icon: <HomeIcon />
     },
     {
+        label:'My goals',
+        value:'goals',
+        icon: <EmojiEventsIcon />
+    },
+    {
+        label:'Learn',
+        value:'learn',
+        icon: <SchoolIcon />
+    },
+    {
         label: 'Transactions',
         value: 'transactions',
         icon: <ReceiptLongIcon />
@@ -23,6 +36,11 @@ const options = [
         label: 'Accounts',
         value: 'accounts',
         icon: <WorkIcon />
+    },
+    {
+        label:'About us',
+        value:'about',
+        icon: <InfoIcon />
     }
 ];
 

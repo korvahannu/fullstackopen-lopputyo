@@ -9,7 +9,7 @@ const profileIconMenuOptions = [
     'Log out'
 ];
 
-const TopBar = ({ user }) => {
+const TopBar = ({ user , view}) => {
 
     const dispatch = useDispatch();
 
@@ -30,6 +30,9 @@ const TopBar = ({ user }) => {
             case 'Log out':
                 handleLogout();
                 break;
+            case 'Edit profile':
+                view.navigate('profile');
+                break;
             default:
                 console.log('unimplemented feature');
         }
@@ -44,6 +47,10 @@ const TopBar = ({ user }) => {
         ? user.name
         : 'Login to view profile';
 
+    const avatarUrl = user
+    ? user.avatar || null
+    : null;
+
     return (
         <Bar
             tooltip={tooltip}
@@ -52,12 +59,14 @@ const TopBar = ({ user }) => {
             handleOpenProfileIconMenu={handleOpenProfileIconMenu}
             handleCloseProfileIconMenu={handleCloseProfileIconMenu}
             handleProfileIconMenuOptionClick={handleProfileIconMenuOptionClick}
+            avatarUrl={avatarUrl}
         />
     );
 };
 
 TopBar.propTypes = {
-    user: PropTypes.object
+    user: PropTypes.object,
+    view: PropTypes.object
 };
 
 export default TopBar;

@@ -40,6 +40,10 @@ const useStyle = makeStyles((theme) => ({
             xs: 'none',
             md: 'flex'
         }
+    },
+    basicFormLayout: {
+        marginBottom: '1em',
+        display:'flex',
     }
 }));
 

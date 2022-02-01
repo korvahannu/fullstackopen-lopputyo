@@ -9,7 +9,7 @@ const useField = (type, name) => {
 
   const getInputParameters = {type:type, value:value, onChange:onChange, name:name};
 
-  return { type, value, onChange, name, reset, getInputParameters };
+  return { type, value, onChange, name, reset, getInputParameters, setValue };
 
 };
 

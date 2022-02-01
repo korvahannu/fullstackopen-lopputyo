@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import useStyle from '../styles';
 
 const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProfileIconMenu,
-    handleProfileIconMenuOptionClick, profileIconMenuOptions, tooltip }) => {
+    handleProfileIconMenuOptionClick, profileIconMenuOptions, tooltip,
+avatarUrl }) => {
 
         const classes = useStyle();
 
@@ -21,7 +22,7 @@ const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProf
                         <Box sx={{ flexGrow: 0 }}>
                             <Tooltip title={tooltip}>
                                 <IconButton onClick={handleOpenProfileIconMenu} sx={{ p: 0 }}>
-                                    <Avatar alt='profile picture' />
+                                    <Avatar alt='profile picture' src={avatarUrl} />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -59,7 +60,8 @@ Bar.propTypes = {
     handleCloseProfileIconMenu: PropTypes.func,
     handleProfileIconMenuOptionClick: PropTypes.func,
     profileIconMenuOptions: PropTypes.array,
-    tooltip: PropTypes.string
+    tooltip: PropTypes.string,
+    avatarUrl: PropTypes.string
 };
 
 export default Bar;

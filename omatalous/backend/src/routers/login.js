@@ -41,7 +41,7 @@ router.post('/', async (request, response) => {
     await session.save();
 
 
-    return response.status(200).send( { token, username: user.username, name: user.name } );
+    return response.status(200).send( { token, username: user.username, name: user.name, avatar:user.avatar, email: user.email } );
 
 });
 

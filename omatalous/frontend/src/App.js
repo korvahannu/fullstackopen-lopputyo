@@ -9,6 +9,7 @@ import TopBar from './components/TopBar';
 import SideBar from './components/SideBar';
 import Accounts from './components/Views/Accounts';
 import Home from './components/Views/Home';
+import Profile from './components/Views/Profile';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -49,7 +50,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={themeSelector.theme}>
-      <TopBar user={user} />
+      <TopBar user={user} view={view} />
 
       <Box sx={{ display: 'flex'}}>
         <If condition={user}>
@@ -61,6 +62,7 @@ const App = () => {
             <Route path='/transactions' element={<Transactions />} />
             <Route path='/home' element={<Home />} />
             <Route path='/accounts' element={<Accounts />} />
+            <Route path='/profile' element={<Profile />} />
         </Routes>
       </Box>
     </ThemeProvider>

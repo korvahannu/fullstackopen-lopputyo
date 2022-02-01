@@ -13,6 +13,10 @@ router.post('/', async (request, response, next) => {
     }
 
     try {
+
+        if(body.password.length < 5)
+            return response.status(400).json(responses.invalidFieldLength('password'));
+
         const passwordHash = await bcrypt.hash(body.password, 10);
 
         const user = new User({

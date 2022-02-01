@@ -3,10 +3,17 @@
 backendin testien kirjoittaminen puuttuviin routereihin
 backendin ylimääräisten routereiden poistaminen
 mahdollisuus muokata omaa profiilia ja avataria
+
 Teeman keskittäminen useStyles() komponenttiin ja ulkoasun hiominen
+
 useMemo ja useCallback hyödyntäminen, yleinen optimointi
+
 rekisteröinti mahdollisuus, sähköpostivarmistus?
+
 dashboardiin hienoja tilastoja yms yms.
+
 Kuukausikatsaus
+
 Mahdollisesti english/finnish lokalisaatio
+
 dark/lightmode
