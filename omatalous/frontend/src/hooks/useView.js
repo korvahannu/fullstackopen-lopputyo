@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /*
     Useview should be the only thing that uses useNavigate and localStorage of 'view'
@@ -8,8 +8,14 @@ import { useNavigate } from 'react-router-dom';
 const useView = () => {
     const navigateTo = useNavigate();
     const [value, setView] = useState('home');
+    const location = useLocation();
 
     useEffect(() => {
+
+        if(location.pathname.startsWith('/confirm')
+        || location.pathname.startsWith('/email-sent-to-verify'))
+            return null;
+
         const savedView
             = window.localStorage.getItem('view');
         
@@ -20,6 +26,10 @@ const useView = () => {
     }, []);
 
     useEffect(()=> {
+        if(location.pathname.startsWith('/confirm')
+        || location.pathname.startsWith('/email-sent-to-verify'))
+            return null;
+            
         window.localStorage.setItem('view', value);
     }, [value]);
     

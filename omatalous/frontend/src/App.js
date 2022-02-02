@@ -10,6 +10,12 @@ import SideBar from './components/SideBar';
 import Accounts from './components/Views/Accounts';
 import Home from './components/Views/Home';
 import Profile from './components/Views/Profile';
+import About from './components/Views/About';
+import Learn from './components/Views/Learn';
+import Register from './components/RegisterForm';
+import ForgotPasswordPrompt from './components/ForgotPasswordPrompt';
+import Confirm from './components/Confirm';
+import EmailSent from './components/EmailSent';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -17,7 +23,8 @@ import initializeReduxStorage from './utils/initializeReduxStorage';
 
 import {
   Routes,
-  Route
+  Route,
+  useLocation
 } from 'react-router-dom';
 import useView from './hooks/useView';
 
@@ -36,8 +43,13 @@ const App = () => {
   const user = useSelector(state => state.user);
   const view = useView();
   const initializer = initializeReduxStorage();
+  const location = useLocation();
 
   useEffect(async () => {
+    if(location.pathname.startsWith('/confirm')
+    || location.pathname.startsWith('/email-sent-to-verify'))
+      return null;
+
     if(user) {
       initializer.init();
       view.navigate(view.value);
@@ -58,11 +70,17 @@ const App = () => {
         </If>
 
         <Routes>
-          <Route path='/login' element={<LoginPrompt view={view} />} />
+            <Route path='/login' element={<LoginPrompt view={view} />} />
             <Route path='/transactions' element={<Transactions />} />
             <Route path='/home' element={<Home />} />
             <Route path='/accounts' element={<Accounts />} />
             <Route path='/profile' element={<Profile />} />
+            <Route path='/about' element={<About />} />
+            <Route path='/learn' element={<Learn />} />
+            <Route path='/register' element={<Register view={view} />}/>
+            <Route path='/forgot' element={<ForgotPasswordPrompt view={view}/>}/>
+            <Route path='/confirm/:confirmationCode' element={<Confirm view={view} />}/>
+            <Route path ='/email-sent-to-verify' element={<EmailSent view={view} />} />
         </Routes>
       </Box>
     </ThemeProvider>

@@ -26,6 +26,7 @@ const EditAccount = ({ account, open, setOpen }) => {
     const [newAccountName, setNewAccountName] = useState('');
     const dispatch = useDispatch();
     const [deleteWindow, setDeleteWindow] = useState(false);
+    const [editWindow, setEditWindow] = useState(false);
 
     const paymentMethods = useSelector(state => state.paymentMethods.filter(method => {
         if (!account)
@@ -74,10 +75,10 @@ const EditAccount = ({ account, open, setOpen }) => {
     };
 
     const saveChanges = async () => {
+        setEditWindow(true);
+    };
 
-        if (!window.confirm('Are you sure? These changes can not be undone.'))
-            return closeWindow();
-
+    const acceptEditAccount = async () => {
         const update = {
             id: account.id,
             name: newAccountName !== '' && newAccountName !== ' '
@@ -146,6 +147,10 @@ const EditAccount = ({ account, open, setOpen }) => {
             <Alert open={deleteWindow} setOpen={setDeleteWindow} titleText='Warning, please read!'
                 bodyText='Deleting these transactions is permanent and it can not be undone!'
                 onAccept={acceptDeleteAccount} />
+            
+            <Alert open={editWindow} setOpen={setEditWindow} titleText='Warning, please read!'
+                bodyText='Changes you have done may affect your existing transactions. proceed with care!'
+                onAccept={acceptEditAccount} />
 
         </>
     );

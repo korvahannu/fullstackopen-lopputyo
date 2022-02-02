@@ -10,7 +10,9 @@ const createQuickUser = async (name, isAdmin) => {
         name: name,
         email: `${name}@${name}.com`,
         passwordHash,
-        admin: isAdmin
+        status: 'Active',
+        admin: isAdmin,
+        confirmationCode: name+passwordHash
     };
 
     return user;

@@ -75,11 +75,11 @@ const Profile = () => {
         await dispatch(
             editUserInfo(
                 {
-                    name: name.value !== '' && name.value !== ' '
+                    name: name.value !== '' && name.value !== ' ' && name.value !== user.name
                     ? name.value
                     : null,
-                    avatar: avatar.value,
-                    password: newPassword.value !== '' && newPassword.value.length >= 5
+                    avatar: avatar.value !== user.avatar ? avatar.value : null,
+                    password: newPassword.value !== '' && newPassword.value.length >= 5 && newPassword.value
                     ? newPassword.value
                     : null
                 }

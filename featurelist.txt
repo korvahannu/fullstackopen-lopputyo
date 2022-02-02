@@ -1,19 +1,21 @@
 0.1.0=>
 
-backendin testien kirjoittaminen puuttuviin routereihin
+Forgot password juttu, katso forgotpassword -komponenttia pseudokoodiin
+backendin testien kirjoittaminen puuttuviin routereihin, testien refaktorointi?
 backendin ylimääräisten routereiden poistaminen
-mahdollisuus muokata omaa profiilia ja avataria
-
 Teeman keskittäminen useStyles() komponenttiin ja ulkoasun hiominen
-
 useMemo ja useCallback hyödyntäminen, yleinen optimointi
 
-rekisteröinti mahdollisuus, sähköpostivarmistus?
 
-dashboardiin hienoja tilastoja yms yms.
+
+0.2.0 =>
+
+Tähän ainakin lista accounteista ja niiden balanceista + uusimmat transaktiot. Mahdollisesti myös jo tämän kuun tulot - menot = kuukauden tasapaino
 
 Kuukausikatsaus
 
 Mahdollisesti english/finnish lokalisaatio
 
 dark/lightmode
+
+kaverilista/shared account

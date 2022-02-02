@@ -5,9 +5,10 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import WorkIcon from '@mui/icons-material/Work';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import SchoolIcon from '@mui/icons-material/School';
+// import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+// import SchoolIcon from '@mui/icons-material/School';
 import InfoIcon from '@mui/icons-material/Info';
+// import EqualizerIcon from '@mui/icons-material/Equalizer';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
 
@@ -16,17 +17,17 @@ const options = [
         label: 'Home',
         value: 'home',
         icon: <HomeIcon />
-    },
+    },/*
     {
-        label:'My goals',
-        value:'goals',
+        label: 'My goals',
+        value: 'goals',
         icon: <EmojiEventsIcon />
     },
     {
-        label:'Learn',
-        value:'learn',
+        label: 'Learn',
+        value: 'learn',
         icon: <SchoolIcon />
-    },
+    },*/
     {
         label: 'Transactions',
         value: 'transactions',
@@ -36,15 +37,20 @@ const options = [
         label: 'Accounts',
         value: 'accounts',
         icon: <WorkIcon />
-    },
+    },/*
     {
-        label:'About us',
-        value:'about',
+        label: 'Statistics',
+        value: 'statistics',
+        icon: <EqualizerIcon />
+    },*/
+    {
+        label: 'About us',
+        value: 'about',
         icon: <InfoIcon />
     }
 ];
 
-const SideBar = ({view}) => {
+const SideBar = ({ view }) => {
 
     const classes = useStyle();
 
@@ -55,26 +61,40 @@ const SideBar = ({view}) => {
     return (
         <Box className={classes.sidebarContainer}>
             <List>
-                {options.map(option => (
+                {options.map(option => (<div key={option.value}>
                     <ListItem
 
-                    className={
-                        view.value === option.value
-                        ? classes.sidebarSelected
-                        : null
-                    }
-                    
-                    button key={option.value} value={option.value} onClick={()=>handleClick(option.value)}>
+                        sx={
+                            view.value === option.value
+                                ? {color:'#01579b', backgroundColor:'#eee'}
+                                : null
+                        }
+
+                        className={
+                            view.value === option.value
+                                ? classes.sidebarSelected
+                                : null
+                        }
+
+                        button  value={option.value} onClick={() => handleClick(option.value)}>
                         <ListItemIcon>
                             {option.icon}
                         </ListItemIcon>
                         <ListItemText
-                        classes={view.value === option.value ? {primary: classes.sidebarSelectedText} : null} primary={option.label} />
+                            classes={view.value === option.value ? { primary: classes.sidebarSelectedText } : null}
+                            >
+                                {
+                                    view.value === option.value
+                                    ? <b>{option.label}</b>
+                                    : <>{option.label}</>
+                                }
+                            </ListItemText>
                     </ListItem>
+                </div>
                 ))}
             </List>
         </Box>
-        );
+    );
 };
 
 SideBar.propTypes = {

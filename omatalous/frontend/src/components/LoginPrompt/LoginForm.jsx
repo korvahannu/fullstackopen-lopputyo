@@ -3,7 +3,7 @@ import { Container, Box, Paper, Button, TextField, Typography, Grid, Link } from
 import LockIcon from '@mui/icons-material/Lock';
 import PropTypes from 'prop-types';
 
-const LoginForm = ({username, password, handleSubmit, error}) => (
+const LoginForm = ({redirectToPasswordReset, redirectToRegister, username, password, handleSubmit, error}) => (
     <Container maxWidth='xs'>
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <Typography align='center' variant='h5' sx={{ mb: 2 }}><LockIcon /> Sign in</Typography>
@@ -24,12 +24,12 @@ const LoginForm = ({username, password, handleSubmit, error}) => (
 
         <Grid container>
             <Grid item xs>
-                <Link href='' variant='body2'>
+                <Link href='#' variant='body2' onClick={redirectToPasswordReset}>
                     Forgot password?
                 </Link>
             </Grid>
             <Grid item>
-                <Link href='' variant='body2'>
+                <Link href='#' variant='body2' onClick={redirectToRegister}>
                     Register
                 </Link>
             </Grid>
@@ -42,7 +42,9 @@ LoginForm.propTypes = {
     username: PropTypes.object,
     password: PropTypes.object,
     handleSubmit: PropTypes.func,
-    error: PropTypes.object
+    error: PropTypes.object,
+    redirectToRegister: PropTypes.func,
+    redirectToPasswordReset: PropTypes.func
 };
 
 export default LoginForm;

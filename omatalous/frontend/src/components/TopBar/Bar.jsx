@@ -2,6 +2,7 @@ import { AppBar, Container, IconButton, Typography, Box, Tooltip, Avatar, Toolba
 import React from 'react';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
+import SavingsIcon from '@mui/icons-material/Savings';
 
 const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProfileIconMenu,
     handleProfileIconMenuOptionClick, profileIconMenuOptions, tooltip,
@@ -13,7 +14,8 @@ avatarUrl }) => {
             <AppBar position='static'>
                 <Container maxWidth='xl'>
                     <Toolbar disableGutters>
-                        <Typography variant='h6' component='div' noWrap className={classes.topBarHeader}>MY ECONOMY</Typography>
+                        <Typography variant='h6' component='div' noWrap className={classes.topBarHeader}>
+                            <SavingsIcon sx={{paddingTop:2, width:'32px', height:'32px'}} />MY ECONOMY</Typography>
 
                         <Box sx={{ flexGrow: 1, display: 'flex' }}>
                             

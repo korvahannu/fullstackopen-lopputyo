@@ -8,7 +8,10 @@ const Home = () => {
 
     return (
         <Box className={classes.viewContainer}>
-            <Typography variant='h4'>Welcome home!</Typography>
+            <Typography variant='h5'>Welcome home!</Typography>
+            <Typography>Tähän ainakin lista accounteista ja niiden balanceista + uusimmat transaktiot.
+                Mahdollisesti myös jo tämän kuun tulot - menot = kuukauden tasapaino
+            </Typography>
         </Box>
     );
 };

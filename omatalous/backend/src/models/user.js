@@ -10,11 +10,20 @@ const userSchema = new mongoose.Schema({
     username: {
         type: String,
         unique: true,
-        required: true
+        required: true,
+        minlength: 5
     },
     name: {
+        type: String
+    },
+    status: {
         type: String,
-        minlength: 5
+        enum: ['Pending', 'Active'],
+        default: 'Pending'
+    },
+    confirmationCode: {
+        type: String,
+        unique: true
     },
     admin: {
         type: Boolean,

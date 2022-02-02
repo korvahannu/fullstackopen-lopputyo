@@ -11,9 +11,16 @@ const URI = process.env.NODE_ENV === 'test'
     ? process.env.URI_TEST
     :  process.env.URI;
 
+const NODEMAILER_USERNAME= process.env.NODEMAILER_USERNAME;
+const NODEMAILER_PASSWORD= process.env.NODEMAILER_PASSWORD;
+const FRONTEND_HOST = process.env.FRONTEND_HOST; // http://localhost:3000
+
 module.exports = {
     PORT,
     URI,
     WEBTOKEN_SECRET,
-    TOKEN_DEFAULT_EXPIRATION
+    TOKEN_DEFAULT_EXPIRATION,
+    NODEMAILER_USERNAME,
+    NODEMAILER_PASSWORD,
+    FRONTEND_HOST
 };

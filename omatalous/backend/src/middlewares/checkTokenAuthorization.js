@@ -25,7 +25,7 @@ const checkTokenAuthorization = async (request, response, next) => {
 
         request.user = await User.findById(decodedToken.id);
 
-        if(request.user.disabled || request.user === null || request.user === undefined) {
+        if(request.user.disabled|| request.user.status !== 'Active' || request.user === null || request.user === undefined) {
             return response.status(401).json({error: 'account disabled or deleted'});
         }
 

@@ -22,6 +22,9 @@ router.post('/', async (request, response) => {
 
     if(user.disabled === true)
         return response.status(400).json(responses.accountDisabled());
+    
+    if(user.status !== 'Active')    // If user has not confirmed his/her account via email
+        return response.status(401).json(responses.accountDisabled());
 
     const _token = {
         username: user.username,

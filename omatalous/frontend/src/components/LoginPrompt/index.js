@@ -23,8 +23,16 @@ const LoginPrompt = ({view}) => {
         }
     };
 
+    const redirectToRegister = () => {
+        view.navigate('register', 'prevent-save');
+    };
+
+    const redirectToPasswordReset = () => {
+        view.navigate('forgot', 'prevent-save');
+    };
+
     return (
-        <LoginForm username={username} password={password} handleSubmit={handleSubmit} error={error} />
+        <LoginForm redirectToPasswordReset={redirectToPasswordReset} redirectToRegister={redirectToRegister} username={username} password={password} handleSubmit={handleSubmit} error={error} />
     );
 };
 

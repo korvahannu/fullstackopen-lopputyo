@@ -21,7 +21,7 @@ const useStyle = makeStyles((theme) => ({
     },
     sidebarSelected: {
         color:'#01579b',
-        backgroundColor:'#eee'
+        backgroundColor:'#eee',
     },
     sidebarSelectedText: {
         fontWeight: 600
