@@ -92,7 +92,7 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
 };
 
 TransactionsDataGrid.propTypes = {
-  transactions: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  transactions: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.bool]),
   onSelectionChange: PropTypes.func
 };
 

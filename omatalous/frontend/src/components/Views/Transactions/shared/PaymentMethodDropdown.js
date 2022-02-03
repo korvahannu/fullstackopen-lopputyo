@@ -12,7 +12,7 @@ const PaymentMethodDropdown = ({account, onChangeValue, value, error, setError})
             <InputLabel id='new-transaction-paymentmethod-label'>Payment Method</InputLabel>
             <Select error={error} onFocus={() => setError(false)} name="paymentMethod"  value={value}  defaultValue={''} onChange={onChangeValue} fullWidth label='Payment Method' labelId='new-transaction-paymentmethod-label'>
                 {
-                    paymentMethods.map(r => {
+                    paymentMethods.paymentMethods.map(r => {
                         if(!account)
                             return null;
 

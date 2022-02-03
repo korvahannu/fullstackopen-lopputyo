@@ -31,8 +31,8 @@ export const logout = () => {
     return async dispatch => {
         window.localStorage.removeItem(LOCALSTORAGE_USER);
         window.localStorage.removeItem('view');
-        await logoutService();
         dispatch({type:'LOGOUT'});
+        await logoutService();
     };
 };
 

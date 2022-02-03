@@ -17,7 +17,7 @@ const useStyle = makeStyles((theme) => ({
         flexGrow:1,
     },
     sidebarContainer: {
-        width:'300px'
+        minWidth:'300px',
     },
     sidebarSelected: {
         color:'#01579b',

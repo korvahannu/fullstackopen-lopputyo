@@ -1,9 +1,10 @@
 import React from 'react';
-import { Container, Box, Paper, Button, TextField, Typography, Grid, Link } from '@mui/material';
+import { Container, Box, Paper, TextField, Typography, Grid, Link } from '@mui/material';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import PropTypes from 'prop-types';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-const ChangePasswordPrompt = ({verificationToken, onSubmit, redirectToLoginScreen, password, passwordCheck, passwordErrorText}) => {
+const ChangePasswordPrompt = ({loading, verificationToken, onSubmit, redirectToLoginScreen, password, passwordCheck, passwordErrorText}) => {
 
     return (
         <Container maxWidth='xs'>
@@ -13,15 +14,15 @@ const ChangePasswordPrompt = ({verificationToken, onSubmit, redirectToLoginScree
                 <Paper component='form' onSubmit={onSubmit} elevation={3} sx={{ border: 0, padding: 2 }}>
                     <Typography variant='subtitle2'>Verification code has been sent to your email! Copy and paste the code here so we can verify your identity.</Typography>
                     
-                    <TextField margin='normal' size='small' variant='filled' label='Verification code' fullWidth autoFocus {...verificationToken.getInputParameters} />
-                    <TextField error={passwordErrorText !== ''} margin='normal' label='New password' fullWidth {...password.getInputParameters} />
-                    <TextField error={passwordErrorText !== ''} margin='normal' label='New password again' fullWidth {...passwordCheck.getInputParameters}  />
+                    <TextField disabled={loading} margin='normal' size='small' variant='filled' label='Verification code' fullWidth autoFocus {...verificationToken.getInputParameters} />
+                    <TextField disabled={loading} error={passwordErrorText !== ''} margin='normal' label='New password' fullWidth {...password.getInputParameters} />
+                    <TextField disabled={loading} error={passwordErrorText !== ''} margin='normal' label='New password again' fullWidth {...passwordCheck.getInputParameters}  />
 
                     <Typography color='error'>{passwordErrorText}</Typography>
 
-                    <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                    <LoadingButton loading={loading} type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
                         Change password
-                    </Button>
+                    </LoadingButton>
                 </Paper>
             </Box>
 
@@ -44,7 +45,8 @@ ChangePasswordPrompt.propTypes = {
     password: PropTypes.object,
     passwordCheck: PropTypes.object,
     passwordErrorText: PropTypes.string,
-    verificationToken: PropTypes.object
+    verificationToken: PropTypes.object,
+    loading: PropTypes.bool
 };
 
 export default ChangePasswordPrompt;

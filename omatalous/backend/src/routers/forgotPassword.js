@@ -38,6 +38,8 @@ router.post('/', async (request, response) => {
     user.disabled = true;   // We disable user untill new password has been set.
     await user.save();
     await verificationToken.save();
+
+    return response.status(200).end();
 });
 
 // POST /api/forgot/changepassword/
@@ -69,6 +71,7 @@ router.post('/changepassword', async (request, response) => {
     user.disabled = false;
     await user.save();
     await verificationToken.remove();
+    return response.status(200).end();
 });
 
 module.exports = router;

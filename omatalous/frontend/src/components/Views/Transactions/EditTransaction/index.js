@@ -35,7 +35,7 @@ const EditTransaction = ({ target, open, setOpen }) => {
 
     const classes = useStyles();
     const transaction = useSelector(state => {
-        return state.transactions.filter(a => a.id.toString() === target);
+        return state.transactions.transactions.filter(a => a.id.toString() === target);
     });
 
     const closeWindow = () => {
@@ -48,7 +48,7 @@ const EditTransaction = ({ target, open, setOpen }) => {
         setOpen(false);
     };
 
-    const sendUpdate = async () => {
+    const sendUpdate = () => {
 
         if (check(account.value)) {
             // If account is set
@@ -72,8 +72,8 @@ const EditTransaction = ({ target, open, setOpen }) => {
             date: check(date) ? format(date, 'yyyy/MM/dd') : null,
         };
 
-        await dispatch(updateTransaction(update));
-        await dispatch(loadAccounts());
+        dispatch(updateTransaction(update));
+        dispatch(loadAccounts());
 
         amount.reset();
         description.reset();

@@ -7,10 +7,8 @@ import NewIncomeDialog from './Dialogs/NewIncome';
 import EditTransaction from './EditTransaction';
 import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
-import If from '../../../utils/If';
 import useStyle from '../../styles';
 import Alert from '../../Alert';
-
 
 const Transactions = () => {
     const classes = useStyle();
@@ -37,6 +35,13 @@ const Transactions = () => {
         setSelected([]);
     };
 
+    if(!transactions.transactions||transactions.loading)
+        return (
+            <Box className={classes.viewContainer}>
+                <Loading />
+            </Box>
+        );
+
     return (
         <Box className={classes.viewContainer}>
             
@@ -44,26 +49,22 @@ const Transactions = () => {
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
             <EditTransaction target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
 
-            <If condition={transactions}>
-                <Box sx={{ mb: '16px' }}>
-                    <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
-                    <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
-                    
-                    {
-                        selected.length < 1
-                        ? null
-                        : selected.length === 1
-                        ? <Button variant='outlined' onClick={() => setShowEditTransactionDialog(true)}>Edit selected</Button>
-                        : <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
-                    }
-                    
-                </Box>
-                <TransactionsDataGrid transactions={transactions} onSelectionChange={onSelectionModelChange} />
-            </If>
+        
+            <Box sx={{ mb: '16px' }}>
+                <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
+                <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
+                
+                {
+                    selected.length < 1
+                    ? null
+                    : selected.length === 1
+                    ? <Button variant='outlined' onClick={() => setShowEditTransactionDialog(true)}>Edit selected</Button>
+                    : <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
+                }
+                
+            </Box>
+            <TransactionsDataGrid transactions={transactions.transactions} onSelectionChange={onSelectionModelChange} />
 
-            <If condition={!transactions}>
-                <Loading />
-            </If>
 
             <Alert open={deleteWindow} setOpen={setDeleteWindow} titleText='Warning, please read!'
             bodyText='Deleting these transactions is permanent and it can not be undone!'

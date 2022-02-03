@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {  Box, Button } from '@mui/material';
-import {useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { Box, Button } from '@mui/material';
+import { useSelector } from 'react-redux';
 import Loading from '../../Loading';
 import AccountInfoHolder from './AccountInfoHolder';
 import NewAccountDialog from './Dialogs/NewAccount';
@@ -21,18 +21,23 @@ const Accounts = () => {
         setShowEditAccountDialog(true);
     };
 
-    if(!accounts ||!user)
-        return <Loading />;
+    if (!accounts || accounts.loading || accounts === null || !user)
+        return (
+            <Box className={classes.viewContainer}>
+                <Loading />
+            </Box>);
 
     return (
         <Box className={classes.viewContainer}>
             <NewAccountDialog open={showNewAccountDialog} setOpen={setShowNewAccountDialog} />
-            <EditAccountDialog  account={targetAccount} open={showEditAccountDialog} setOpen={setShowEditAccountDialog} />
+            
+            <EditAccountDialog account={targetAccount} open={showEditAccountDialog} setOpen={setShowEditAccountDialog} />
 
-            <Button variant='contained' onClick={()=>setShowNewAccountDialog(!showNewAccountDialog)}>New account</Button> <br />
+            <Button variant='contained' onClick={() => setShowNewAccountDialog(!showNewAccountDialog)}>New account</Button> <br />
 
-            {accounts.map(
-                    account =><AccountInfoHolder openEditAccountWindow={openEditAccountWindow} key={account.id.toString()} account={account}/>)}
+            {accounts.accounts.map(
+                account => <AccountInfoHolder openEditAccountWindow={openEditAccountWindow} key={account.id.toString()} account={account} />)}
+
         </Box>
     );
 };

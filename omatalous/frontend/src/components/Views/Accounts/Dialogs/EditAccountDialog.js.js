@@ -28,16 +28,22 @@ const EditAccount = ({ account, open, setOpen }) => {
     const [deleteWindow, setDeleteWindow] = useState(false);
     const [editWindow, setEditWindow] = useState(false);
 
-    const paymentMethods = useSelector(state => state.paymentMethods.filter(method => {
-        if (!account)
-            return false;
-        if (method.account === null || method.account.id !== account.id)
-            return false;
-        return true;
-    }));
+    const paymentMethods = useSelector(state => {
+        if(!state.paymentMethods.paymentMethods ||!account)
+            return { loading: true, paymentMethods:null};
 
-    if (!account)
-        return null;
+        return {
+            loading: state.paymentMethods.loading,
+            paymentMethods: state.paymentMethods.paymentMethods.filter(method => {
+                if (!method.account)
+                    return false;
+                if (method.account.id !== account.id)
+                    return false;
+
+                return true;
+            })
+        };
+    });
 
     const deleteAccount = async () => {
         setDeleteWindow(true);
@@ -56,7 +62,6 @@ const EditAccount = ({ account, open, setOpen }) => {
             },
             ...newPaymentMethods
         ]);
-        console.log(newPaymentMethods);
         newPaymentMethod.reset();
     };
 
@@ -94,12 +99,15 @@ const EditAccount = ({ account, open, setOpen }) => {
             }
         };
 
+        closeWindow();
         // Editing accounts is a bit heavy work
         await dispatch(editAccount(update));
         await dispatch(loadTransactions());
         await dispatch(loadPaymentMethods());
-        closeWindow();
     };
+
+    if(!account)
+        return null;
 
 
     return (
@@ -116,7 +124,7 @@ const EditAccount = ({ account, open, setOpen }) => {
                         <Typography variant='subtitle1'>Payment methods:
 
                             {
-                                paymentMethods.filter(p => !paymentMethodsToBeDeleted.includes(p.id)).map(p => <ButtonBase
+                                paymentMethods.paymentMethods.filter(p => !paymentMethodsToBeDeleted.includes(p.id)).map(p => <ButtonBase
                                     onClick={() => setPaymentMethodsToBeDeleted([...paymentMethodsToBeDeleted, p.id])}
                                     sx={{ ml: 1, mr: 1, textTransform: 'uppercase' }} key={p.id}>{p.name}</ButtonBase>)
                             }

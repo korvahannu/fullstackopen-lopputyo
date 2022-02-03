@@ -70,18 +70,11 @@ const SideBar = ({ view }) => {
                                 : null
                         }
 
-                        className={
-                            view.value === option.value
-                                ? classes.sidebarSelected
-                                : null
-                        }
-
                         button  value={option.value} onClick={() => handleClick(option.value)}>
                         <ListItemIcon>
                             {option.icon}
                         </ListItemIcon>
                         <ListItemText
-                            classes={view.value === option.value ? { primary: classes.sidebarSelectedText } : null}
                             >
                                 {
                                     view.value === option.value

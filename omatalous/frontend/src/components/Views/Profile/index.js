@@ -7,6 +7,7 @@ import useField from '../../../hooks/useField';
 import Alert from '../../Alert';
 import { testPassword } from '../../../services/user';
 import { setNotification } from '../../../reducers/notificationReducer';
+import Loading from '../../Loading';
 
 const Profile = () => {
 
@@ -26,6 +27,7 @@ const Profile = () => {
     const [passwordErrorText, setPasswordErrorText] = useState('Passwords do not match!');
     const [currentPasswordError, setCurrentPasswordError] = useState(false);
     const notification = useSelector(state => state.notification);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if(user) {
@@ -72,6 +74,7 @@ const Profile = () => {
     };
 
     const acceptEdit = async () => {
+        setLoading(true);
         await dispatch(
             editUserInfo(
                 {
@@ -91,6 +94,7 @@ const Profile = () => {
         newPasswordCheck.setValue('');
 
         await dispatch(setNotification('update-successful', 'Profile updated successfully!', 5));
+        setLoading(false);
     };
 
     const resetFields = () => {
@@ -103,6 +107,12 @@ const Profile = () => {
         newPasswordCheck.setValue('');
     };
     
+    if(loading)
+        return (
+            <Box className={classes.viewContainer}>
+                <Loading />
+            </Box>
+        );
 
     return (
         <Box className={classes.viewContainer}>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState } from 'react';
 import { login } from '../../reducers/userReducer';
 import { setNotification } from '../../reducers/notificationReducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,28 +11,33 @@ const LoginPrompt = ({view}) => {
     const username = useField('text', 'username');
     const password = useField('password', 'password');
     const error = useSelector(state => state.notification);
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            setLoading(true);
             await dispatch(login(username.value, password.value));
             view.navigateToSaved();
         }
         catch(error) {
+            setLoading(false);
             await dispatch(setNotification('login-error', 'Invalid login credentials', 5));
         }
     };
 
     const redirectToRegister = () => {
-        view.navigate('register', 'prevent-save');
+        if(!loading)
+            view.navigate('register', 'prevent-save');
     };
 
     const redirectToPasswordReset = () => {
-        view.navigate('forgot', 'prevent-save');
+        if(!loading)
+            view.navigate('forgot', 'prevent-save');
     };
 
     return (
-        <LoginForm redirectToPasswordReset={redirectToPasswordReset} redirectToRegister={redirectToRegister} username={username} password={password} handleSubmit={handleSubmit} error={error} />
+        <LoginForm loading={loading} redirectToPasswordReset={redirectToPasswordReset} redirectToRegister={redirectToRegister} username={username} password={password} handleSubmit={handleSubmit} error={error} />
     );
 };
 

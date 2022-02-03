@@ -47,6 +47,11 @@ app.use('/ping', (request, response) => {
     response.send('pong');
 });
 
+// FIXME: Remove the following middleware post-testing
+app.use(async (request, response, next) => {
+    setTimeout(next, 1000);
+});
+
 // ROUTERS
 app.use('/api/login', loginRouter);
 app.use('/api/register', registerRouter);

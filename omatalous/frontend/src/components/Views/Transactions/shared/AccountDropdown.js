@@ -12,7 +12,7 @@ const AccountDropdown = ({onChangeValue, value, error, setError}) => {
             <InputLabel id='new-transaction-account-label'>Account</InputLabel>
             <Select error={error} onFocus={()=> setError(false)} name="account" value={value} defaultValue={''} onChange={onChangeValue} fullWidth label='Account' labelId='new-transaction-account-label'>
                 {
-                    accounts.map(r => <MenuItem value={r.id} key={r.id}>{r.name}</MenuItem>)
+                    accounts.accounts.map(r => <MenuItem value={r.id} key={r.id}>{r.name}</MenuItem>)
                 }
             </Select>
         </FormControl>

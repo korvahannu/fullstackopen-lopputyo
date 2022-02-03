@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import useField from '../../hooks/useField';
 import PropTypes from 'prop-types';
-import { Container, Box, Paper, Button, TextField, Typography, Grid, Link } from '@mui/material';
+import { Container, Box, Paper, TextField, Typography, Grid, Link } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import PersonIcon from '@mui/icons-material/Person';
 import register from '../../services/register';
 
@@ -18,6 +19,7 @@ const RegisterPrompt = ({ view }) => {
     const [passwordCheckError, setPasswordCheckError] = useState(false);
     const [error, setError] = useState(false);
     const [registerError, setRegisterError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -60,6 +62,7 @@ const RegisterPrompt = ({ view }) => {
         }
 
         try {
+            setLoading(true);
             await register({
                 name: name.value,
                 username: username.value,
@@ -70,13 +73,15 @@ const RegisterPrompt = ({ view }) => {
             view.navigate('email-sent-to-verify', 'prevent-save');
         }
         catch(error) {
+            setLoading(false);
             setRegisterError('Error while registering your user account! The username or email may have already been taken.');
         }
 
     };
 
     const redirectToLoginScreen = () => {
-        view.navigate('login', 'prevent-save');
+        if(!loading)
+            view.navigate('login', 'prevent-save');
     };
 
     return (
@@ -88,11 +93,11 @@ const RegisterPrompt = ({ view }) => {
 
                     <Typography align='center' variant='subtitle1' color='error'>{registerError}</Typography>
 
-                    <TextField margin='normal' label='Name' fullWidth autoFocus {...name.getInputParameters} />
-                    <TextField error={usernameError} onFocus={() => setUsernameError(false)} margin='normal' label='Username' fullWidth autoFocus {...username.getInputParameters} />
-                    <TextField error={emailError} onFocus={() => setEmailError(false)} margin='normal' label='Email' fullWidth autoFocus {...email.getInputParameters} />
-                    <TextField error={passwordError} onFocus={() => setPasswordError(false)} margin='normal' label='Password' autoComplete='current-password' fullWidth {...password.getInputParameters} />
-                    <TextField error={passwordCheckError} onFocus={() => setPasswordCheckError(false)} margin='normal' label='Password again' fullWidth autoFocus {...passwordCheck.getInputParameters} />
+                    <TextField disabled={loading} margin='normal' label='Name' fullWidth autoFocus {...name.getInputParameters} />
+                    <TextField disabled={loading} error={usernameError} onFocus={() => setUsernameError(false)} margin='normal' label='Username' fullWidth autoFocus {...username.getInputParameters} />
+                    <TextField disabled={loading} error={emailError} onFocus={() => setEmailError(false)} margin='normal' label='Email' fullWidth autoFocus {...email.getInputParameters} />
+                    <TextField disabled={loading} error={passwordError} onFocus={() => setPasswordError(false)} margin='normal' label='Password' autoComplete='current-password' fullWidth {...password.getInputParameters} />
+                    <TextField disabled={loading} error={passwordCheckError} onFocus={() => setPasswordCheckError(false)} margin='normal' label='Password again' fullWidth autoFocus {...passwordCheck.getInputParameters} />
 
                     <Typography variant='caption'>{'After clicking "Register" -button, you will be sent an email confirmation link.'}</Typography>
 
@@ -102,9 +107,9 @@ const RegisterPrompt = ({ view }) => {
                         : null
                     }
 
-                    <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
+                    <LoadingButton loading={loading} type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
                         Register
-                    </Button>
+                    </LoadingButton>
                 </Paper>
             </Box>
 

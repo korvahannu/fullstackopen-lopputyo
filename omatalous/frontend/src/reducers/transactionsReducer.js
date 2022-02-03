@@ -3,28 +3,52 @@ import { addOutcome } from '../services/outcomes';
 import { addIncome } from '../services/incomes';
 
 const reducer = (state = [], action) => {
-    switch(action.type) {
+
+    switch (action.type) {
+        case 'SET_TRANSACTIONS_LOADING':
+            return {
+                loading: true,
+                transactions: state.transactions
+            };
         case 'ADD_TRANSACTION':
-            return [action.data, ...state];
-            
+            return {
+                loading: false,
+                transactions: [action.data, ...state.transactions]
+            };
+
         case 'LOAD_TRANSACTIONS':
-            return action.transactions;
+            return {
+                loading: false,
+                transactions: action.transactions
+            };
 
-        case 'DELETE_TRANSACTIONS':
+        case 'DELETE_TRANSACTIONS': {
 
-            return state.filter(
+            const transactions = state.transactions.filter(
                 obj => !action.transactions.includes(obj.id)
             );
 
-        case 'UPDATE_TRANSACTION':
+            return {
+                loading: false,
+                transactions
+            };
+        }
 
-        return state.map(obj => {
-            if(obj.id !== action.update.id)
-                return obj;
-            else {
-                return action.update;
-            }
-        });
+        case 'UPDATE_TRANSACTION': {
+
+            const transactions = state.transactions.map(obj => {
+                if (obj.id !== action.update.id)
+                    return obj;
+                else {
+                    return action.update;
+                }
+            });
+
+            return {
+                loading: false,
+                transactions
+            };
+        }
 
         default:
             return state;
@@ -33,22 +57,25 @@ const reducer = (state = [], action) => {
 
 export const addNewOutcome = (outcome) => {
     return async dispatch => {
+        dispatch({type:'SET_TRANSACTIONS_LOADING'});
         const newOutcome = await addOutcome(outcome);
-        dispatch({type:'ADD_TRANSACTION', data:newOutcome});
+        dispatch({ type: 'ADD_TRANSACTION', data: newOutcome });
     };
 };
 
 export const addNewIncome = (income) => {
     return async dispatch => {
+        dispatch({type:'SET_TRANSACTIONS_LOADING'});
         const newIncome = await addIncome(income);
-        dispatch({type:'ADD_TRANSACTION', data: newIncome});
+        dispatch({ type: 'ADD_TRANSACTION', data: newIncome });
     };
 };
 
 export const loadTransactions = () => {
     return async dispatch => {
+        dispatch({type:'SET_TRANSACTIONS_LOADING'});
         const transactions = await getUserTransactions();
-        dispatch({type:'LOAD_TRANSACTIONS', transactions});
+        dispatch({ type: 'LOAD_TRANSACTIONS', transactions });
     };
 };
 
@@ -56,10 +83,12 @@ export const deleteManyTransactions = (idArray) => {
 
     return async dispatch => {
         try {
+            dispatch({type:'SET_TRANSACTIONS_LOADING'});
             await deleteMany(idArray);
-            dispatch({type:'DELETE_TRANSACTIONS', transactions:idArray});
+            dispatch({ type: 'DELETE_TRANSACTIONS', transactions: idArray });
         }
-        catch(error) {
+        catch (error) {
+            dispatch({type:'error'});
             console.log(error);
         }
     };
@@ -68,8 +97,9 @@ export const deleteManyTransactions = (idArray) => {
 
 export const updateTransaction = (update) => {
     return async dispatch => {
+        dispatch({type:'SET_TRANSACTIONS_LOADING'});
         const result = await updateUserTransaction(update);
-        return dispatch({type:'UPDATE_TRANSACTION', update: result});
+        return dispatch({ type: 'UPDATE_TRANSACTION', update: result });
     };
 };
 

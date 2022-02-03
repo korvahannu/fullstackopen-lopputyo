@@ -15,11 +15,19 @@ const RegisterPrompt = ({ view }) => {
     const passwordCheck = useField('password', 'passwordCheck');
     const verificationToken = useField('text', 'verificationToken');
     const [passwordErrorText, setPasswordErrorText] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const sendVerificationCode = (event) => {
+    const sendVerificationCode = async (event) => {
         event.preventDefault();
-        userForgotPassword({ email: email.value });
-        setPhase('change-password');
+        try {
+            setLoading(true);
+            await userForgotPassword({ email: email.value });
+            setLoading(false);
+            setPhase('change-password');
+        }
+        catch(error) {
+            setLoading(false);
+        } 
     };
 
     const changePassword = async (event) => {
@@ -34,29 +42,33 @@ const RegisterPrompt = ({ view }) => {
         }
 
         try {
-            resetUserPassword({
+            setLoading(true);
+            await resetUserPassword({
                 email: email.value,
                 password: password.value,
                 token: verificationToken.value
             });
+            setLoading(false);
             setPhase('success');
         }
         catch(error) {
+            setLoading(false);
             setPhase('error');
         }
     };
 
     const redirectToLoginScreen = () => {
-        view.navigate('login', 'prevent-save');
+        if(!loading)
+            view.navigate('login', 'prevent-save');
     };
 
     return (
         <>
             {
                 phase === 'send-email'
-                    ? <EmailPrompt redirectToLoginScreen={redirectToLoginScreen} onSubmit={sendVerificationCode} email={email} />
+                    ? <EmailPrompt loading={loading} redirectToLoginScreen={redirectToLoginScreen} onSubmit={sendVerificationCode} email={email} />
                     : phase === 'change-password'
-                        ? <ChangePasswordPrompt verificationToken={verificationToken} redirectToLoginScreen={redirectToLoginScreen} onSubmit={changePassword} passwordErrorText={passwordErrorText} password={password} passwordCheck={passwordCheck} />
+                        ? <ChangePasswordPrompt loading={loading} verificationToken={verificationToken} redirectToLoginScreen={redirectToLoginScreen} onSubmit={changePassword} passwordErrorText={passwordErrorText} password={password} passwordCheck={passwordCheck} />
                         : phase === 'success'
                         ? <Success redirectToLoginScreen={redirectToLoginScreen} />
                         : <Fail redirectToLoginScreen={redirectToLoginScreen} />
