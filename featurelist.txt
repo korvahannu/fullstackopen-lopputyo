@@ -1,7 +1,6 @@
 0.1.0=>
 
-Forgot password juttu, katso forgotpassword -komponenttia pseudokoodiin
-backendin testien kirjoittaminen puuttuviin routereihin, testien refaktorointi?
+backendin testit kuntoon
 backendin ylimääräisten routereiden poistaminen
 Teeman keskittäminen useStyles() komponenttiin ja ulkoasun hiominen
 useMemo ja useCallback hyödyntäminen, yleinen optimointi

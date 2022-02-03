@@ -24,6 +24,7 @@ const logsRouter = require('./routers/logs');
 const transactionsRouter = require('./routers/transactions');
 const errorHandler = require('./middlewares/errorHandler');
 const { checkTokenAuthorization, } = require('./middlewares/checkTokenAuthorization');
+const forgotPasswordRouter = require('./routers/forgotPassword');
 
 // ESTABLISH  CONNECTION TO MONGODB
 const connectToMongo = async () => {
@@ -49,6 +50,7 @@ app.use('/ping', (request, response) => {
 // ROUTERS
 app.use('/api/login', loginRouter);
 app.use('/api/register', registerRouter);
+app.use('/api/forgot', forgotPasswordRouter);
 
 app.use(checkTokenAuthorization); // Routers after this middleware can only be used with a valid token
 

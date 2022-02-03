@@ -70,12 +70,9 @@ router.post('/', async (request, response, next) => {
             confirmationCode
         });
 
-        const url = request.protocol + '://' + request.get('host');
-
         nodemailer.sendConfirmationEmail(
-            user.username,
+            user.name,
             user.email,
-            url,
             user.confirmationCode
         );
 

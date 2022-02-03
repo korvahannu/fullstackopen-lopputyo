@@ -5,7 +5,8 @@ require('dotenv').config();
 
 const PORT = process.env.PORT | 3001;
 const WEBTOKEN_SECRET = process.env.WEBTOKEN_SECRET;
-const TOKEN_DEFAULT_EXPIRATION = 86400000;
+const TOKEN_DEFAULT_EXPIRATION = 86400000;  // milliseconds, this is 24h
+const PASSWORD_RESET_TOKEN_EXPIRATION = 1800000; // 30 minutes
 
 const URI = process.env.NODE_ENV === 'test'
     ? process.env.URI_TEST

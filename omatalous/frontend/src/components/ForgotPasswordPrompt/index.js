@@ -1,24 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useField from '../../hooks/useField';
 import PropTypes from 'prop-types';
-import { Container, Box, Paper, Button, TextField, Typography, Grid, Link } from '@mui/material';
-import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import EmailPrompt from './EmailPrompt';
+import ChangePasswordPrompt from './ChangePasswordPrompt';
+import Success from './Success';
+import Fail from './Fail';
+import userForgotPassword, { resetUserPassword } from '../../services/forgotPassword';
 
 const RegisterPrompt = ({ view }) => {
 
     const email = useField('email', 'email');
+    const [phase, setPhase] = useState('send-email');
+    const password = useField('password', 'password');
+    const passwordCheck = useField('password', 'passwordCheck');
+    const verificationToken = useField('text', 'verificationToken');
+    const [passwordErrorText, setPasswordErrorText] = useState('');
 
-    const handleSubmit = () => {
-        // TODO: Handle the stuff here
-        /*
-            1. Lähetä käyttäjän antama salasana backendille
-            2. Backendi ottaa vastaan jossain routerissa sähköpostin
-            3. Backendi generoi koodin ja lähettää sen sähköpostilla käyttäjälle
-             - Samaan aikaan tämä näkymä vaihtuu semmoiseksi, joka ottaa vastaan koodin ja uuden salasanan
-            4. Frontend lähettää backendille sähköpostin, generoidun koodin ja uuden salasanan
-            5. Backend varmistaa kaiken ja vaihtaa salasanan, käyttäjälle ilmoitetaan asia.
-        */
-        return null;
+    const sendVerificationCode = (event) => {
+        event.preventDefault();
+        userForgotPassword({ email: email.value });
+        setPhase('change-password');
+    };
+
+    const changePassword = async (event) => {
+        event.preventDefault();
+        if (password.value !== passwordCheck.value) {
+            setPasswordErrorText('Set passwords do not match!');
+            return;
+        }
+        if (password.value.length < 5) {
+            setPasswordErrorText('Your password must be at least 5 characters long!');
+            return;
+        }
+
+        try {
+            resetUserPassword({
+                email: email.value,
+                password: password.value,
+                token: verificationToken.value
+            });
+            setPhase('success');
+        }
+        catch(error) {
+            setPhase('error');
+        }
     };
 
     const redirectToLoginScreen = () => {
@@ -26,29 +51,17 @@ const RegisterPrompt = ({ view }) => {
     };
 
     return (
-        <Container maxWidth='xs'>
-            <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <Typography align='center' variant='h5' sx={{ mb: 2 }}><VpnKeyIcon /> Reset password</Typography>
-
-                <Paper component='form' onSubmit={handleSubmit} elevation={3} sx={{ border: 0, padding: 2 }}>
-                    <Typography variant='subtitle2'>You can send a link to your email that you can use to reset your password.</Typography>
-                    <TextField margin='normal' label='Email' fullWidth autoFocus {...email.getInputParameters} />
-
-                    <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-                        Send
-                    </Button>
-                </Paper>
-            </Box>
-
-            <Grid container>
-                <Grid item xs>
-                    <Link href='#' onClick={redirectToLoginScreen} variant='body2'>
-                        Back to login screen
-                    </Link>
-                </Grid>
-            </Grid>
-
-        </Container>
+        <>
+            {
+                phase === 'send-email'
+                    ? <EmailPrompt redirectToLoginScreen={redirectToLoginScreen} onSubmit={sendVerificationCode} email={email} />
+                    : phase === 'change-password'
+                        ? <ChangePasswordPrompt verificationToken={verificationToken} redirectToLoginScreen={redirectToLoginScreen} onSubmit={changePassword} passwordErrorText={passwordErrorText} password={password} passwordCheck={passwordCheck} />
+                        : phase === 'success'
+                        ? <Success redirectToLoginScreen={redirectToLoginScreen} />
+                        : <Fail redirectToLoginScreen={redirectToLoginScreen} />
+            }
+        </>
     );
 };
 

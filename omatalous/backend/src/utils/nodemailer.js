@@ -12,8 +12,29 @@ const transport = nodemailer.createTransport({
    } 
 });
 
-module.exports.sendConfirmationEmail = (name, email, url, confirmationCode) => {
-    console.log('Sending confirmation email with url ' + url);
+module.exports.sendVerificationEmail = (name, email, verificationToken) => {
+    transport.sendMail({
+        from: user,
+        to: email,
+        subject: 'Your code for reseting password',
+        html: `
+            <div>
+            <h1>Password reset</h1>
+            <h2>Hello ${name}</h2>
+            <p>We have recieved a request from you about reseting your password. If you did not
+            want to reset your password, please ignore this email.</p>
+            <p>Your password reset code is:</p>
+            <h3>${verificationToken}</h3>
+            </div>
+        `
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
+    console.log('Sending confirmation email with url');
 
     transport.sendMail({
         from: user,

@@ -15,6 +15,7 @@ router.post('/deleteAccount/', async (request, response, next) => {
 
     try {
         // Instead of deleting, we disable an account and remove sessions
+        // TODO: We should delete accounts since users have right to be forgotten
         const session = await Session.findOne({user:request.user.id.toString()});
         await session.remove();
         const user = await User.findByIdAndUpdate(request.user.id, {disabled: true}, {new: true});
