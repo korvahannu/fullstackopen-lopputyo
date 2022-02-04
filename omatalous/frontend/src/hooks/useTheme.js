@@ -1,27 +1,38 @@
 import { useState } from 'react';
 import { createTheme } from '@mui/material';
-import { grey } from '@mui/material/colors';
 
 const useTheme = () => {
-    const [dark, setDark] = useState(false);
+    const [color, setColor] = useState('blue');
 
     const theme = createTheme({
         palette: {
-            dark,
-            ...(dark===true)
+            color,
+            ...(color==='red')
             ? {
-                primary:  {
-                    main: grey[500],
-                    divider: grey[700],
-                    background: {
-                      default: grey[900],
-                      paper: grey[900],
-                    },
-                    text: {
-                      primary: '#fff',
-                      secondary: grey[500],
-                    },
-                }
+                primary: {
+                    main: '#e53935'
+                },
+                secondary: {
+                  main: '#b71c1c',
+                },
+            }
+            : color, ...(color==='green')
+            ? {
+                primary: {
+                    main: '#43a047',
+                  },
+                  secondary: {
+                    main: '#b71c1c',
+                  },
+            }
+            : color, ...(color==='pink')
+            ? {
+                primary: {
+                    main: '#ab47bc',
+                  },
+                  secondary: {
+                    main: '#d81b60',
+                  },
             }
             : {
 
@@ -30,11 +41,11 @@ const useTheme = () => {
         },
     });
 
-    const changeTheme = (mode) => {
-        setDark(mode);
+    const changeTheme = (c) => {
+        setColor(c);
     };
 
-    return { dark, changeTheme, theme };
+    return { color, changeTheme, theme };
 };
 
 export default useTheme;

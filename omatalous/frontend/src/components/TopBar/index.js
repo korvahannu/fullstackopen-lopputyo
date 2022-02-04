@@ -9,7 +9,7 @@ const profileIconMenuOptions = [
     'Log out'
 ];
 
-const TopBar = ({ user , view}) => {
+const TopBar = ({ user , view, setColor}) => {
 
     const dispatch = useDispatch();
 
@@ -53,6 +53,7 @@ const TopBar = ({ user , view}) => {
 
     return (
         <Bar
+            setColor={setColor}
             tooltip={tooltip}
             profileIconMenuOptions={profileIconMenuOptions}
             profileIconMenuAnchor={profileIconMenuAnchor}
@@ -66,7 +67,8 @@ const TopBar = ({ user , view}) => {
 
 TopBar.propTypes = {
     user: PropTypes.object,
-    view: PropTypes.object
+    view: PropTypes.object,
+    setColor: PropTypes.func
 };
 
 export default TopBar;

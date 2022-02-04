@@ -60,9 +60,13 @@ const App = () => {
     }
   }, [user]);
 
+  const setColor = (c) => {
+    themeSelector.changeTheme(c);
+  };
+
   return (
     <ThemeProvider theme={themeSelector.theme}>
-      <TopBar user={user} view={view} />
+      <TopBar setColor={setColor} user={user} view={view} />
 
       <Box sx={{ display: 'flex'}}>
         <If condition={user}>

@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 
-const PaymentMethodDropdown = ({account, onChangeValue, value, error, setError}) => {
+const PaymentMethodDropdown = ({label, account, onChangeValue, value, error, setError}) => {
 
     const paymentMethods = useSelector(state => state.paymentMethods);
 
     return (
         <FormControl fullWidth>
-            <InputLabel id='new-transaction-paymentmethod-label'>Payment Method</InputLabel>
-            <Select error={error} onFocus={() => setError(false)} name="paymentMethod"  value={value}  defaultValue={''} onChange={onChangeValue} fullWidth label='Payment Method' labelId='new-transaction-paymentmethod-label'>
+            <InputLabel id='new-transaction-paymentmethod-label'>{label ||'Payment Method'}</InputLabel>
+            <Select error={error} onFocus={() => setError(false)} name="paymentMethod"  value={value}  defaultValue={''} onChange={onChangeValue} fullWidth label={label || 'Payment Method'} labelId='new-transaction-paymentmethod-label'>
                 {
                     paymentMethods.paymentMethods.map(r => {
                         if(!account)
@@ -35,7 +35,8 @@ PaymentMethodDropdown.propTypes = {
     value: PropTypes.string,
     account: PropTypes.object,
     error: PropTypes.bool,
-    setError: PropTypes.func
+    setError: PropTypes.func,
+    label: PropTypes.string
 };
 
 export default PaymentMethodDropdown;

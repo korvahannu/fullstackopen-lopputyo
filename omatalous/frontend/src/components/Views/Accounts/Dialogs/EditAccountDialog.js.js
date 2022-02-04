@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonBase, Dialog, DialogTitle, TextField, DialogContent, DialogActions, Slide, FormControl, Typography, Divider } from '@mui/material';
+import { Button, ButtonBase, Dialog, DialogTitle, TextField, DialogContent, Box, DialogActions, Slide, FormControl, Typography, Divider } from '@mui/material';
 import { forwardRef } from 'react';
 import useStyles from '../../../styles';
 import useField from '../../../../hooks/useField';
@@ -9,6 +9,9 @@ import { removeAccount, editAccount } from '../../../../reducers/accountsReducer
 import { loadPaymentMethods } from '../../../../reducers/paymentMethodsReducer';
 import { loadTransactions } from '../../../../reducers/transactionsReducer';
 import Alert from '../../../Alert';
+import SendIcon from '@mui/icons-material/Send';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 
 const Transition = forwardRef(
@@ -27,6 +30,26 @@ const EditAccount = ({ account, open, setOpen }) => {
     const dispatch = useDispatch();
     const [deleteWindow, setDeleteWindow] = useState(false);
     const [editWindow, setEditWindow] = useState(false);
+    const transactions = useSelector(state => {
+        if(!state.transactions ||!state.transactions.transactions||!account)
+            return null;
+        return state.transactions.transactions.filter(tr => {
+            if(!tr.account)
+                return false;
+            return tr.account.id === account.id;
+        });
+    });
+
+    let transactionCount = 0;
+
+    if(transactions)
+        transactionCount = transactions.length;
+
+    useEffect(() => {
+        if(account) {
+            setNewAccountName(account.name);
+        }
+    }, [account]);
 
     const paymentMethods = useSelector(state => {
         if(!state.paymentMethods.paymentMethods ||!account)
@@ -114,13 +137,13 @@ const EditAccount = ({ account, open, setOpen }) => {
         <>
             <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => setOpen(false)}>
 
-                <DialogTitle>{account.name}<TextField sx={{ marginLeft: '490px' }} label='New name' variant='standard' onChange={(event) => setNewAccountName(event.target.value)} value={newAccountName} size='medium' /></DialogTitle>
+                <DialogTitle><TextField label='Account name' variant='standard' onChange={(event) => setNewAccountName(event.target.value)} value={newAccountName} size='medium' /></DialogTitle>
 
                 <FormControl fullWidth>
 
                     <DialogContent>
-                        <Typography variant='body1' paragraph>Balance: {account.balance}$</Typography>
-                        <Typography variant='body1' paragraph>Logged transactions: 6154</Typography>
+                        <Typography variant='body1' paragraph>Balance: {account.balance} €</Typography>
+                        <Typography variant='body1' paragraph>Logged transactions: {transactionCount}</Typography>
                         <Typography variant='subtitle1'>Payment methods:
 
                             {
@@ -136,15 +159,17 @@ const EditAccount = ({ account, open, setOpen }) => {
                         </Typography>
                         <Divider />
                         <br />
-                        <TextField size='small' label='Paymentmethod name' type='text' variant='outlined'
+                        <TextField size='small' label='Payment method name' type='text' variant='outlined'
                             value={newPaymentMethod.value} onChange={newPaymentMethod.onChange} />
-                        <Button onClick={addToNewPaymentMethods}>+</Button>
+                        <Button sx={{minHeight:'40px'}} onClick={addToNewPaymentMethods} startIcon={<SendIcon />} />
                     </DialogContent>
 
-                    <DialogActions>
-                        <Button onClick={() => saveChanges()}>Confirm edit</Button>
-                        <Button color='error' onClick={() => deleteAccount()}>Delete account</Button>
+                    <DialogActions sx={{display:'flex'}}>
+                        
+                        <Button color='error' onClick={() => deleteAccount()} startIcon={<DeleteForeverIcon />}> Delete account</Button>
+                        <Box sx={{flexGrow:1}}/>
                         <Button onClick={closeWindow}>Cancel</Button>
+                        <Button variant='contained' onClick={() => saveChanges()} startIcon={<CheckIcon />}> Save</Button>
                     </DialogActions>
 
                 </FormControl>
@@ -153,11 +178,11 @@ const EditAccount = ({ account, open, setOpen }) => {
 
 
             <Alert open={deleteWindow} setOpen={setDeleteWindow} titleText='Warning, please read!'
-                bodyText='Deleting these transactions is permanent and it can not be undone!'
+                bodyText='Deleting an account is permanent and it can not be undone. Proceed with care!'
                 onAccept={acceptDeleteAccount} />
             
             <Alert open={editWindow} setOpen={setEditWindow} titleText='Warning, please read!'
-                bodyText='Changes you have done may affect your existing transactions. proceed with care!'
+                bodyText='Changes you have done may affect your existing transactions. Proceed with care!'
                 onAccept={acceptEditAccount} />
 
         </>

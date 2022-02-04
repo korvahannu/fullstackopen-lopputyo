@@ -9,6 +9,10 @@ import { deleteManyTransactions } from '../../../reducers/transactionsReducer';
 import Loading from '../../Loading';
 import useStyle from '../../styles';
 import Alert from '../../Alert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 const Transactions = () => {
     const classes = useStyle();
@@ -47,19 +51,21 @@ const Transactions = () => {
             
             <NewOutcomeDialog open={showNewOutcomeDialog} setOpen={setShowNewOutcomeDialog} />
             <NewIncomeDialog open={showNewIncomeDialog} setOpen={setShowNewIncomeDialog} />
-            <EditTransaction target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
+            <EditTransaction setSelected={setSelected} target={selected[0]} open={showEditTransactionDialog} setOpen={setShowEditTransactionDialog} />
 
         
             <Box sx={{ mb: '16px' }}>
-                <Button variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>Add Outcome</Button>
-                <Button variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>Add Income</Button>
+
+                <Button startIcon={<ArrowUpwardIcon />} variant='contained' color='success' sx={{ mr: 4 }} onClick={openNewIncomeDialog}>New Income</Button>
+                <Button startIcon={<ArrowDownwardIcon />} variant='contained' color='error' sx={{ mr: 4 }} onClick={openNewOutcomeDialog}>New Outcome</Button>
+                
                 
                 {
                     selected.length < 1
                     ? null
                     : selected.length === 1
-                    ? <Button variant='outlined' onClick={() => setShowEditTransactionDialog(true)}>Edit selected</Button>
-                    : <Button variant='outlined' onClick={deleteSelected}>Delete selected</Button>
+                    ? <Button variant='outlined' onClick={() => setShowEditTransactionDialog(true)} startIcon={<EditIcon />}> Edit selected</Button>
+                    : <Button variant='outlined' color='error' onClick={deleteSelected} startIcon={<DeleteForeverIcon />}> Delete selected</Button>
                 }
                 
             </Box>

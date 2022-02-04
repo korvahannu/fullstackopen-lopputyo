@@ -23,6 +23,7 @@ const Alert = ({
                 onAccept,           // Function to perform on clicking accept-button
                 onCancel,           // Function to perform on clicking cancel-button
                 dontCloseOnAccept,  // Boolean to stop closing window when clicking accept-button
+                dontCloseOnCancel,  // Boolean to stop closing window when clicking cancel-button
 
                 titleText,          // String, title of alert window
                 bodyText,           // String, main text of alert window
@@ -32,7 +33,9 @@ const Alert = ({
                 className,          // If you want you can set className of the window using this
 
                 acceptButtonText,   // String, what text should the accept-button have?
+                cancelButtonText,   // String, what text should the cancel-button have?
                 acceptButtonVariant,// String, what MUI variant should accept-button be?
+                cancelButtonVariant,// String, what MUI variant should cancel-button be?
               }) => {
 
   if(!onCancel)
@@ -47,6 +50,13 @@ const Alert = ({
     onAccept();
   };
 
+  const cancel = () => {
+    if(!dontCloseOnCancel)
+      setOpen(false);
+
+    onCancel();
+  };
+
   return (
     <div>
       <Modal
@@ -57,12 +67,13 @@ const Alert = ({
       >
         <Box sx={sx || {...style, ...appendStyle}} className={className}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            {titleText || 'Please note.'}
+            {titleText || 'Are you sure you want to continue with this action?'}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {bodyText || 'This is a notification'}
+            {bodyText || 'This action is permanent.'}
           </Typography>
           <Box sx={{mt:3, display:'flex'}}>
+            <Button onClick={cancel} variant={cancelButtonVariant ||'contained'}>{cancelButtonText ||'Cancel'}</Button>
             <Box sx={{flexGrow:1}}/>
             <Button onClick={accept} variant={acceptButtonVariant ||'contained'}>{acceptButtonText ||'Continue'}</Button>
           </Box>

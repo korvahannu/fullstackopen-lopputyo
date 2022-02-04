@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, FormControl, Typography, TextField } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, FormControl, TextField, Box } from '@mui/material';
 import { forwardRef } from 'react';
 import useStyles from '../../../styles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -15,6 +15,9 @@ import { loadAccounts } from '../../../../reducers/accountsReducer';
 import If from '../../../../utils/If';
 import Alert from '../../../Alert';
 import { deleteManyTransactions } from '../../../../reducers/transactionsReducer';
+import CheckIcon from '@mui/icons-material/Check';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -22,7 +25,7 @@ const Transition = forwardRef(
     }
 );
 
-const EditTransaction = ({ target, open, setOpen }) => {
+const EditTransaction = ({ target, open, setOpen, setSelected }) => {
     const amount = useField('number', 'amount');
     const description = useField('text', 'description');
     const category = useField('text', 'category');
@@ -32,6 +35,16 @@ const EditTransaction = ({ target, open, setOpen }) => {
     const dispatch = useDispatch();
     const [paymentMethodError, setPaymentMethodError] = useState(false);
     const [deleteWindow, setDeleteWindow] = useState(false);
+
+    useEffect(()=> {
+        if(transaction && transaction[0]) {
+            amount.setValue(transaction[0].amount);
+            description.setValue(transaction[0].description);
+            setDate(new Date(parseInt(transaction[0].date.substring(0,4)),
+            parseInt(transaction[0].date.substring(5,7))-1,
+            parseInt(transaction[0].date.substring(8,10))));
+        }
+    }, [open]);
 
     const classes = useStyles();
     const transaction = useSelector(state => {
@@ -80,6 +93,7 @@ const EditTransaction = ({ target, open, setOpen }) => {
         category.reset();
         account.reset();
         paymentMethod.reset();
+        setSelected([]);
         setOpen(false);
     };
 
@@ -112,8 +126,6 @@ const EditTransaction = ({ target, open, setOpen }) => {
     if (!transaction || !transaction[0])
         return null;
 
-    const currentAmount = transaction[0].amount;
-    const currentDescription = transaction[0].description;
     const currentCategory = transaction[0].category.name;
     const currentAccount = transaction[0].account !== undefined && transaction[0].account !== null
         ? transaction[0].account.name
@@ -121,33 +133,25 @@ const EditTransaction = ({ target, open, setOpen }) => {
     const currentPaymentMethod = transaction[0].paymentMethod !== undefined && transaction[0].paymentMethod !== null
         ? transaction[0].paymentMethod.name
         : 'X';
-    const currentDate = transaction[0].date;
 
     return (
         <>
             <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => closeWindow()}>
 
-                <DialogTitle>Edit transaction</DialogTitle>
+                <DialogTitle><EditIcon /> Edit transaction</DialogTitle>
 
                 <FormControl fullWidth>
 
                     <DialogContent>
 
-                        <Typography variant='body1'><b>Amount➤</b> {currentAmount}</Typography>
-                        <TextField sx={{ ml: 8 }} align='right' size='small' variant='standard' type={amount.type} value={amount.value} onChange={amount.onChange} />
-                        <Typography variant='body1'><b>Description➤</b> {currentDescription}</Typography>
-                        <TextField sx={{ ml: 8 }} align='right' size='small' variant='standard' type={description.type} value={description.value} onChange={description.onChange} />
-                        <Typography variant='body1'><b>Category➤</b> {currentCategory}</Typography>
-                        <CategoryDropdown error={false} setError={() => null} value={category.value} onChangeValue={category.onChange} type={transaction[0].category.type} sx={{ ml: 8 }} />
-                        <Typography variant='body1'><b>Account➤</b> {currentAccount}</Typography>
-                        <AccountDropdown error={false} setError={() => null} value={account.value} onChangeValue={account.onChange} sx={{ ml: 8 }} />
+                        <TextField fullWidth label='Amount' align='right' size='small' variant='standard' type={amount.type} value={amount.value} onChange={amount.onChange} /> <br /><br />
+                        <TextField fullWidth label='Description' align='right' size='small' variant='standard' type={description.type} value={description.value} onChange={description.onChange} /> <br /><br />
+                        <CategoryDropdown label={currentCategory} error={false} setError={() => null} value={category.value} onChangeValue={category.onChange} type={transaction[0].category.type} sx={{ ml: 8 }} /><br /><br />
+                        <AccountDropdown label={currentAccount} error={false} setError={() => null} value={account.value} onChangeValue={account.onChange} sx={{ ml: 8 }} /><br /><br />
 
                         <If condition={transaction[0].category.type === 'outcome'}>
-                            <Typography variant='body1'><b>Payment method➤</b> {currentPaymentMethod} </Typography>
-                            <PaymentMethodDropdown error={paymentMethodError} setError={setPaymentMethodError} account={account} value={paymentMethod.value || ''} onChangeValue={paymentMethod.onChange} sx={{ ml: 8 }} />
+                            <PaymentMethodDropdown label={currentPaymentMethod} error={paymentMethodError} setError={setPaymentMethodError} account={account} value={paymentMethod.value || ''} onChangeValue={paymentMethod.onChange} sx={{ ml: 8 }} /> <br/> <br />
                         </If>
-
-                        <Typography variant='body1'><b>Date➤</b> {currentDate}</Typography>
                         <DesktopDatePicker
                             fullWidth
                             label="Date"
@@ -160,10 +164,13 @@ const EditTransaction = ({ target, open, setOpen }) => {
 
                     </DialogContent>
 
-                    <DialogActions>
-                        <Button onClick={sendUpdate}>Save</Button>
-                        <Button color='error' onClick={() => deleteTransaction()}>Delete transaction</Button>
+                    <DialogActions sx={{display:'flex'}}>
+                        <Button color='error' onClick={() => deleteTransaction()} startIcon={<DeleteForeverIcon />}> Delete transaction</Button>
+                        <Box sx={{flexGrow:1}}/>
                         <Button onClick={() => closeWindow()}>Cancel</Button>
+                        <Button variant='contained' onClick={sendUpdate} startIcon={<CheckIcon />}> Save</Button>
+                        
+                        
                     </DialogActions>
 
                 </FormControl>
@@ -181,7 +188,8 @@ EditTransaction.propTypes = {
     children: PropTypes.node,
     setOpen: PropTypes.func,
     open: PropTypes.bool,
-    target: PropTypes.string
+    target: PropTypes.string,
+    setSelected: PropTypes.func
 };
 
 export default EditTransaction;

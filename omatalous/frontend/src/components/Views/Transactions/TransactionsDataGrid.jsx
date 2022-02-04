@@ -63,7 +63,7 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
   return (
     <Box
       sx={{
-        height: 600,
+        height: 475,
         width: 1,
         '& .negative': {
           color: 'red'

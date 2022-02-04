@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Divider, Typography, TextField, Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, FormControl, ButtonBase } from '@mui/material';
 import { forwardRef } from 'react';
@@ -7,6 +7,8 @@ import useField from '../../../../hooks/useField';
 import { addAccount } from '../../../../reducers/accountsReducer';
 import { useDispatch } from 'react-redux';
 import { loadPaymentMethods } from '../../../../reducers/paymentMethodsReducer';
+import SendIcon from '@mui/icons-material/Send';
+import CheckIcon from '@mui/icons-material/Check';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -14,18 +16,26 @@ const Transition = forwardRef(
     }
 );
 
+const defaultPaymentMethods = [{icon:'default', name:'Bank Transfer'},
+{icon:'default', name:'Cash'},
+{icon:'default', name:'Debit Card'}];
+
 const NewAccount = ({ open, setOpen }) => {
 
     const classes = useStyles();
     const name = useField('text', 'name');
     const balance = useField('number', 'balance');
     const paymentMethod = useField('text', 'paymentMethod');
-    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [paymentMethods, setPaymentMethods] = useState([...defaultPaymentMethods]);
     const dispatch = useDispatch();
 
     const [balanceError, setBalanceError] = useState(false);
     const [nameError, setNameError] = useState(false);
     const [paymentMethodError, setPaymentMethodError] = useState(false);
+
+    useEffect(()=> {
+        setPaymentMethods([...defaultPaymentMethods]);
+    }, [open]);
 
     const addPaymentMethod = () => {
         setPaymentMethods([
@@ -102,7 +112,7 @@ const NewAccount = ({ open, setOpen }) => {
     return (
         <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => closeWindow()}>
 
-            <DialogTitle>Add a new account</DialogTitle>
+            <DialogTitle>Create a new account</DialogTitle>
 
             <FormControl fullWidth>
 
@@ -120,9 +130,8 @@ const NewAccount = ({ open, setOpen }) => {
                         paymentMethods.map(m => <ButtonBase onClick={()=>removeMethod(m.name)} color='error' sx={{mr:2}} key={m.name}><Typography variant='overline'>{m.name} </Typography></ButtonBase>)
                     }
                     <Divider /> <br />
-                    <Typography>Add payment methods:</Typography>
                     <TextField error={paymentMethodError} onFocus={()=>setPaymentMethodError(false)} size='small' value={paymentMethod.value} onChange={paymentMethod.onChange} label='Payment method name' type='text' variant='outlined' />
-                    <Button onClick={addPaymentMethod}>+</Button>
+                    <Button onClick={addPaymentMethod} startIcon={<SendIcon />} sx={{minHeight:'40px'}} />
                     {
                         paymentMethodError && <Typography variant='subtitle2' color='error'>You need to add at least 1 payment method to your new account.</Typography>
                     }
@@ -130,8 +139,10 @@ const NewAccount = ({ open, setOpen }) => {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={() => addNewAccount()}>Add</Button>
+
                     <Button onClick={() => closeWindow()}>Cancel</Button>
+                    <Button variant='contained' onClick={() => addNewAccount()} endIcon={<CheckIcon />}> Accept</Button>
+                    
                 </DialogActions>
 
             </FormControl>

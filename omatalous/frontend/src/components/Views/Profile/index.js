@@ -8,6 +8,7 @@ import Alert from '../../Alert';
 import { testPassword } from '../../../services/user';
 import { setNotification } from '../../../reducers/notificationReducer';
 import Loading from '../../Loading';
+import SaveAsIcon from '@mui/icons-material/SaveAs';
 
 const Profile = () => {
 
@@ -194,7 +195,7 @@ const Profile = () => {
                 <Box className={classes.basicFormLayout}>
                     <Button variant='outlined' onClick={()=>resetFields()}>Cancel</Button>
                     <Box sx={{ flexGrow: 1 }} />
-                    <Button variant='contained' onClick={handleSubmit}>Save changes</Button>
+                    <Button variant='contained' onClick={handleSubmit} startIcon={<SaveAsIcon />}> Save</Button>
                 </Box>
             </Box>
             <Alert open={confirmWindow} setOpen={setConfirmWindow} titleText='Are you sure?'
