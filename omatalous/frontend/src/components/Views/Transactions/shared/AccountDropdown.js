@@ -7,6 +7,9 @@ const AccountDropdown = ({label, onChangeValue, value, error, setError}) => {
 
     const accounts = useSelector( state => state.accounts );
 
+    if(!accounts||accounts.loading||!accounts.accounts)
+        return null;
+
     return (
         <FormControl fullWidth>
             <InputLabel id='new-transaction-account-label'>{label ||'Account'}</InputLabel>

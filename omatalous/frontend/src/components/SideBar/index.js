@@ -9,6 +9,7 @@ import WorkIcon from '@mui/icons-material/Work';
 // import SchoolIcon from '@mui/icons-material/School';
 import InfoIcon from '@mui/icons-material/Info';
 // import EqualizerIcon from '@mui/icons-material/Equalizer';
+import CategoryIcon from '@mui/icons-material/Category';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
 
@@ -37,6 +38,11 @@ const options = [
         label: 'Accounts',
         value: 'accounts',
         icon: <WorkIcon />
+    },
+    {
+        label: 'Categories',
+        value: 'categories',
+        icon: <CategoryIcon />
     },/*
     {
         label: 'Statistics',
@@ -44,7 +50,7 @@ const options = [
         icon: <EqualizerIcon />
     },*/
     {
-        label: 'About us',
+        label: 'About',
         value: 'about',
         icon: <InfoIcon />
     }

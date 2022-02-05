@@ -16,6 +16,7 @@ import Register from './components/RegisterForm';
 import ForgotPasswordPrompt from './components/ForgotPasswordPrompt';
 import Confirm from './components/Confirm';
 import EmailSent from './components/EmailSent';
+import Categories from './components/Views/Categories';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -77,7 +78,7 @@ const App = () => {
           <Routes>
             <Route path='/login' element={<LoginPrompt view={view} />} />
             <Route path='/transactions' element={<Transactions />} />
-            <Route path='/home' element={<Home />} />
+            <Route path='/home' element={<Home view={view} />} />
             <Route path='/accounts' element={<Accounts />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/about' element={<About />} />
@@ -86,6 +87,7 @@ const App = () => {
             <Route path='/forgot' element={<ForgotPasswordPrompt view={view} />} />
             <Route path='/confirm/:confirmationCode' element={<Confirm view={view} />} />
             <Route path='/email-sent-to-verify' element={<EmailSent view={view} />} />
+            <Route path='/categories' element={<Categories />} />
           </Routes>
         </Box>
       </main>

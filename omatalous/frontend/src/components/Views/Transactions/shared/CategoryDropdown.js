@@ -12,7 +12,7 @@ const CategoryDropdown = ({label, onChangeValue, value, type, error, setError}) 
             <InputLabel id='new-transaction-category-label'>{label || 'Category' }</InputLabel>
             <Select error={error} onFocus={()=>setError(false)} name="category" value={value} defaultValue={''} onChange={onChangeValue} fullWidth label={label || 'Category'} labelId='new-transaction-category-label'>
                 {
-                    categories.map(r => {
+                    categories.categories.map(r => {
                         if(r.type === type)
                             return <MenuItem value={r.id} key={r.id}>{r.name}</MenuItem>;
                         else

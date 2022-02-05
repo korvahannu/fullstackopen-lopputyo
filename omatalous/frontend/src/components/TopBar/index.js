@@ -54,7 +54,6 @@ const TopBar = ({ user , view, setColor, color}) => {
     const setAndChangeColor = (c) => {
         window.localStorage.setItem('color', c);
         setColor(c);
-        console.log('saved color');
     };
 
     return (

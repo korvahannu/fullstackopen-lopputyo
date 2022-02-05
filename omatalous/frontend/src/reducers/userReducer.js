@@ -42,7 +42,6 @@ export const tryToLoadUserFromStorage = () => {
     return async dispatch => {
         const user = JSON.parse(window.localStorage.getItem(LOCALSTORAGE_USER));
         if(user) {
-            console.log('found user in storage');
             setToken(user.token);
             dispatch({type:'LOGIN', user});
             try {

@@ -7,6 +7,9 @@ const PaymentMethodDropdown = ({label, account, onChangeValue, value, error, set
 
     const paymentMethods = useSelector(state => state.paymentMethods);
 
+    if(!paymentMethods||paymentMethods.loading||!paymentMethods.paymentMethods)
+        return null;
+
     return (
         <FormControl fullWidth>
             <InputLabel id='new-transaction-paymentmethod-label'>{label ||'Payment Method'}</InputLabel>
