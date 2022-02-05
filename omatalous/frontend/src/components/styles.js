@@ -18,6 +18,9 @@ const useStyle = makeStyles((theme) => ({
     },
     sidebarContainer: {
         minWidth:'300px',
+        borderRight:'1px solid',
+        borderRightColor:theme.palette.secondary.main,
+        height:'81vh'
     },
     sidebarSelected: {
         color:'#01579b',
@@ -35,11 +38,9 @@ const useStyle = makeStyles((theme) => ({
         marginBottom:'16px'
     },
     topBarHeader: {
-        margin: 2,
-        display : {
-            xs: 'none',
-            md: 'flex'
-        }
+        color:'error',
+        display : 'flex',
+        paddingTop:4
     },
     basicFormLayout: {
         marginBottom: '1em',

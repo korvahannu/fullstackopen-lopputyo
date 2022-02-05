@@ -2,30 +2,50 @@ import { AppBar, Container, IconButton, Typography, Box, Tooltip, Avatar, Toolba
 import React from 'react';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
-import SavingsIcon from '@mui/icons-material/Savings';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProfileIconMenu,
     handleProfileIconMenuOptionClick, profileIconMenuOptions, tooltip,
-    avatarUrl, setColor }) => {
+    avatarUrl, setColor, color }) => {
 
     const classes = useStyle();
 
     return (
-        <AppBar position='static'>
-            <Container maxWidth='xl'>
+        <AppBar position='relative'>
+            <Container maxWidth='xxxxl'>
                 <Toolbar disableGutters>
                     <Typography variant='h6' component='div' noWrap className={classes.topBarHeader}>
-                        <SavingsIcon sx={{ paddingTop: 2, width: '32px', height: '32px' }} />MY ECONOMY</Typography>
+                        <MonetizationOnIcon sx={{ position: 'relative', top: '-2px', width: '36px', height: '36px', mr: 1 }} />MY ECONOMY</Typography>
 
                     <Box sx={{ flexGrow: 1, display: 'flex' }}>
 
                     </Box>
 
-                    <Box sx={{display:'flex', flexDirection:'row', '&:hover': {cursor:'pointer'}}}>
-                        <Box onClick={()=>setColor('blue')} sx={{ backgroundColor: '#1976d2', width: '20px', height: '20px', borderRadius: '20px', mr: 1, border: '2px solid #fff' }} /> <br />
-                        <Box onClick={()=>setColor('green')} sx={{ backgroundColor: '#43a047', width: '20px', height: '20px', borderRadius: '20px', mr: 1, border: '2px solid #fff' }} />
-                        <Box onClick={()=>setColor('pink')} sx={{ backgroundColor: '#ab47bc', width: '20px', height: '20px', borderRadius: '20px', mr: 1, border: '2px solid #fff' }} />
-                        <Box onClick={()=>setColor('red')} sx={{ backgroundColor: '#e53935', width: '20px', height: '20px', borderRadius: '20px', mr: 1, border: '2px solid #fff' }} />
+                    <Box sx={{ display: 'flex', flexDirection: 'row', '&:hover': { cursor: 'pointer' } }}>
+                        <Box onClick={() => setColor('blue')} sx={{
+                            backgroundColor: '#1976d2', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'blue' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
+                        <Box onClick={() => setColor('green')} sx={{
+                            backgroundColor: '#43a047', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'green' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
+                        <Box onClick={() => setColor('pink')} sx={{
+                            backgroundColor: '#ab47bc', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'pink' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
+                        <Box onClick={() => setColor('red')} sx={{
+                            backgroundColor: '#e53935', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'red' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
+                        <Box onClick={() => setColor('white')} sx={{
+                            backgroundColor: '#fafafa', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'white' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
+                        <Box onClick={() => setColor('grey')} sx={{
+                            backgroundColor: '#263238', width: '20px', height: '20px', borderRadius: '20px', mr: 1,
+                            border: color === 'grey' || color === '' ? '2px solid #000' : '2px solid #fff'
+                        }} />
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
@@ -71,7 +91,8 @@ Bar.propTypes = {
     profileIconMenuOptions: PropTypes.array,
     tooltip: PropTypes.string,
     avatarUrl: PropTypes.string,
-    setColor: PropTypes.func
+    setColor: PropTypes.func,
+    color: PropTypes.string
 };
 
 export default Bar;

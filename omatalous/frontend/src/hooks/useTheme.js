@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createTheme } from '@mui/material';
 
 const useTheme = () => {
     const [color, setColor] = useState('blue');
+
+    useEffect(() => {
+      setColor(window.localStorage.getItem('color'));
+    }, []);
 
     const theme = createTheme({
         palette: {
@@ -22,8 +26,14 @@ const useTheme = () => {
                     main: '#43a047',
                   },
                   secondary: {
-                    main: '#b71c1c',
+                    main: '#a5d6a7',
                   },
+                success: {
+                  main:'#43a047'
+                },
+                error: {
+                  main: '#f44336'
+                }
             }
             : color, ...(color==='pink')
             ? {
@@ -31,13 +41,36 @@ const useTheme = () => {
                     main: '#ab47bc',
                   },
                   secondary: {
-                    main: '#d81b60',
+                    main: '#ce93d8',
                   },
+            }
+            : color, ...(color==='white')
+            ? {
+                primary: {
+                    main: '#fafafa',
+                  },
+                  secondary: {
+                    main: '#e0e0e0',
+                  },
+            }
+            : color, ...(color==='grey')
+            ? {
+                primary: {
+                    main: '#263238',
+                  },
+                  secondary: {
+                    main: '#546e7a',
+                  },
+            }
+            : color, ...(color==='blue' ||color === '')
+            ? {
+              secondary: {
+                main: '#42a5f5'
+              }
             }
             : {
 
             }
-
         },
     });
 

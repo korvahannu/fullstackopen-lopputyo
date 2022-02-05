@@ -9,7 +9,7 @@ const profileIconMenuOptions = [
     'Log out'
 ];
 
-const TopBar = ({ user , view, setColor}) => {
+const TopBar = ({ user , view, setColor, color}) => {
 
     const dispatch = useDispatch();
 
@@ -51,9 +51,16 @@ const TopBar = ({ user , view, setColor}) => {
     ? user.avatar || null
     : null;
 
+    const setAndChangeColor = (c) => {
+        window.localStorage.setItem('color', c);
+        setColor(c);
+        console.log('saved color');
+    };
+
     return (
         <Bar
-            setColor={setColor}
+            setColor={setAndChangeColor}
+            color={color}
             tooltip={tooltip}
             profileIconMenuOptions={profileIconMenuOptions}
             profileIconMenuAnchor={profileIconMenuAnchor}
@@ -68,7 +75,8 @@ const TopBar = ({ user , view, setColor}) => {
 TopBar.propTypes = {
     user: PropTypes.object,
     view: PropTypes.object,
-    setColor: PropTypes.func
+    setColor: PropTypes.func,
+    color: PropTypes.string
 };
 
 export default TopBar;

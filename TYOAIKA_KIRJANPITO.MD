@@ -33,3 +33,4 @@
 | 3.2.2021 | 2 | Nyt forgot password? toimii moitteetta. Versio 0.0.27 |
 | 3.2.2021 | 3 | Ulkonäköä hiottu siten, että kun odotetaan jotain tietokannasta niin tulostetaan ruudulle loading-bar. Toteutusta varten kolme reduceria muutettu. Toiminnallisuus on ihan 4/5 minun mielestäni. Seuraavaksi on tarkoituksena tehdä tuo sivu mobiiliystävälliseksi yms. Kun tämä versio on hiottu timantiksi alan lisäämään noita tavoite-ominaisuuksia. Versio 0.0.28 |
 | 4.2.2021 | 2 | Hiottu jonkin verran ulkonäköä. Myös teeman nyt voi vaihtaa välillä sininen, vihreä, punainen ja pinkki. Käyttäjän preferenssi ei vielä tallennu mihinkään. Versio 0.0.29 |
+| 5.2.2021 | 3 | Home -näkymää prototypoitu. Tiedot on nyt kovakoodattuna, joten seuraava vaihe olisikin tehdä varsinainen logiikka taustalle. Hyvältä näyttää anyways. Teeman vaihto tallennetaan nyt localStorageen. Jossain vaiheessa ehkä mongoon? en ole ihan varma onko se niin tarpeellista. Hiottu teemoja. Versio 0.0.30 |

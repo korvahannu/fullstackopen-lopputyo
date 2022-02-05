@@ -20,6 +20,7 @@ import EmailSent from './components/EmailSent';
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
 import initializeReduxStorage from './utils/initializeReduxStorage';
+import Footer from './Footer';
 
 import {
   Routes,
@@ -46,11 +47,11 @@ const App = () => {
   const location = useLocation();
 
   useEffect(async () => {
-    if(location.pathname.startsWith('/confirm')
-    || location.pathname.startsWith('/email-sent-to-verify'))
+    if (location.pathname.startsWith('/confirm')
+      || location.pathname.startsWith('/email-sent-to-verify'))
       return null;
 
-    if(user) {
+    if (user) {
       initializer.init();
       view.navigate(view.value);
     }
@@ -66,14 +67,14 @@ const App = () => {
 
   return (
     <ThemeProvider theme={themeSelector.theme}>
-      <TopBar setColor={setColor} user={user} view={view} />
+      <TopBar setColor={setColor} color={themeSelector.color} user={user} view={view} />
+      <main>
+        <Box sx={{ display: 'flex' }}>
+          <If condition={user}>
+            <SideBar view={view} />
+          </If>
 
-      <Box sx={{ display: 'flex'}}>
-        <If condition={user}>
-          <SideBar view={view} />
-        </If>
-
-        <Routes>
+          <Routes>
             <Route path='/login' element={<LoginPrompt view={view} />} />
             <Route path='/transactions' element={<Transactions />} />
             <Route path='/home' element={<Home />} />
@@ -81,13 +82,17 @@ const App = () => {
             <Route path='/profile' element={<Profile />} />
             <Route path='/about' element={<About />} />
             <Route path='/learn' element={<Learn />} />
-            <Route path='/register' element={<Register view={view} />}/>
-            <Route path='/forgot' element={<ForgotPasswordPrompt view={view}/>}/>
-            <Route path='/confirm/:confirmationCode' element={<Confirm view={view} />}/>
-            <Route path ='/email-sent-to-verify' element={<EmailSent view={view} />} />
-        </Routes>
-      </Box>
+            <Route path='/register' element={<Register view={view} />} />
+            <Route path='/forgot' element={<ForgotPasswordPrompt view={view} />} />
+            <Route path='/confirm/:confirmationCode' element={<Confirm view={view} />} />
+            <Route path='/email-sent-to-verify' element={<EmailSent view={view} />} />
+          </Routes>
+        </Box>
+      </main>
+      <Footer />
     </ThemeProvider>
+
+
   );
 };
 
