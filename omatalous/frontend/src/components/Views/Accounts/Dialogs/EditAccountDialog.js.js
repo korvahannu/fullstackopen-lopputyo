@@ -73,8 +73,12 @@ const EditAccount = ({ account, open, setOpen }) => {
     };
 
     const acceptDeleteAccount = async() => {
+        
         await dispatch(removeAccount(account));
         setOpen(false);
+        await dispatch(loadTransactions());
+        await dispatch(loadPaymentMethods());
+        
     };
 
     const addToNewPaymentMethods = () => {
@@ -142,7 +146,7 @@ const EditAccount = ({ account, open, setOpen }) => {
                 <FormControl fullWidth>
 
                     <DialogContent>
-                        <Typography variant='body1' paragraph>Balance: {account.balance} €</Typography>
+                        <Typography variant='body1' paragraph>Balance: {Math.round(account.balance*100)/100} €</Typography>
                         <Typography variant='body1' paragraph>Logged transactions: {transactionCount}</Typography>
                         <Typography variant='subtitle1'>Payment methods:
 

@@ -48,7 +48,7 @@ const AccountsList = ({accounts}) => {
             <Box sx={{ display: 'flex' }} key={account.id}>
                 <Typography variant='body2'><AssignmentIndIcon sx={{ position: 'relative', top: '5px', mr: 0.5 }} /> {account.name}</Typography>
                 <Box sx={{ flexGrow: 1 }} />
-                <Typography variant='body2' sx={{ position: 'relative', top: '10px', mr: 0.5, color: account.balance >= 0 ? 'green' : 'red' }} >{account.balance} €</Typography>
+                <Typography variant='body2' sx={{ position: 'relative', top: '10px', mr: 0.5, color: account.balance >= 0 ? 'green' : 'red' }} >{Math.round(account.balance*100)/100} €</Typography>
             </Box>
         );
     });

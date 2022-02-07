@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Divider, Typography } from '@mui/materia
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -60,16 +61,18 @@ const ListedTransactions = ({ transactions }) => {
         <Box sx={{ display: 'flex' }} key={transaction.id}>
             <Typography variant='body2'>
                 {
-                    transaction.category.type === 'income'
+                    transaction.category && transaction.category.type === 'income'
                     ? <KeyboardArrowUpIcon sx={{ position: 'relative', top: '5px', mr: 0.5, color: 'green' }} />
-                    : <KeyboardArrowDownIcon sx={{ position: 'relative', top: '5px', mr: 0.5, color: 'red' }} />
+                    : transaction.category
+                    ? <KeyboardArrowDownIcon sx={{ position: 'relative', top: '5px', mr: 0.5, color: 'red' }} />
+                    : <QuestionMarkIcon sx={{ position: 'relative', top: '5px', mr: 0.5 }} />
                 }
                 
             
-            {transaction.category.name}</Typography>
+            {transaction.category ? transaction.category.name : <i>Unknown deleted category</i>}</Typography>
             <Box sx={{ flexGrow: 1 }} />
-            <Typography variant='body2' sx={{ position: 'relative', top: '10px', mr: 0.5, color: transaction.category.type === 'income' ? 'green' : 'red' }} >
-                {transaction.category.type === 'income' ? '+' : '-'}{transaction.amount} €</Typography>
+            <Typography variant='body2' sx={{ position: 'relative', top: '10px', mr: 0.5, color: !transaction.category ? 'grey' : transaction.category.type === 'income' ? 'green' : 'red' }} >
+                {!transaction.category ? '? ' : transaction.category.type === 'income' ? '+' : '-'}{transaction.amount} €</Typography>
         </Box>
     ));
 

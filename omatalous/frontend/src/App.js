@@ -69,6 +69,7 @@ const App = () => {
   return (
     <ThemeProvider theme={themeSelector.theme}>
       <TopBar setColor={setColor} color={themeSelector.color} user={user} view={view} />
+      <div style={{overflow:'auto', paddingBottom:'80px'}}>
       <main>
         <Box sx={{ display: 'flex' }}>
           <If condition={user}>
@@ -92,6 +93,7 @@ const App = () => {
         </Box>
       </main>
       <Footer />
+      </div>
     </ThemeProvider>
 
 

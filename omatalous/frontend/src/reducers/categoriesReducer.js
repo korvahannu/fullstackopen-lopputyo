@@ -1,4 +1,4 @@
-import { getUserCategories } from '../services/categories';
+import { getUserCategories, addNewCategory, deleteUserCategory, editUserCategory } from '../services/categories';
 const reducer = (state = [], action) => {
     switch(action.type) {
         case 'SET_CATEGORIES_LOADING':
@@ -20,7 +20,21 @@ const reducer = (state = [], action) => {
             return {
                 loading: false,
                 categories: state.categories.filter(
-                    obj => !action.categories.includes(obj.id)
+                    obj => obj.id !== action.categoryId
+                )
+            };
+        case 'EDIT_CATEGORY':
+            return {
+                loading: false,
+                categories: state.categories.map(
+                    obj => {
+                        if(obj.id !== action.category.id) {
+                            return obj;
+                        }
+                        else {
+                            return action.category;
+                        }
+                    }
                 )
             };
         default:
@@ -28,20 +42,29 @@ const reducer = (state = [], action) => {
     }
 };
 
-// TODO: category-service has no option to add categories
-export const addNewCategory = (category) => {
+export const addCategory = (body) => {
 
     return async dispatch => {
-        
+        dispatch({type:'SET_CATEGORIES_LOADING'});
+        const category = await addNewCategory(body);
         dispatch({type:'ADD_CATEGORY', category});
     };
 };
 
-// TODO: category-service and router does not support multideleting
-export const deleteManyCategories = (categories) => {
+export const deleteCategory = (categoryId) => {
 
     return async dispatch => {
-        dispatch({type:'DELETE_CATEGORIES', categories});
+        dispatch({type:'SET_CATEGORIES_LOADING'});
+        await deleteUserCategory(categoryId);
+        dispatch({type:'DELETE_CATEGORIES', categoryId});
+    };
+};
+
+export const editCategory = (categoryId, body) => {
+    return async dispatch => {
+        dispatch({type:'SET_CATEGORIES_LOADING'});
+        const category = await editUserCategory(categoryId, body);
+        dispatch({type:'EDIT_CATEGORY', category});
     };
 };
 

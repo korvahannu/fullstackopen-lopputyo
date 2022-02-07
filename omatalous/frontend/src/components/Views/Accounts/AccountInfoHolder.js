@@ -30,7 +30,7 @@ const AccountInfoHolder = ({ account, openEditAccountWindow }) => {
         <ButtonBase onClick={() => openEditAccountWindow(account)}>
             <Paper elevation={6} className={classes.accountInfoContainer}>
                 <Typography variant='h6'><AssignmentIndIcon /> {account.name}</Typography>
-                <Typography variant='subtitle2' style={{ color: account.balance < 0 ? 'red' : 'green' }}>{account.balance} €</Typography>
+                <Typography variant='subtitle2' style={{ color: account.balance < 0 ? 'red' : 'green' }}>{Math.round(account.balance*100)/100} €</Typography>
                 <Divider />
 
                 {

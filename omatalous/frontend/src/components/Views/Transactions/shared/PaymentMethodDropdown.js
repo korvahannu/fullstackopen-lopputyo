@@ -7,25 +7,17 @@ const PaymentMethodDropdown = ({label, account, onChangeValue, value, error, set
 
     const paymentMethods = useSelector(state => state.paymentMethods);
 
-    if(!paymentMethods||paymentMethods.loading||!paymentMethods.paymentMethods)
-        return null;
-
     return (
         <FormControl fullWidth>
             <InputLabel id='new-transaction-paymentmethod-label'>{label ||'Payment Method'}</InputLabel>
             <Select error={error} onFocus={() => setError(false)} name="paymentMethod"  value={value}  defaultValue={''} onChange={onChangeValue} fullWidth label={label || 'Payment Method'} labelId='new-transaction-paymentmethod-label'>
                 {
                     paymentMethods.paymentMethods.map(r => {
-                        if(!account)
+                        if(!account ||r.account===null||r.account.id.toString() !== account.value) 
                             return null;
 
-                        if(r.account === null) // Incase user has deleted the account this paymentmethod belongs to
-                            return null;
 
-                        if(r.account.id.toString() === account.value)
-                            return <MenuItem value={r.id} key={r.id}>{r.name}</MenuItem>;
-                        else
-                            return null;
+                        return <MenuItem value={r.id} key={r.id}>{r.name}</MenuItem>;
                     })
                 }
             </Select>

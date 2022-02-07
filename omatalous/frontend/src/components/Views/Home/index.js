@@ -45,6 +45,8 @@ const Home = ({ view }) => {
     let lastMonthSpendings = 0;
 
     thisMonth.forEach(transaction => {
+        if(!transaction.category)
+            return null;
         if (transaction.category.type === 'income')
             thisMonthEarnings += transaction.amount;
         if (transaction.category.type === 'outcome')
@@ -52,6 +54,8 @@ const Home = ({ view }) => {
     });
 
     lastMonth.forEach(transaction => {
+        if(!transaction.category)
+            return null;
         if (transaction.category.type === 'income')
             lastMonthEarnings += transaction.amount;
         if (transaction.category.type === 'outcome')

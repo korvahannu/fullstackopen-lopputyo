@@ -27,31 +27,36 @@ const TransactionsDataGrid = ({ transactions, onSelectionChange }) => {
 
     const accName = transaction.account === null
     ||transaction.account === undefined
-    ? 'X'
+    ? '?'
     : transaction.account.name;
 
     const pmName = transaction.paymentMethod === null ||
     transaction.paymentMethod === undefined
-    ? 'X'
+    ? '?'
     : transaction.paymentMethod.name;
 
-    if (transaction.category.type === 'outcome') {
+    const cName = transaction.category === null ||
+    transaction.category === undefined
+    ? '?'
+    : transaction.category.name;
+
+    if (transaction.type === 'outcome') {
       return {
         id: transaction.id,
         amount: -(transaction.amount),
         description: transaction.description,
-        category: transaction.category.name,
+        category: cName,
         paymentMethod: pmName,
         account: accName,
         date: transaction.date.substring(0, 10)
       };
     }
-    else if (transaction.category.type === 'income') {
+    else if (transaction.type === 'income') {
       return {
         id: transaction.id,
         amount: transaction.amount,
         description: transaction.description,
-        category: transaction.category.name,
+        category: cName,
         paymentMethod: '',
         account: accName,
         date: transaction.date.substring(0, 10)

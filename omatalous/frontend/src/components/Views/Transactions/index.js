@@ -26,8 +26,8 @@ const Transactions = () => {
         const filtered = !filter || filter === 'all'
         ?  state.transactions.transactions
         : filter === 'incomes'
-        ?  state.transactions.transactions.filter(r => r.category.type === 'income')
-        :  state.transactions.transactions.filter(r => r.category.type === 'outcome');
+        ?  state.transactions.transactions.filter(r => r.type === 'income')
+        :  state.transactions.transactions.filter(r => r.type === 'outcome');
 
         return {
             loading: state.transactions.loading,

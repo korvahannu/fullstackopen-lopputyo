@@ -131,6 +131,9 @@ router.put('/:id', async (request, response, next) => {
     if (body.icon !== undefined)
         updatedCategory.icon = body.icon;
 
+    if(body.type !== undefined && (body.type === 'income' || body.type ==='outcome'))
+        updatedCategory.type = body.type;
+
     try {
         const category = await Category.findById(request.params.id);
 

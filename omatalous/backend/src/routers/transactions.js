@@ -10,12 +10,24 @@ const responses = require('./responses');
 router.get('/', async(request, response, next) => {
     try {
         const incomes = await Income.find({user:request.user.id})
-        .populate('user', 'name').populate('account', 'name icon').populate('category', 'name icon type');
+        .populate('user', 'name').populate('account', 'name icon').populate('category', 'name icon type').lean();
 
         const outcomes = await Outcome.find({user:request.user.id})
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon type');
+        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'name icon type').lean();
 
-        const result = [...incomes, ...outcomes];
+        const ic = incomes.map(ob => {
+            ob.type = 'income';
+            ob.id = ob._id;
+            return ob;
+        });
+
+        const oc = outcomes.map(ob => {
+            ob.type = 'outcome';
+            ob.id = ob._id;
+            return ob;
+        });
+
+        const result = [...ic, ...oc];
 
         result.sort((a,b) => {
             let dateA = new Date(a.date);
@@ -170,7 +182,12 @@ router.put('/:id', async (request, response, next) => {
             
             if(income.user.toString() === request.user.id) {
                 const result = await Income.findByIdAndUpdate(request.params.id, update, {new: true})
-                .populate('user', 'name').populate('account', 'name icon').populate('category', 'type name icon');
+                .populate('user', 'name').populate('account', 'name icon').populate('category', 'type name icon').lean();
+
+                // TODO: Tämä on laiskan ratkaisu. Lean() aiheuttaa ongelmia, olisiko toJSON() parempi?
+                result.type = 'income';
+                result.id = result._id;
+
                 await syncAccounts(request.user.id);
                 return response.json(result);
             }
@@ -193,7 +210,10 @@ router.put('/:id', async (request, response, next) => {
             
             if(outcome.user.toString() === request.user.id || request.user.admin) {
                 const result = await Outcome.findByIdAndUpdate(request.params.id, update, {new: true})
-                .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'type name icon');
+                .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'type name icon').lean();
+                // TODO: Laiskan ratkaisu .lean() vuoksi
+                result.type = 'outcome';
+                result.id = result._id;
                 await syncAccounts(request.user.id);
                 return response.json(result);
             }

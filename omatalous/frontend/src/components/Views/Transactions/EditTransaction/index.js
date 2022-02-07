@@ -36,19 +36,26 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
     const [paymentMethodError, setPaymentMethodError] = useState(false);
     const [deleteWindow, setDeleteWindow] = useState(false);
 
-    useEffect(()=> {
-        if(transaction && transaction[0]) {
+    useEffect(() => {
+        if (transaction && transaction[0]) {
             amount.setValue(transaction[0].amount);
             description.setValue(transaction[0].description);
-            setDate(new Date(parseInt(transaction[0].date.substring(0,4)),
-            parseInt(transaction[0].date.substring(5,7))-1,
-            parseInt(transaction[0].date.substring(8,10))));
+
+            if(transaction[0].account)
+                account.setValue(transaction[0].account._id);
+            
+            if(transaction[0].category)
+                category.setValue(transaction[0].category._id);
+
+            setDate(new Date(parseInt(transaction[0].date.substring(0, 4)),
+                parseInt(transaction[0].date.substring(5, 7)) - 1,
+                parseInt(transaction[0].date.substring(8, 10))));
         }
     }, [open]);
 
     const classes = useStyles();
     const transaction = useSelector(state => {
-        return state.transactions.transactions.filter(a => a.id.toString() === target);
+        return state.transactions.transactions.filter(a => a.id === target);
     });
 
     const closeWindow = () => {
@@ -66,7 +73,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
         if (check(account.value)) {
             // If account is set
 
-            if (!check(paymentMethod.value)) {
+            if (transaction[0].type === 'outcome' && !check(paymentMethod.value)) {
                 // If paymentMethod is not set
                 setPaymentMethodError(true);
 
@@ -76,7 +83,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
 
         const update = { // Katso onko null tai mtn
             id: transaction[0].id,
-            type: transaction[0].category.type,
+            type: transaction[0].type,
             amount: check(amount.value) ? amount.value : null,
             description: check(description.value) ? description.value : null,
             category: check(category.value) ? category.value : null,
@@ -126,13 +133,15 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
     if (!transaction || !transaction[0])
         return null;
 
-    const currentCategory = transaction[0].category.name;
+    const currentCategory = transaction[0].category !== undefined && transaction[0].category !== null
+        ? transaction[0].category.name
+        : '?';
     const currentAccount = transaction[0].account !== undefined && transaction[0].account !== null
         ? transaction[0].account.name
-        : 'X';
+        : '?';
     const currentPaymentMethod = transaction[0].paymentMethod !== undefined && transaction[0].paymentMethod !== null
         ? transaction[0].paymentMethod.name
-        : 'X';
+        : '?';
 
     return (
         <>
@@ -146,11 +155,12 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
 
                         <TextField fullWidth label='Amount' align='right' size='small' variant='standard' type={amount.type} value={amount.value} onChange={amount.onChange} /> <br /><br />
                         <TextField fullWidth label='Description' align='right' size='small' variant='standard' type={description.type} value={description.value} onChange={description.onChange} /> <br /><br />
-                        <CategoryDropdown label={currentCategory} error={false} setError={() => null} value={category.value} onChangeValue={category.onChange} type={transaction[0].category.type} sx={{ ml: 8 }} /><br /><br />
+                        <CategoryDropdown label={currentCategory} error={false} setError={() => null} value={category.value} onChangeValue={category.onChange}
+                            type={transaction[0].type} sx={{ ml: 8 }} /><br /><br />
                         <AccountDropdown label={currentAccount} error={false} setError={() => null} value={account.value} onChangeValue={account.onChange} sx={{ ml: 8 }} /><br /><br />
 
-                        <If condition={transaction[0].category.type === 'outcome'}>
-                            <PaymentMethodDropdown label={currentPaymentMethod} error={paymentMethodError} setError={setPaymentMethodError} account={account} value={paymentMethod.value || ''} onChangeValue={paymentMethod.onChange} sx={{ ml: 8 }} /> <br/> <br />
+                        <If condition={transaction[0].type === 'outcome'}>
+                            <PaymentMethodDropdown label={currentPaymentMethod} error={paymentMethodError} setError={setPaymentMethodError} account={account} value={paymentMethod.value || ''} onChangeValue={paymentMethod.onChange} sx={{ ml: 8 }} /> <br /> <br />
                         </If>
                         <DesktopDatePicker
                             fullWidth
@@ -164,13 +174,13 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
 
                     </DialogContent>
 
-                    <DialogActions sx={{display:'flex'}}>
+                    <DialogActions sx={{ display: 'flex' }}>
                         <Button color='error' onClick={() => deleteTransaction()} startIcon={<DeleteForeverIcon />}> Delete transaction</Button>
-                        <Box sx={{flexGrow:1}}/>
+                        <Box sx={{ flexGrow: 1 }} />
                         <Button onClick={() => closeWindow()}>Cancel</Button>
                         <Button variant='contained' onClick={sendUpdate} startIcon={<CheckIcon />}> Save</Button>
-                        
-                        
+
+
                     </DialogActions>
 
                 </FormControl>

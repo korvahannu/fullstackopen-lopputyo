@@ -35,3 +35,4 @@
 | 4.2.2021 | 2 | Hiottu jonkin verran ulkonäköä. Myös teeman nyt voi vaihtaa välillä sininen, vihreä, punainen ja pinkki. Käyttäjän preferenssi ei vielä tallennu mihinkään. Versio 0.0.29 |
 | 5.2.2021 | 3 | Home -näkymää prototypoitu. Tiedot on nyt kovakoodattuna, joten seuraava vaihe olisikin tehdä varsinainen logiikka taustalle. Hyvältä näyttää anyways. Teeman vaihto tallennetaan nyt localStorageen. Jossain vaiheessa ehkä mongoon? en ole ihan varma onko se niin tarpeellista. Hiottu teemoja. Versio 0.0.30 |
 | 5.2.2021 | 3 | Etusivu nyt toimii sataprosenttisesti. Categories-näkymää alustettu. Versio 0.0.31 |
+| 7.2.2021 | 5 | Backendiä piti vähän refaktoroida ja frontendin categories-näkymä on nyt tehty. Ei nyt oikein aivot pelannut niin meni paljon aikaa tehdä jotain näin yksinkertaista. Versio 0.0.32 |
