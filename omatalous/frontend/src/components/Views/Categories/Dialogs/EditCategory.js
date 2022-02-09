@@ -26,43 +26,27 @@ const EditCategory = ({ category, open, setOpen }) => {
     const dispatch = useDispatch();
 
     useEffect(()=> {
-        if(category) {
-            name.setValue(category.name);
-        }
+        category && name.setValue(category.name);
     }, [category]);
 
-    const closeWindow = () => {
-        setOpen(false);
-    };
-
-    const confirmEdit = () => {
-        setEditWindow(true);
-    };
-
-    const confirmDelete = () => {
-        setDeleteWindow(true);
-    };
 
     const finishDelete = async () => {
-
-        closeWindow();
+        setOpen(false);
         await dispatch(deleteCategory(category.id));
         await dispatch(loadTransactions());
-        
-        
     };
 
     const finishEdit =  async () => {
-        closeWindow();
-        await dispatch(loadTransactions());
+        setOpen(false);
         await dispatch(editCategory(category.id, {
             name: name.value,
         }));
+        await dispatch(loadTransactions());
         
     };
 
     return (
-        <Dialog classes={{ paper: classes.dialog }} maxWidth='sm' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => closeWindow()}>
+        <Dialog classes={{ paper: classes.dialog }} maxWidth='sm' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => setOpen(false)}>
 
             <DialogTitle>Edit category</DialogTitle>
 
@@ -76,10 +60,10 @@ const EditCategory = ({ category, open, setOpen }) => {
 
                 <DialogActions sx={{display:'flex'}}>
 
-                    <Button color='error' onClick={() => confirmDelete()} startIcon={<DeleteForeverIcon />}> Delete</Button>
+                    <Button color='error' onClick={() => setDeleteWindow(true)} startIcon={<DeleteForeverIcon />}> Delete</Button>
                     <Box sx={{flexGrow:1}}/>
-                    <Button onClick={() => closeWindow()}>Cancel</Button>
-                    <Button variant='contained' onClick={() => confirmEdit()} startIcon={<CheckIcon />}> Accept</Button>
+                    <Button onClick={() => setOpen(false)}>Cancel</Button>
+                    <Button variant='contained' onClick={() => setEditWindow(true)} startIcon={<CheckIcon />}> Accept</Button>
 
                 </DialogActions>
 

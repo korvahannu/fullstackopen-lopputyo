@@ -65,15 +65,16 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
         account.reset();
         paymentMethod.reset();
         setDate(new Date());
+        setSelected([]);
         setOpen(false);
     };
 
-    const sendUpdate = () => {
+    const sendUpdate = async () => {
 
-        if (check(account.value)) {
+        if (account.value) {
             // If account is set
 
-            if (transaction[0].type === 'outcome' && !check(paymentMethod.value)) {
+            if (transaction[0].type === 'outcome' && !(paymentMethod.value)) {
                 // If paymentMethod is not set
                 setPaymentMethodError(true);
 
@@ -84,50 +85,25 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
         const update = { // Katso onko null tai mtn
             id: transaction[0].id,
             type: transaction[0].type,
-            amount: check(amount.value) ? amount.value : null,
-            description: check(description.value) ? description.value : null,
-            category: check(category.value) ? category.value : null,
-            account: check(account.value) ? account.value : null,
-            paymentMethod: check(paymentMethod.value) ? paymentMethod.value : null,
-            date: check(date) ? format(date, 'yyyy/MM/dd') : null,
+            amount: (amount.value) ? amount.value : null,
+            description: (description.value) ? description.value : null,
+            category: (category.value) ? category.value : null,
+            account: (account.value) ? account.value : null,
+            paymentMethod: (paymentMethod.value) ? paymentMethod.value : null,
+            date: (date) ? format(date, 'yyyy/MM/dd') : null,
         };
 
-        dispatch(updateTransaction(update));
-        dispatch(loadAccounts());
+        closeWindow();
 
-        amount.reset();
-        description.reset();
-        category.reset();
-        account.reset();
-        paymentMethod.reset();
-        setSelected([]);
-        setOpen(false);
+        await dispatch(updateTransaction(update));
+        await dispatch(loadAccounts());
     };
 
-    const check = (v) => {
-        if (v === null ||
-            v === undefined ||
-            v === '' ||
-            v === ' ')
-            return false;
+    const acceptDelete =  async () => {
+        closeWindow();
 
-        return true;
-    };
-
-    const deleteTransaction = () => {
-        setDeleteWindow(true);
-    };
-
-    const acceptDelete = () => {
-        // Delete transaction
-        dispatch(deleteManyTransactions([transaction[0].id]));
-
-        amount.reset();
-        description.reset();
-        category.reset();
-        account.reset();
-        paymentMethod.reset();
-        setOpen(false);
+        await dispatch(deleteManyTransactions([transaction[0].id]));
+        await dispatch(loadAccounts());
     };
 
     if (!transaction || !transaction[0])
@@ -175,7 +151,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
                     </DialogContent>
 
                     <DialogActions sx={{ display: 'flex' }}>
-                        <Button color='error' onClick={() => deleteTransaction()} startIcon={<DeleteForeverIcon />}> Delete transaction</Button>
+                        <Button color='error' onClick={() => setDeleteWindow(true)} startIcon={<DeleteForeverIcon />}> Delete transaction</Button>
                         <Box sx={{ flexGrow: 1 }} />
                         <Button onClick={() => closeWindow()}>Cancel</Button>
                         <Button variant='contained' onClick={sendUpdate} startIcon={<CheckIcon />}> Save</Button>

@@ -1,15 +1,9 @@
 import axios from 'axios';
 import { baseUrl } from '../utils/config';
-import { getToken } from '../utils/tokenholder';
+import { getConfig } from '../utils/tokenholder';
 
 
 export const getUserPaymentMethods = async () => {
-    const config = {
-        headers: {
-            Authorization: getToken()
-        }
-    };
-
-    const response = await axios.get(`${baseUrl}/api/paymentMethods`, config);
+    const response = await axios.get(`${baseUrl}/api/paymentMethods`, getConfig());
     return response.data;
 };

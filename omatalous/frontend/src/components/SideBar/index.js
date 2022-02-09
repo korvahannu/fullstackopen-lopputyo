@@ -9,6 +9,7 @@ import WorkIcon from '@mui/icons-material/Work';
 // import SchoolIcon from '@mui/icons-material/School';
 import InfoIcon from '@mui/icons-material/Info';
 // import EqualizerIcon from '@mui/icons-material/Equalizer';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import CategoryIcon from '@mui/icons-material/Category';
 import PropTypes from 'prop-types';
 import useStyle from '../styles';
@@ -18,12 +19,12 @@ const options = [
         label: 'Home',
         value: 'home',
         icon: <HomeIcon />
-    },/*
-    {
-        label: 'My goals',
-        value: 'goals',
-        icon: <EmojiEventsIcon />
     },
+    {
+        label: 'Assesment',
+        value: 'assesment',
+        icon: <AssessmentIcon />
+    },/*
     {
         label: 'Learn',
         value: 'learn',

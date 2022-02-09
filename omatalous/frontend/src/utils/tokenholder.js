@@ -7,3 +7,10 @@ export const getToken = () => {
 export const setToken = newToken => {
     token = `bearer ${newToken}`;
 };
+
+export const getConfig = () => ({
+    headers: {
+        Authorization: getToken()
+        
+    }
+});

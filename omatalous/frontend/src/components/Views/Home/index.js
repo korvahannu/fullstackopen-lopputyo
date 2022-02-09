@@ -39,27 +39,25 @@ const Home = ({ view }) => {
 
     const thisMonth = transactions.transactions.filter(tr => new Date(tr.date) >= firstDayOfCurrentMonth);
     const lastMonth = transactions.transactions.filter(tr => new Date(tr.date) >= firstDayOfLastMonth && new Date(tr.date) < firstDayOfCurrentMonth);
-    let thisMonthEarnings = 0;
-    let thisMonthSpendings = 0;
-    let lastMonthEarnings = 0;
-    let lastMonthSpendings = 0;
+    let thisMonthEarnings = 0,
+        thisMonthSpendings = 0,
+        lastMonthEarnings = 0,
+        lastMonthSpendings = 0;
 
     thisMonth.forEach(transaction => {
-        if(!transaction.category)
+        if (!transaction.category)
             return null;
-        if (transaction.category.type === 'income')
-            thisMonthEarnings += transaction.amount;
-        if (transaction.category.type === 'outcome')
-            thisMonthSpendings += transaction.amount;
+        transaction.category.type === 'income'
+            ? thisMonthEarnings += transaction.amount
+            : thisMonthSpendings += transaction.amount;
     });
 
     lastMonth.forEach(transaction => {
-        if(!transaction.category)
+        if (!transaction.category)
             return null;
-        if (transaction.category.type === 'income')
-            lastMonthEarnings += transaction.amount;
-        if (transaction.category.type === 'outcome')
-            lastMonthSpendings += transaction.amount;
+        transaction.category.type === 'income'
+            ? lastMonthEarnings += transaction.amount
+            : lastMonthSpendings += transaction.amount;
     });
 
     return (

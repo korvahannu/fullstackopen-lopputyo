@@ -17,6 +17,7 @@ import ForgotPasswordPrompt from './components/ForgotPasswordPrompt';
 import Confirm from './components/Confirm';
 import EmailSent from './components/EmailSent';
 import Categories from './components/Views/Categories';
+import Assesments from './components/Views/Assesments';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -89,6 +90,7 @@ const App = () => {
             <Route path='/confirm/:confirmationCode' element={<Confirm view={view} />} />
             <Route path='/email-sent-to-verify' element={<EmailSent view={view} />} />
             <Route path='/categories' element={<Categories />} />
+            <Route path='/assesment' element={<Assesments />} />
           </Routes>
         </Box>
       </main>

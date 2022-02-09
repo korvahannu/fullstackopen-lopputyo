@@ -115,7 +115,10 @@ router.post('/', async (request, response, next) => {
         await account.save();
 
         const result = await Outcome.findById(outcome.id.toString())
-        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'type name icon');
+        .populate('user', 'name').populate('account', 'name icon').populate('paymentMethod', 'name icon').populate('category', 'type name icon').lean();
+        // TODO: Laiskan ratkaisu .lean() vuoksi
+        result.type = 'outcome';
+        result.id = result._id;
 
         return response.json(result);
 

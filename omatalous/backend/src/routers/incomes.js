@@ -91,7 +91,11 @@ router.post('/', async (request, response, next) => {
         await account.save();
 
         const result = await Income.findById(income.id.toString())
-        .populate('user', 'name').populate('account', 'name icon').populate('category', 'type name icon');
+        .populate('user', 'name').populate('account', 'name icon').populate('category', 'type name icon').lean();
+
+        // TODO: Tämä on laiskan ratkaisu. Lean() aiheuttaa ongelmia, olisiko toJSON() parempi?
+        result.type = 'income';
+        result.id = result._id;
 
         return response.json(result);
 

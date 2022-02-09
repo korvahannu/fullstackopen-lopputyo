@@ -6,7 +6,7 @@ import useStyles from '../../../styles';
 import useField from '../../../../hooks/useField';
 import CheckIcon from '@mui/icons-material/Check';
 import { useDispatch } from 'react-redux';
-import {addCategory} from '../../../../reducers/categoriesReducer';
+import { addCategory } from '../../../../reducers/categoriesReducer';
 
 const Transition = forwardRef(
     function Transition(props, ref) {
@@ -29,20 +29,13 @@ const NewCategory = ({ open, setOpen }) => {
 
     const createNewCategory = async () => {
 
-        if(name.value === null
-            || name.value === undefined
-            || name.value === ''
-            || name.value === ' ') {
-                setNameError(true);
-                return null;
-            }
+        if (!name.value) {
+            return setNameError(true);
+        }
 
-        const body = {
-            name: name.value,
-            type: type
-        };
         closeWindow();
-        await dispatch(addCategory(body));
+        await dispatch(addCategory({name: name.value,
+        type}));
     };
 
     const handleCheckboxChange = (event) => {
@@ -57,12 +50,12 @@ const NewCategory = ({ open, setOpen }) => {
             <FormControl fullWidth>
 
                 <DialogContent>
-                    <TextField error={nameError} onFocus={()=>setNameError(false)} label='Category name name' type='text' variant='outlined' fullWidth value={name.value || ''} onChange={name.onChange} />
+                    <TextField error={nameError} onFocus={() => setNameError(false)} label='Category name name' type='text' variant='outlined' fullWidth value={name.value || ''} onChange={name.onChange} />
                     <Box sx={{ height: 32 }} />
 
-                    <FormGroup sx={{display:'flex', flexDirection:'row', alignItems:'center', justifyContent:'center', borderBottomColor:'primary.main', borderBottom:'1px solid'}}>
-                        <Typography sx={{mr:16}}> Category type: </Typography>
-                        <FormControlLabel label='Income' sx={{mr:8}}
+                    <FormGroup sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderBottomColor: 'primary.main', borderBottom: '1px solid' }}>
+                        <Typography sx={{ mr: 16 }}> Category type: </Typography>
+                        <FormControlLabel label='Income' sx={{ mr: 8 }}
                             control={<Checkbox checked={type === 'income'} onChange={handleCheckboxChange} name='income' />} />
                         <FormControlLabel label='Outcome'
                             control={<Checkbox checked={type === 'outcome'} onChange={handleCheckboxChange} name='outcome' />} />

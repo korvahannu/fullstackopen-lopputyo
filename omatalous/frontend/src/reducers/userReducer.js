@@ -56,7 +56,7 @@ export const tryToLoadUserFromStorage = () => {
             }
         }
         else
-            return null; // Does this work?
+            return null;
     };
 };
 

@@ -1,14 +1,10 @@
 import axios from 'axios';
 import { baseUrl } from '../utils/config';
-import { getToken } from '../utils/tokenholder';
+import { getConfig } from '../utils/tokenholder';
 
 const logout = async () => {
 
-    const response = await axios.post(`${baseUrl}/api/logout`, null, {
-        headers: {
-            'authorization': getToken()
-        }
-    });
+    const response = await axios.post(`${baseUrl}/api/logout`, null, getConfig());
     
     return response.data;
 };
