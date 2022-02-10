@@ -2,6 +2,7 @@ import { Box, Button } from '@mui/material';
 import React, { useState } from 'react';
 import useStyle from '../../styles';
 import ByCategories from './ByCategories';
+import Overview from './Overview';
 
 const Assesments = () => {
 
@@ -16,13 +17,14 @@ const Assesments = () => {
                 size='small' sx={{ width: '128px', mr: 0.5, border: view === 'overview' && selectedBorder }} variant='contained'>Overview</Button>
             <Button onClick={() => setView('category')}
                 size='small' sx={{ width: '128px', mr: 0.5, border: view === 'category' && selectedBorder }} variant='contained'>By Category</Button>
-            <Button onClick={() => setView('spendings')}
-                size='small' sx={{ width: '128px', border: view === 'spendings' && selectedBorder, }} variant='contained'>Spendings</Button>
 
             <Box sx={{height:'16px'}}/>
 
             {
                 view==='category' && <ByCategories />
+            }
+            {
+                view==='overview' && <Overview />
             }
 
         </Box>

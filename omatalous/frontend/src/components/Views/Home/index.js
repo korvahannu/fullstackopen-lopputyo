@@ -17,6 +17,7 @@ const Home = ({ view }) => {
 
     const switchToAccountsView = () => view.navigate('accounts');
     const switchToTransactionsView = () => view.navigate('transactions');
+    const switchToAssesmentView = () => view.navigate('assesment');
 
     const date = new Date();
     const firstDayOfCurrentMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -77,8 +78,8 @@ const Home = ({ view }) => {
 
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
 
-                <MonthOverview earnings={thisMonthEarnings} spendings={thisMonthSpendings} title='This month...' />
-                <MonthOverview earnings={lastMonthEarnings} spendings={lastMonthSpendings} title='Last month...' />
+                <MonthOverview switchToAssesmentView={switchToAssesmentView} earnings={thisMonthEarnings} spendings={thisMonthSpendings} title='This month...' />
+                <MonthOverview switchToAssesmentView={switchToAssesmentView} earnings={lastMonthEarnings} spendings={lastMonthSpendings} title='Last month...' />
 
             </Box>
 

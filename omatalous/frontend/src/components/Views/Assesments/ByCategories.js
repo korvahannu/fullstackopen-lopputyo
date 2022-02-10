@@ -22,7 +22,6 @@ const ByCategories = () => {
 
     categories.categories.forEach(category => {
         if (!isNaN(category.incomes) || !isNaN(category.outcomes)) {
-            console.log('error, it is ' + category.incomes);
             category.incomes = 0;
             category.outcomes = 0;
         }
@@ -51,20 +50,15 @@ const ByCategories = () => {
                 category.date = transaction.date;
 
                 if (isNaN(category.incomes) || isNaN(category.outcomes)) {
-                    console.log('error, it is ' + category.incomes);
                     category.incomes = 0;
                     category.outcomes = 0;
                 }
 
                 if (transaction.type === 'income') {
-                    console.log('original income ' + category.incomes);
                     category.incomes += transaction.amount;
-                    console.log('updated income ' + category.incomes);
                 }
                 else {
-                    console.log('original outcome ' + category.outcomes);
                     category.outcomes += transaction.amount;
-                    console.log('updated outcome ' + category.outcomes);
                 }
             }
         });
@@ -94,7 +88,7 @@ const ByCategories = () => {
             <Typography color='green' variant='overline' sx={{ ml: 2, mt: 2 }}>Incomes</Typography>
 
             <TableContainer component={Paper}>
-                <Table aria-label='by-category-table'>
+                <Table aria-label='by-category-table' size='small'>
                     <TableHead>
                         <TableRow sx={{ backgroundColor: 'secondary.main' }}>
                             <TableCell>Category</TableCell>
@@ -123,7 +117,7 @@ const ByCategories = () => {
             <Typography color='error' variant='overline' sx={{ ml: 2 }}>Outcomes</Typography>
 
             <TableContainer component={Paper}>
-                <Table aria-label='by-category-table'>
+                <Table aria-label='by-category-table' size='small'>
                     <TableHead>
                         <TableRow sx={{ backgroundColor: 'secondary.main' }}>
                             <TableCell>Category</TableCell>

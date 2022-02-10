@@ -37,3 +37,4 @@
 | 5.2.2021 | 3 | Etusivu nyt toimii sataprosenttisesti. Categories-näkymää alustettu. Versio 0.0.31 |
 | 7.2.2021 | 5 | Backendiä piti vähän refaktoroida ja frontendin categories-näkymä on nyt tehty. Ei nyt oikein aivot pelannut niin meni paljon aikaa tehdä jotain näin yksinkertaista. Versio 0.0.32 |
 | 9.2.2021 | 3.5h | Categories näkymän yksi näkymä on tehty loppuun + refaktorointia hieman. Tuo backendin suunnittelemattomuus kyllä iskee pahasti peffaan nyt :S. Versio 0.0.34 |
+| 10.2.2021 | 3h | Charts toimii nyt ja näkymä on valmis. Tai ainakin jonkinäköinen versio. Yritän deployata herokuun. Versio 0.0.35 |

@@ -5,11 +5,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import PropTypes from 'prop-types';
 
-const MonthOverview = ({title, earnings, spendings}) => {
+const MonthOverview = ({title, earnings, spendings, switchToAssesmentView}) => {
 
 
     return (
-        <Box sx={{ mr:2, border: '1px solid lightgrey', borderRadius: 1, width: '350px', padding: 2, '&:hover': { cursor: 'pointer', backgroundColor: '#f7f7f7' } }}>
+        <Box onClick={switchToAssesmentView} sx={{ mr:2, border: '1px solid lightgrey', borderRadius: 1, width: '350px', padding: 2, '&:hover': { cursor: 'pointer', backgroundColor: '#f7f7f7' } }}>
 
             <Box sx={{ display: 'flex' }}>
                 <Typography variant='body1'>
@@ -41,7 +41,8 @@ const MonthOverview = ({title, earnings, spendings}) => {
 MonthOverview.propTypes = {
     title: PropTypes.string,
     earnings: PropTypes.number,
-    spendings: PropTypes.number
+    spendings: PropTypes.number,
+    switchToAssesmentView: PropTypes.func
 };
 
 export default MonthOverview;
