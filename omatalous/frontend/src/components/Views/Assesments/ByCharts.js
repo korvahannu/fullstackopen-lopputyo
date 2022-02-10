@@ -80,7 +80,7 @@ const ByCharts = ({transactions}) => {
 };
 
 ByCharts.propTypes = {
-    transactions: PropTypes.oneOfType(PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.bool])),
+    transactions: PropTypes.oneOfType([PropTypes.array, PropTypes.object, PropTypes.bool]),
 };
 
 export default ByCharts;
