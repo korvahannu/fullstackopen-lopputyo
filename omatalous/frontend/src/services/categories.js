@@ -14,9 +14,7 @@ export const addNewCategory = async (body) => {
 };
 
 export const deleteUserCategory = async (categoryId) => {
-
     await axios.delete(`${baseUrl}/api/categories/${categoryId}`,getConfig());
-
 };
 
 export const editUserCategory = async (categoryId, body) => {

@@ -7,6 +7,9 @@ const CategoryDropdown = ({label, onChangeValue, value, type, error, setError}) 
 
     const categories = useSelector(state => state.categories);
 
+    if(!categories||categories.loading||!categories.categories)
+        return null;
+
     return (
         <FormControl fullWidth>
             <InputLabel id='new-transaction-category-label'>{label || 'Category' }</InputLabel>

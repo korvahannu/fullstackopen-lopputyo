@@ -1,15 +1,6 @@
 import axios from 'axios';
 import { baseUrl } from '../utils/config';
 
-/*
-{
-    *name: String,
-    username: String,
-    email: String,
-    password: String,
-    *avatar: String
-}
-*/
 const register = async (credentials) => {
     const response = await axios.post(`${baseUrl}/api/register`, credentials);
     return response.data;

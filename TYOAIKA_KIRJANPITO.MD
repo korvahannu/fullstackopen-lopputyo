@@ -1,4 +1,5 @@
 # työaikakirjanpito
+## Työntunteja: 92h
 
 | päivä | aika | mitä tein  |
 | :----:|:-----| :-----|
@@ -39,3 +40,4 @@
 | 9.2.2021 | 3.5h | Categories näkymän yksi näkymä on tehty loppuun + refaktorointia hieman. Tuo backendin suunnittelemattomuus kyllä iskee pahasti peffaan nyt :S. Versio 0.0.34 |
 | 10.2.2021 | 3h | Charts toimii nyt ja näkymä on valmis. Tai ainakin jonkinäköinen versio. Yritän deployata herokuun. Versio 0.0.35 |
 | 10.2.2021 | 1h | Yritin deployata herokuun ja löytyi liuta uusia bugeja :D Korjasin nyt backendiä hieman. Nyt esim. backendi toimii react routerin kanssa. Tätähän olisi ollut hyvä testata jo aiemmin. Versio 0.0.36 | 
+| 11.2.2021 | 1.5h | Säätöjä deployamista varten. Katselin vähän koodia ja melkein aloin refaktoroimaan laajasti, mutta eiköhän tämä ole ihan hyvä :) |
