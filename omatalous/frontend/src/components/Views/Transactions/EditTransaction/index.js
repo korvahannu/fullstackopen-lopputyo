@@ -46,6 +46,10 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
             
             if(transaction[0].category)
                 category.setValue(transaction[0].category._id);
+            
+            if(transaction[0].type === 'outcome' && transaction[0].paymentMethod) {
+                paymentMethod.setValue(transaction[0].paymentMethod._id);
+            }
 
             setDate(new Date(parseInt(transaction[0].date.substring(0, 4)),
                 parseInt(transaction[0].date.substring(5, 7)) - 1,
@@ -65,7 +69,6 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
         account.reset();
         paymentMethod.reset();
         setDate(new Date());
-        setSelected([]);
         setOpen(false);
     };
 
@@ -94,6 +97,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
         };
 
         closeWindow();
+        setSelected([]);
 
         await dispatch(updateTransaction(update));
         await dispatch(loadAccounts());
@@ -101,6 +105,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
 
     const acceptDelete =  async () => {
         closeWindow();
+        setSelected([]);
 
         await dispatch(deleteManyTransactions([transaction[0].id]));
         await dispatch(loadAccounts());
@@ -121,7 +126,7 @@ const EditTransaction = ({ target, open, setOpen, setSelected }) => {
 
     return (
         <>
-            <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => closeWindow()}>
+            <Dialog classes={{ paper: classes.dialog }} maxWidth='md' fullWidth open={open} TransitionComponent={Transition} keepMounted onClose={() => setOpen(false)}>
 
                 <DialogTitle><EditIcon /> Edit transaction</DialogTitle>
 

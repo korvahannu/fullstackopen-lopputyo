@@ -9,6 +9,7 @@ import { testPassword } from '../../../services/user';
 import { setNotification } from '../../../reducers/notificationReducer';
 import Loading from '../../Loading';
 import SaveAsIcon from '@mui/icons-material/SaveAs';
+import DeleteUser from './DeleteUser';
 
 const Profile = () => {
 
@@ -16,6 +17,7 @@ const Profile = () => {
     const classes = useStyle();
     const dispatch = useDispatch();
 
+    const [open, setOpen] = useState(false);
     const avatar = useField('text', 'avatar');
     const name = useField('text', 'name');
     const username = useField('text', 'username');
@@ -195,12 +197,16 @@ const Profile = () => {
                 <Box className={classes.basicFormLayout}>
                     <Button variant='outlined' onClick={()=>resetFields()}>Cancel</Button>
                     <Box sx={{ flexGrow: 1 }} />
+                    <Button color='error' onClick={()=>setOpen(true)}>Delete account</Button>
+                    <Box sx={{ flexGrow: 1 }} />
                     <Button variant='contained' onClick={handleSubmit} startIcon={<SaveAsIcon />}> Save</Button>
                 </Box>
             </Box>
             <Alert open={confirmWindow} setOpen={setConfirmWindow} titleText='Are you sure?'
                 bodyText='These changes can not be undone'
                 onAccept={acceptEdit} />
+            
+            <DeleteUser open={open} setOpen={setOpen} />
         </Box>
     );
 };

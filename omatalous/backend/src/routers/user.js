@@ -1,8 +1,14 @@
 const router = require('express').Router();
-const User = require('../models/user');
-const Session = require('../models/session');
 const responses = require('./responses');
 const bcrypt = require('bcrypt');
+
+const User = require('../models/user');
+const Session = require('../models/session');
+const Income = require('../models/income');
+const Outcome = require('../models/outcome');
+const Category = require('../models/category');
+const Account = require('../models/account');
+const PaymentMethod = require('../models/paymentMethod');
 
 router.get('/', async (request, response) => {
     return response.json(request.user);
@@ -14,12 +20,18 @@ router.post('/deleteAccount/', async (request, response, next) => {
     }
 
     try {
-        // Instead of deleting, we disable an account and remove sessions
-        // TODO: We should delete accounts since users have right to be forgotten
         const session = await Session.findOne({user:request.user.id.toString()});
         await session.remove();
-        const user = await User.findByIdAndUpdate(request.user.id, {disabled: true}, {new: true});
-        return response.json(user);
+
+        await User.findByIdAndRemove(request.user.id);
+
+        await Income.deleteMany({user:request.user.id});
+        await Outcome.deleteMany({user:request.user.id});
+        await Category.deleteMany({user:request.user.id});
+        await Account.deleteMany({user:request.user.id});
+        await PaymentMethod.deleteMany({user:request.user.id});
+
+        return response.status(200).end();
     }
     catch(error) {
         next(error);

@@ -4,6 +4,7 @@ import { setToken } from '../utils/tokenholder';
 import { testLogin } from '../services/login';
 import { editUser } from '../services/user';
 import logoutService from '../services/logout';
+import deleteUser from '../services/deleteUser';
 
 const reducer = (state = null, action) => {
     switch(action.type) {
@@ -32,6 +33,16 @@ export const logout = () => {
         window.localStorage.removeItem(LOCALSTORAGE_USER);
         window.localStorage.removeItem('view');
         dispatch({type:'LOGOUT'});
+        await logoutService();
+    };
+};
+
+export const logoutAndDeleteUser = () => {
+    return async dispatch => {
+        window.localStorage.removeItem(LOCALSTORAGE_USER);
+        window.localStorage.removeItem('view');
+        dispatch({type:'LOGOUT'});
+        await deleteUser();
         await logoutService();
     };
 };
