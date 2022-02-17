@@ -6,7 +6,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProfileIconMenu,
     handleProfileIconMenuOptionClick, profileIconMenuOptions, tooltip,
-    avatarUrl, setColor, color }) => {
+    avatarUrl, setColor, color, handleLogoClick }) => {
 
     const classes = useStyle();
 
@@ -14,7 +14,7 @@ const Bar = ({ profileIconMenuAnchor, handleOpenProfileIconMenu, handleCloseProf
         <AppBar position='relative'>
             <Container maxWidth='xxxxl'>
                 <Toolbar disableGutters>
-                    <Typography variant='h6' component='div' noWrap className={classes.topBarHeader}>
+                    <Typography variant='h6' component='div' noWrap className={classes.topBarHeader} sx={{'&:hover': { cursor: 'pointer'}}} onClick={handleLogoClick}>
                         <MonetizationOnIcon sx={{ position: 'relative', top: '-2px', width: '36px', height: '36px', mr: 1 }} />MY ECONOMY</Typography>
 
                     <Box sx={{ flexGrow: 1, display: 'flex' }}>
@@ -92,7 +92,8 @@ Bar.propTypes = {
     tooltip: PropTypes.string,
     avatarUrl: PropTypes.string,
     setColor: PropTypes.func,
-    color: PropTypes.string
+    color: PropTypes.string,
+    handleLogoClick: PropTypes.func
 };
 
 export default Bar;

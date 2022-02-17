@@ -58,6 +58,22 @@ const useStyle = makeStyles((theme) => ({
     },
     footerText: {
         color:'lightgrey'
+    },
+    frontPageContainer: {
+        display:' flex',
+        width:'100%',
+        marginTop:8,
+        paddingLeft:'5%',
+        marginRight:'5%',
+        height:'75vh',
+        flexWrap:'wrap'
+    },
+    frontPagePaper: {
+        margin:16,
+        flexGrow: 1,
+        padding: 16,
+        flexBasis:0,
+        minWidth:'350px'
     }
 }));
 

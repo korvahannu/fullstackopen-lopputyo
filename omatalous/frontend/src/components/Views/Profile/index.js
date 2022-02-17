@@ -31,6 +31,7 @@ const Profile = () => {
     const [currentPasswordError, setCurrentPasswordError] = useState(false);
     const notification = useSelector(state => state.notification);
     const [loading, setLoading] = useState(false);
+    const avatarDefault = 'Using default avatar.';
 
     useEffect(() => {
         if(user) {
@@ -78,17 +79,23 @@ const Profile = () => {
 
     const acceptEdit = async () => {
         setLoading(true);
+
+        const updatedUserInfo = {
+            name: name.value !== '' && name.value !== ' ' && name.value !== user.name
+            ? name.value
+            : null,
+            password: newPassword.value !== '' && newPassword.value.length >= 5 && newPassword.value
+            ? newPassword.value
+            : null
+        };
+
+        if(avatar.value !== user.avatar && avatar.value !== avatarDefault)
+            updatedUserInfo.avatar = avatar.value;
+
+
         await dispatch(
             editUserInfo(
-                {
-                    name: name.value !== '' && name.value !== ' ' && name.value !== user.name
-                    ? name.value
-                    : null,
-                    avatar: avatar.value !== user.avatar ? avatar.value : null,
-                    password: newPassword.value !== '' && newPassword.value.length >= 5 && newPassword.value
-                    ? newPassword.value
-                    : null
-                }
+                updatedUserInfo
             )
         );
 
@@ -101,7 +108,7 @@ const Profile = () => {
     };
 
     const resetFields = () => {
-        avatar.setValue(user.avatar ||'Using default avatar');
+        avatar.setValue(user.avatar || avatarDefault);
         name.setValue(user.name);
         username.setValue(user.username);
         email.setValue(user.email);

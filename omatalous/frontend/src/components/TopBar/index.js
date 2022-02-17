@@ -18,6 +18,8 @@ const TopBar = ({ user , view, setColor, color}) => {
     const handleOpenProfileIconMenu = (event) => {
         if(user)
             setProfileIconMenuAnchor(event.currentTarget);
+        else 
+            view.navigate('login', 'prevent-save');
     };
 
     const handleCloseProfileIconMenu = () => {
@@ -41,6 +43,13 @@ const TopBar = ({ user , view, setColor, color}) => {
     const handleLogout = () => {
         // TODO: Do I need to empty all states when logging out?
         dispatch(logout());
+    };
+
+    const handleLogoClick = () => {
+        if(!user)
+            view.navigate('', 'prevent-save');
+        else
+            view.navigate('home');
     };
 
     const tooltip = user
@@ -67,6 +76,7 @@ const TopBar = ({ user , view, setColor, color}) => {
             handleCloseProfileIconMenu={handleCloseProfileIconMenu}
             handleProfileIconMenuOptionClick={handleProfileIconMenuOptionClick}
             avatarUrl={avatarUrl}
+            handleLogoClick={handleLogoClick}
         />
     );
 };

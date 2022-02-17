@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         lowercase: true,
-        unique:true,
+        unique: true,
         validate: [validateEmail, 'Invalid email'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Invalid email'] // eslint-disable-line
     },
@@ -52,9 +52,17 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: String,
         required: false
-    }
+    },
+    friends: [{
+        user: mongoose.Schema.Types.ObjectId,
+        accepted: {
+            type: Boolean,
+            default: false
+        }
+    }],
+
 }, {
-    timestamps:true
+    timestamps: true
 });
 
 userSchema.set('toJSON', {

@@ -18,6 +18,7 @@ import Confirm from './components/Confirm';
 import EmailSent from './components/EmailSent';
 import Categories from './components/Views/Categories';
 import Assesments from './components/Views/Assesments';
+import FrontPage from './components/Views/FrontPage';
 
 import Transactions from './components/Views/Transactions';
 import If from './utils/If';
@@ -59,7 +60,7 @@ const App = () => {
     }
     else {
       initializer.loadUserFromStorage();
-      view.navigate('login', 'prevent-save');
+      view.navigate('', 'prevent-save');
     }
   }, [user]);
 
@@ -91,6 +92,7 @@ const App = () => {
             <Route path='/email-sent-to-verify' element={<EmailSent view={view} />} />
             <Route path='/categories' element={<Categories />} />
             <Route path='/assesment' element={<Assesments />} />
+            <Route path='/' element={<FrontPage view={view} />} />
           </Routes>
         </Box>
       </main>
