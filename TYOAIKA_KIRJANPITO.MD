@@ -1,5 +1,5 @@
 # työaikakirjanpito
-## Työntunteja: 92h
+## Työntunteja: 94h
 
 | päivä | aika | mitä tein  |
 | :----:|:-----| :-----|

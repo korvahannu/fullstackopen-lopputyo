@@ -1,0 +1,3 @@
+- Käyttäjän avatarin uploadaus
+- Accountin initial balance on talletettava, koska synkronointi aloitetaan nyt 0:sta.
+- Vanhentuuko account verification code ja password change code?
