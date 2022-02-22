@@ -5,7 +5,7 @@ import useStyles from './components/styles';
 
 const Footer = () => {
     const classes = useStyles();
-    return (<>
+    return (
         <footer className={classes.footer}>
             <Box sx={{ display: 'flex' }}>
                 <Typography className={classes.footerText} variant='subtitle2'>
@@ -19,7 +19,7 @@ const Footer = () => {
             </Box>
 
         </footer>
-    </>);
+    );
 };
 
 export default Footer;

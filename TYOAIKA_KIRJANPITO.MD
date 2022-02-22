@@ -43,3 +43,4 @@
 | 11.2.2021 | 1.5h | Säätöjä deployamista varten. Katselin vähän koodia ja melkein aloin refaktoroimaan laajasti, mutta eiköhän tämä ole ihan hyvä :) |
 | 11.2.2021 | 2h | Lisää säätöjä tein. Nyt voi käyttäjä poistaa oman tunnuksen ja kaikki siihen liittyvät tiedot omasta profiilista. Versio 0.0.37 |
 | 17.2.2022 | 2h | Jonkinnäköinen etusivu tehty. Korjattu bugi, jossa salasanan vaihtaminen nollaa profiilikuvan. Tein hyvin vähän työtä myös kaverilistaa varten. Versio 0.1.1 |
+| 22.2.2022 | 1h | Sälää, hieman refaktorointia. Versio 0.1.2 |

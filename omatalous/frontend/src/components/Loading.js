@@ -8,8 +8,10 @@ const Loading = () => {
   const classes = useStyle();
 
   return (
-    <Box className={classes.loadingBar}>
-      <LinearProgress />
+    <Box className={classes.viewContainer}>
+      <Box className={classes.loadingBar}>
+        <LinearProgress />
+      </Box>
     </Box>
   );
 };

@@ -21,11 +21,8 @@ const Accounts = () => {
         setShowEditAccountDialog(true);
     };
 
-    if (!accounts || accounts.loading || accounts === null || !user)
-        return (
-            <Box className={classes.viewContainer}>
-                <Loading />
-            </Box>);
+    if (!accounts || accounts.loading  || !user)
+                return <Loading />;
 
     return (
         <Box className={classes.viewContainer}>

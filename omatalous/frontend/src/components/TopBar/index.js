@@ -9,16 +9,16 @@ const profileIconMenuOptions = [
     'Log out'
 ];
 
-const TopBar = ({ user , view, setColor, color}) => {
+const TopBar = ({ user, view, setColor, color }) => {
 
     const dispatch = useDispatch();
 
     const [profileIconMenuAnchor, setProfileIconMenuAnchor] = useState(null);
 
     const handleOpenProfileIconMenu = (event) => {
-        if(user)
+        if (user)
             setProfileIconMenuAnchor(event.currentTarget);
-        else 
+        else
             view.navigate('login', 'prevent-save');
     };
 
@@ -28,7 +28,7 @@ const TopBar = ({ user , view, setColor, color}) => {
 
     const handleProfileIconMenuOptionClick = (event) => {
         setProfileIconMenuAnchor(null);
-        switch(event.currentTarget.dataset.value) {
+        switch (event.currentTarget.dataset.value) {
             case 'Log out':
                 handleLogout();
                 break;
@@ -41,12 +41,11 @@ const TopBar = ({ user , view, setColor, color}) => {
     };
 
     const handleLogout = () => {
-        // TODO: Do I need to empty all states when logging out?
         dispatch(logout());
     };
 
     const handleLogoClick = () => {
-        if(!user)
+        if (!user)
             view.navigate('', 'prevent-save');
         else
             view.navigate('home');
@@ -57,8 +56,8 @@ const TopBar = ({ user , view, setColor, color}) => {
         : 'Login to view profile';
 
     const avatarUrl = user
-    ? user.avatar || null
-    : null;
+        ? user.avatar || null
+        : null;
 
     const setAndChangeColor = (c) => {
         window.localStorage.setItem('color', c);
@@ -69,6 +68,7 @@ const TopBar = ({ user , view, setColor, color}) => {
         <Bar
             setColor={setAndChangeColor}
             color={color}
+            handleLogoClick={handleLogoClick}
             tooltip={tooltip}
             profileIconMenuOptions={profileIconMenuOptions}
             profileIconMenuAnchor={profileIconMenuAnchor}
@@ -76,7 +76,6 @@ const TopBar = ({ user , view, setColor, color}) => {
             handleCloseProfileIconMenu={handleCloseProfileIconMenu}
             handleProfileIconMenuOptionClick={handleProfileIconMenuOptionClick}
             avatarUrl={avatarUrl}
-            handleLogoClick={handleLogoClick}
         />
     );
 };
